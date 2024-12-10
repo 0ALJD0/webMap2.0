@@ -1,0 +1,110 @@
+.hp-homepage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.hp-header {
+  flex: 0 0 auto;
+  text-align: center;
+  background-color: #b8adab;
+  margin: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+}
+
+.hp-main-content {
+  position: relative;
+  flex: 1;
+}
+
+.leaflet-map {
+  height: 100%;
+  width: 100%;
+}
+
+.hp-establecimientos-tabla {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 35%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.hp-establecimientos-tabla.plegado {
+  transform: translateX(-100%);
+}
+
+.hp-establecimientos-tabla.desplegado {
+  transform: translateX(0);
+}
+
+.hp-tabla-contenido {
+  padding: 10px;
+}
+
+.hp-plegar-boton {
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 20%;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.hp-plegar-boton1 {
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 20%;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.hp-cerrar-boton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border: none;
+  cursor: pointer;
+  font-weight: bolder;
+}
+
+.hp-agente-virtual-boton {
+  position: absolute;
+  bottom: 5%;
+  right: 2%;
+  z-index: 1000;
+}
+
+.hp-agente-virtual {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 35%;
+  height: 75%;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.hp-agente-virtual.plegado {
+  transform: scaleY(0.1) translateY(50%);
+}
+
+.hp-agente-virtual.desplegado {
+  transform: scaleY(1) translateY(0);
+}

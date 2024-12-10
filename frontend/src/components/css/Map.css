@@ -1,0 +1,86 @@
+/* src/components/css/Map.css */
+.map-container {
+  height: 100%; /* Ajusta la altura según tus necesidades */
+  width: 100%;
+}
+
+.leaflet-map {
+  height: 100%;
+  width: 100%;
+}
+
+.custom-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  transform: translate(-50%, -50%);
+}
+
+.icon-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: red; /* Cambia esto al color que desees */
+  border-radius: 50%;
+  border: 2px solid white; /* Borde blanco para simular el borde del marcador */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
+  font-size: 24px; /* Tamaño del emoji */
+}
+
+.custom-icon::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; /* Ajusta la posición vertical de la punta */
+  left: 55%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  box-shadow: 0 0 10px rgba(0, 17, 255, 0); /* Sombra para dar profundidad */
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid red; /* Debe ser del mismo color que el fondo */
+}
+
+/* Estilos para los popups */
+.mp-popup-content {
+  padding: 0.5px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+.mp-popup-section {
+  display: flex;
+  
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 3px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.mp-popup-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 1px;
+}
+
+.mp-popup-text {
+  font-size: 14px;
+  color: #555555;
+  flex-grow: 1;
+  text-align: right;
+}
+
+/* Separador */
+.mp-popup-divider {
+  border-bottom: 0.5px solid #ddd;
+  margin: 5px 0;
+}

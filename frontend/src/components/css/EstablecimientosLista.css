@@ -1,0 +1,45 @@
+/* src/components/css/EstablecimientosLista.css */
+
+.el-container {
+    max-height: 400px; /* Ajusta según sea necesario */
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+  
+  .el-item {
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+  
+  .el-title {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .el-address {
+    margin: 5px 0;
+  }
+  
+  .el-button {
+    padding: 8px 12px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .el-button-edit:hover,
+  .el-button-delete:hover {
+    background-color: #45a049;
+  }
+  

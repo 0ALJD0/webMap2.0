@@ -1,0 +1,31 @@
+/* src/components/css/ListarHorarios.css */
+
+.lh-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+  
+  .lh-item p {
+    margin-bottom: 5px;
+  }
+  
+  .lh-button-edit,
+  .lh-button-delete {
+    padding: 8px 12px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .lh-button-edit:hover,
+  .lh-button-delete:hover {
+    background-color: #45a049;
+  }
+  

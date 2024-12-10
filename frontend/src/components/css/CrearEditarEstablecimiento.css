@@ -1,0 +1,116 @@
+/* CrearEditarEstablecimiento.css */
+
+.ce-popup-container {
+    position: relative;
+  }
+  
+  .ce-crearEditarEstablecimiento {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1001; /* Asegura que esté encima del resto de la interfaz */
+  }
+  
+  .ce-crearEditarEstablecimiento h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .ce-crearEditarEstablecimiento input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #666;
+  }
+  .ce-crearEditarEstablecimiento label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+  }
+  .ce-crearEditarEstablecimiento option {
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+  }
+  .ce-select{
+    display: block;
+    margin-bottom: 5px;
+    color: #666;
+  }
+  
+  .ce-crearEditarEstablecimiento .ce-button-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .ce-crearEditarEstablecimiento .ce-button-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .ce-crearEditarEstablecimiento .ce-button-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 25px;
+  }
+  
+  .ce-crearEditarEstablecimiento .ce-button-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  .ce-error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  /* Estilos para CrearEditarHorarios dentro de CrearEditarEstablecimiento */
+  
+  .ce-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
+    z-index: 1000; /* Asegura que esté detrás del popup */
+  }
+  
+  .ce-popup-horarios {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1001; /* Asegura que esté encima del resto de la interfaz */
+  }
+  
+  .ce-popup-horarios .ce-popup-content {
+    max-width: 400px; /* Ajustar el ancho máximo según necesidades */
+  }
+  
+  .ce-popup-horarios h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .ce-popup-horarios .ce-button-primary,
+  .ce-popup-horarios .ce-button-secondary {
+    margin-top: 10px;
+  }
+  
