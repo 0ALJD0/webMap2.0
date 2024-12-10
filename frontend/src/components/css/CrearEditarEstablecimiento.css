@@ -11,6 +11,9 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1001; /* Asegura que esté encima del resto de la interfaz */
+    max-height: 80vh; /* Altura máxima para el contenedor */
+    overflow-y: auto; /* Habilita el scroll vertical si el contenido es mayor */
+    overflow-x: hidden; /* Evita el scroll horizontal */
   }
   
   .ce-crearEditarEstablecimiento h2 {
@@ -113,4 +116,13 @@
   .ce-popup-horarios .ce-button-secondary {
     margin-top: 10px;
   }
-  
+  .map-buttons{
+    padding: 3%;
+  }
+  .map-popup{
+    padding: 2%;
+  }
+  .ce-ubicacion p{
+    color:#666;
+    font-size: 1rem;
+  }

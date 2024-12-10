@@ -88,6 +88,19 @@
   right: 2%;
   z-index: 1000;
 }
+ .hp-agente-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .hp-agente-button:hover {
+    background-color: #0056b3;
+  }
 
 .hp-agente-virtual {
   position: absolute;

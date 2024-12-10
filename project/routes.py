@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session, current_app
 from . import db
-from .models import Administrador, Establecimiento, Horario
+from .models import Administrador, Establecimiento, Horario, Tipo_servicio, Tipo_cocina
 import openai
 import json
 
@@ -50,6 +50,9 @@ def obtener_establecimientos():
                 }
                 for horario in horarios
             ]
+            tipo_servicio = [ts.nombre for ts in Tipo_servicio.query.filter_by(establecimiento_id=establecimiento.id).all()]
+            tipo_cocina = [tc.nombre for tc in Tipo_cocina.query.filter_by(establecimiento_id=establecimiento.id).all()]
+
             lista_establecimientos.append({
                 'id': establecimiento.id,
                 'nombre': establecimiento.nombre,
@@ -58,6 +61,14 @@ def obtener_establecimientos():
                 'longitud': str(establecimiento.longitud),
                 'descripcion': establecimiento.descripcion,
                 'tipo': establecimiento.tipo,
+                ################################################################
+                'tipo_servicio': tipo_servicio,
+                'tipo_cocina': tipo_cocina,
+                'numero_taza': establecimiento.numero_taza,
+                'numero_cubiertos': establecimiento.numero_cubiertos,
+                'numero_copas': establecimiento.numero_copas,
+                'petfriendly': establecimiento.petfriendly,
+                'accesibilidad': establecimiento.accesibilidad,
                 'horarios': horarios_json
             })
 
@@ -81,6 +92,15 @@ def add_establecimiento():
         
         direccion = data.get('direccion')
         tipo = data.get('tipo')
+
+        tipo_servicio_ids = data.get('tipo_servicio', [])
+        tipo_cocina_ids = data.get('tipo_cocina', [])
+        numero_taza = data.get('numero_taza', 0)  # Por defecto 0
+        numero_cubiertos = data.get('numero_cubiertos', 0)  # Por defecto 0
+        numero_copas = data.get('numero_copas', 0)  # Por defecto 0
+        petfriendly = data.get('petfriendly', False)
+        accesibilidad = data.get('accesibilidad', False)
+        
         latitud = data.get('latitud')
         longitud = data.get('longitud')
         descripcion = data.get('descripcion')
@@ -90,11 +110,30 @@ def add_establecimiento():
             nombre=nombre,
             direccion=direccion,
             tipo=tipo,
+            tipo_servicio=tipo_servicio_ids,
+            tipo_cocina=tipo_cocina_ids,
+            numero_taza=numero_taza,
+            numero_cubiertos=numero_cubiertos,
+            numero_copas=numero_copas,
+            petfriendly=petfriendly,
+            accesibilidad=accesibilidad,
             latitud=latitud,
             longitud=longitud,
             descripcion=descripcion,
             administrador_id=session['admin_id']
         )
+
+
+       # Asociar tipos de servicio y cocina
+        for ts_id in tipo_servicio_ids:
+            tipo_servicio = Tipo_servicio.query.get(ts_id)
+            if tipo_servicio:
+                nuevo_establecimiento.tipo_servicio.append(tipo_servicio)
+        
+        for tc_id in tipo_cocina_ids:
+            tipo_cocina = Tipo_cocina.query.get(tc_id)
+            if tipo_cocina:
+                nuevo_establecimiento.tipo_cocina.append(tipo_cocina)
 
         db.session.add(nuevo_establecimiento)
         db.session.commit()
@@ -119,9 +158,33 @@ def edit_establecimiento(id):
         establecimiento.nombre = data.get('nombre', establecimiento.nombre)
         establecimiento.direccion = data.get('direccion', establecimiento.direccion)
         establecimiento.tipo = data.get('tipo', establecimiento.tipo)
+        
+        establecimiento.numero_taza = data.get('numero_taza', establecimiento.numero_taza)
+        establecimiento.numero_cubiertos = data.get('numero_cubiertos', establecimiento.numero_cubiertos)
+        establecimiento.numero_copas = data.get('numero_copas', establecimiento.numero_copas)
+        establecimiento.petfriendly = data.get('petfriendly', establecimiento.petfriendly)
+        establecimiento.accesibilidad = data.get('accesibilidad', establecimiento.accesibilidad)
         establecimiento.latitud=data.get('latitud', establecimiento.latitud)
         establecimiento.longitud=data.get('longitud', establecimiento.longitud)
         establecimiento.descripcion=data.get('descripcion', establecimiento.descripcion)
+
+        # Actualizar tipos de servicio y cocina
+        tipo_servicio_ids = data.get('tipo_servicio', [])
+        tipo_cocina_ids = data.get('tipo_cocina', [])
+
+        # Limpiar relaciones existentes
+        establecimiento.tipo_servicio = []
+        establecimiento.tipo_cocina = []
+
+        for ts_id in tipo_servicio_ids:
+            tipo_servicio = Tipo_servicio.query.get(ts_id)
+            if tipo_servicio:
+                establecimiento.tipo_servicio.append(tipo_servicio)
+        
+        for tc_id in tipo_cocina_ids:
+            tipo_cocina = Tipo_cocina.query.get(tc_id)
+            if tipo_cocina:
+                establecimiento.tipo_cocina.append(tipo_cocina)
 
         db.session.commit()
 

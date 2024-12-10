@@ -89,7 +89,7 @@ const HomePage = () => {
         )}
         {!mostrarAgente && (
           <div className="hp-agente-virtual-boton">
-            <button onClick={handleDesplegarAgente}>
+            <button className="hp-agente-button" onClick={handleDesplegarAgente}>
               Agente Virtual
             </button>
           </div>
