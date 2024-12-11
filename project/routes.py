@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify, session, current_app
 from . import db
 from .models import Administrador, Establecimiento, Horario, Tipo_servicio, Tipo_cocina
+from .models import establecimiento_tipo_cocina, establecimiento_tipo_servicio
 import openai
 import json
+from sqlalchemy import text
 
 bp = Blueprint('routes', __name__)
 
@@ -50,8 +52,18 @@ def obtener_establecimientos():
                 }
                 for horario in horarios
             ]
-            tipo_servicio = [ts.nombre for ts in Tipo_servicio.query.filter_by(establecimiento_id=establecimiento.id).all()]
-            tipo_cocina = [tc.nombre for tc in Tipo_cocina.query.filter_by(establecimiento_id=establecimiento.id).all()]
+
+            # Obtener los IDs de tipo_servicio asociados con el establecimiento
+            tipo_servicio_ids = [ts.id for ts in establecimiento.tipo_servicio]
+            
+            # Obtener los nombres de los tipos de servicio (opcional)
+            #tipo_servicio_nombres = [Tipo_servicio.query.get(ts_id).nombre for ts_id in tipo_servicio_ids]
+            
+            # Obtener los IDs de tipo_cocina asociados con el establecimiento
+            tipo_cocina_ids = [tc.id for tc in establecimiento.tipo_cocina]
+            
+            # Obtener los nombres de los tipos de cocina (opcional)
+            #tipo_cocina_nombres = [Tipo_cocina.query.get(tc_id).nombre for tc_id in tipo_cocina_ids]
 
             lista_establecimientos.append({
                 'id': establecimiento.id,
@@ -62,8 +74,8 @@ def obtener_establecimientos():
                 'descripcion': establecimiento.descripcion,
                 'tipo': establecimiento.tipo,
                 ################################################################
-                'tipo_servicio': tipo_servicio,
-                'tipo_cocina': tipo_cocina,
+                'tipo_servicio': tipo_servicio_ids,
+                'tipo_cocina': tipo_cocina_ids,
                 'numero_taza': establecimiento.numero_taza,
                 'numero_cubiertos': establecimiento.numero_cubiertos,
                 'numero_copas': establecimiento.numero_copas,
@@ -110,8 +122,6 @@ def add_establecimiento():
             nombre=nombre,
             direccion=direccion,
             tipo=tipo,
-            tipo_servicio=tipo_servicio_ids,
-            tipo_cocina=tipo_cocina_ids,
             numero_taza=numero_taza,
             numero_cubiertos=numero_cubiertos,
             numero_copas=numero_copas,
@@ -123,6 +133,8 @@ def add_establecimiento():
             administrador_id=session['admin_id']
         )
 
+        db.session.add(nuevo_establecimiento)
+        db.session.flush()  # Asegurarse de que se genere el ID
 
        # Asociar tipos de servicio y cocina
         for ts_id in tipo_servicio_ids:
@@ -135,7 +147,6 @@ def add_establecimiento():
             if tipo_cocina:
                 nuevo_establecimiento.tipo_cocina.append(tipo_cocina)
 
-        db.session.add(nuevo_establecimiento)
         db.session.commit()
 
         return jsonify({'message': 'Establecimiento added successfully'}), 201
@@ -150,46 +161,81 @@ def edit_establecimiento(id):
             return jsonify({'message': 'Not authorized'}), 403
 
         data = request.get_json()
-        establecimiento = Establecimiento.query.filter_by(id=id, administrador_id=session['admin_id']).first()
 
-        if establecimiento is None:
+         # Buscar el establecimiento
+        establecimiento = Establecimiento.query.get(id)
+        if not establecimiento:
             return jsonify({'message': 'Establecimiento no encontrado'}), 404
+        
 
-        establecimiento.nombre = data.get('nombre', establecimiento.nombre)
+        nuevo_nombre = data.get('nombre')
+        if nuevo_nombre and Establecimiento.query.filter(Establecimiento.nombre == nuevo_nombre, Establecimiento.id != id).first():
+            return jsonify({'message': 'Establecimiento con este nombre ya existe'}), 409
+
+        # Actualizar atributos básicos del establecimiento
+        establecimiento.nombre = nuevo_nombre or establecimiento.nombre
         establecimiento.direccion = data.get('direccion', establecimiento.direccion)
         establecimiento.tipo = data.get('tipo', establecimiento.tipo)
-        
         establecimiento.numero_taza = data.get('numero_taza', establecimiento.numero_taza)
         establecimiento.numero_cubiertos = data.get('numero_cubiertos', establecimiento.numero_cubiertos)
         establecimiento.numero_copas = data.get('numero_copas', establecimiento.numero_copas)
         establecimiento.petfriendly = data.get('petfriendly', establecimiento.petfriendly)
         establecimiento.accesibilidad = data.get('accesibilidad', establecimiento.accesibilidad)
-        establecimiento.latitud=data.get('latitud', establecimiento.latitud)
-        establecimiento.longitud=data.get('longitud', establecimiento.longitud)
-        establecimiento.descripcion=data.get('descripcion', establecimiento.descripcion)
-
-        # Actualizar tipos de servicio y cocina
-        tipo_servicio_ids = data.get('tipo_servicio', [])
-        tipo_cocina_ids = data.get('tipo_cocina', [])
-
-        # Limpiar relaciones existentes
-        establecimiento.tipo_servicio = []
-        establecimiento.tipo_cocina = []
-
-        for ts_id in tipo_servicio_ids:
-            tipo_servicio = Tipo_servicio.query.get(ts_id)
-            if tipo_servicio:
-                establecimiento.tipo_servicio.append(tipo_servicio)
-        
-        for tc_id in tipo_cocina_ids:
-            tipo_cocina = Tipo_cocina.query.get(tc_id)
-            if tipo_cocina:
-                establecimiento.tipo_cocina.append(tipo_cocina)
+        establecimiento.latitud = data.get('latitud', establecimiento.latitud)
+        establecimiento.longitud = data.get('longitud', establecimiento.longitud)
+        establecimiento.descripcion = data.get('descripcion', establecimiento.descripcion)
 
         db.session.commit()
 
+        # Obtener los tipos de servicio y cocina de los datos enviados
+        tipo_servicio_ids = data.get('tipo_servicio', [])
+        tipo_cocina_ids = data.get('tipo_cocina', [])
+
+        # **Eliminar relaciones antiguas** en la tabla intermedia de tipo_servicio
+        for ts in establecimiento.tipo_servicio:
+            if ts.id not in tipo_servicio_ids:
+                # Eliminar la relación de la tabla intermedia 'establecimiento_tipo_servicio'
+                db.session.execute(
+                    text("DELETE FROM establecimiento_tipo_servicio WHERE establecimiento_id = :establecimiento_id AND tipo_servicio_id = :tipo_servicio_id"),
+                    {'establecimiento_id': establecimiento.id, 'tipo_servicio_id': ts.id}
+                )
+
+        # **Agregar nuevas relaciones** de tipo_servicio
+        for ts_id in tipo_servicio_ids:
+            tipo_servicio = Tipo_servicio.query.get(ts_id)
+            if tipo_servicio and tipo_servicio not in establecimiento.tipo_servicio:
+                # Insertar la relación en la tabla intermedia 'establecimiento_tipo_servicio'
+                db.session.execute(
+                    text("INSERT INTO establecimiento_tipo_servicio (establecimiento_id, tipo_servicio_id) VALUES (:establecimiento_id, :tipo_servicio_id)"),
+                    {'establecimiento_id': establecimiento.id, 'tipo_servicio_id': ts_id}
+                )
+
+        # **Eliminar relaciones antiguas** en la tabla intermedia de tipo_cocina
+        for tc in establecimiento.tipo_cocina:
+            if tc.id not in tipo_cocina_ids:
+                # Eliminar la relación de la tabla intermedia 'establecimiento_tipo_cocina'
+               db.session.execute(
+                    text("DELETE FROM establecimiento_tipo_cocina WHERE establecimiento_id = :establecimiento_id AND tipo_cocina_id = :tipo_cocina_id"),
+                    {'establecimiento_id': establecimiento.id, 'tipo_cocina_id': tc.id}
+                )
+
+        # **Agregar nuevas relaciones** de tipo_cocina
+        for tc_id in tipo_cocina_ids:
+            tipo_cocina = Tipo_cocina.query.get(tc_id)
+            if tipo_cocina and tipo_cocina not in establecimiento.tipo_cocina:
+                # Insertar la relación en la tabla intermedia 'establecimiento_tipo_cocina'
+                db.session.execute(
+                    text("INSERT INTO establecimiento_tipo_cocina (establecimiento_id, tipo_cocina_id) VALUES (:establecimiento_id, :tipo_cocina_id)"),
+                    {'establecimiento_id': establecimiento.id, 'tipo_cocina_id': tc_id}
+                )
+
+        db.session.commit()
+
+
+
         return jsonify({'message': 'Establecimiento updated successfully'}), 200
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 #actualizar un establecimiento a eliminado
 @bp.route('/eliminar_establecimiento/<int:id>', methods=['PUT'])
@@ -205,12 +251,49 @@ def actualizar_estado_establecimiento(id):
         data = request.get_json()
         eliminado = data.get('eliminado')
 
+
+        # Eliminar las relaciones en las tablas intermedias
+        db.session.execute(
+            text("DELETE FROM establecimiento_tipo_servicio WHERE establecimiento_id = :establecimiento_id"),
+            {'establecimiento_id': establecimiento.id}
+        )
+        db.session.execute(
+            text("DELETE FROM establecimiento_tipo_cocina WHERE establecimiento_id = :establecimiento_id"),
+            {'establecimiento_id': establecimiento.id}
+        )
+
         establecimiento.eliminado = eliminado
         db.session.commit()
 
         return jsonify({'message': 'Establecimiento eliminado correctamente'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+# Ruta para obtener todos los tipos de servicio
+@bp.route('/tipo_servicio', methods=['GET'])
+def obtener_tipos_servicio():
+    try:
+        tipos_servicio = Tipo_servicio.query.all()
+        tipo_servicio_list = [{"id": ts.id, "nombre": ts.nombre} for ts in tipos_servicio]
+
+        return jsonify(tipo_servicio_list), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# Ruta para obtener todos los tipos de cocina
+@bp.route('/tipo_cocina', methods=['GET'])
+def obtener_tipos_cocina():
+    try:
+        tipos_cocina = Tipo_cocina.query.all()
+        tipo_cocina_list = [{"id": tc.id, "nombre": tc.nombre} for tc in tipos_cocina]
+
+        return jsonify(tipo_cocina_list), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
 #agregar un horario a un establecimiento
 @bp.route('/establecimientos/<int:establecimiento_id>/horarios', methods=['POST'])
 def add_horario(establecimiento_id):
