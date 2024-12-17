@@ -15,6 +15,44 @@ export const fetchEstablecimientos = async () => {
     throw error;
   }
 };
+// Función para obtener  establecimientos
+export const fetchEstablecimiento = async (id) => {
+  try {
+    const response = await api.get(`/establecimiento/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching establecimientos:', error);
+    throw error;
+  }
+};
+// Cargar los tipos de servicio desde el backend
+export const fetchTipoServicios = async () => {
+  try {
+    const response = await api.get('/tipo_servicio');
+    const data = response.data; 
+    const opciones = data.map(servicio => ({
+      id: servicio.id,
+      nombre: servicio.nombre,
+    }));
+    return opciones;
+  } catch (error) {
+    console.error('Error al cargar tipos de servicio:', error);
+  }
+}
+
+export const fetchTipoCocina = async () => {
+  try {
+    const response = await api.get('/tipo_cocina');
+    const data = response.data; 
+    const opciones = data.map(cocina => ({
+      id: cocina.id,
+      nombre: cocina.nombre,
+    }));
+    return opciones;
+  } catch (error) {
+    console.error('Error al cargar tipos de servicio:', error);
+  }
+}
 
 // Función para enviar la pregunta al agente virtual
 export const preguntarAgenteVirtual = async (pregunta) => {

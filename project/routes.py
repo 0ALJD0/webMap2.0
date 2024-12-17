@@ -53,17 +53,15 @@ def obtener_establecimientos():
                 for horario in horarios
             ]
 
-            # Obtener los IDs de tipo_servicio asociados con el establecimiento
-            tipo_servicio_ids = [ts.id for ts in establecimiento.tipo_servicio]
+            tipos_servicio_json = [
+                {'id': ts.id, 'nombre': ts.nombre}
+                for ts in establecimiento.tipo_servicio
+            ]
             
-            # Obtener los nombres de los tipos de servicio (opcional)
-            #tipo_servicio_nombres = [Tipo_servicio.query.get(ts_id).nombre for ts_id in tipo_servicio_ids]
-            
-            # Obtener los IDs de tipo_cocina asociados con el establecimiento
-            tipo_cocina_ids = [tc.id for tc in establecimiento.tipo_cocina]
-            
-            # Obtener los nombres de los tipos de cocina (opcional)
-            #tipo_cocina_nombres = [Tipo_cocina.query.get(tc_id).nombre for tc_id in tipo_cocina_ids]
+            tipos_cocina_json = [
+                {'id': ts.id, 'nombre': ts.nombre}
+                for ts in establecimiento.tipo_cocina
+            ]
 
             lista_establecimientos.append({
                 'id': establecimiento.id,
@@ -74,8 +72,8 @@ def obtener_establecimientos():
                 'descripcion': establecimiento.descripcion,
                 'tipo': establecimiento.tipo,
                 ################################################################
-                'tipo_servicio': tipo_servicio_ids,
-                'tipo_cocina': tipo_cocina_ids,
+                'tipo_servicio': tipos_servicio_json,
+                'tipo_cocina': tipos_cocina_json,
                 'numero_taza': establecimiento.numero_taza,
                 'numero_cubiertos': establecimiento.numero_cubiertos,
                 'numero_copas': establecimiento.numero_copas,
@@ -85,6 +83,63 @@ def obtener_establecimientos():
             })
 
         return jsonify(lista_establecimientos), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+#ruta para obtener los establecimientos
+@bp.route('/establecimiento/<int:id>', methods=['GET'])
+def obtener_establecimiento(id):
+    try:
+        # Buscar el establecimiento por ID
+        establecimiento = Establecimiento.query.get(id)
+
+        if establecimiento is None:
+            return jsonify({'error': 'Establecimiento no encontrado'}), 404
+        
+        # Obtener los horarios del establecimiento
+        horarios = Horario.query.filter_by(establecimiento_id=establecimiento.id).all()
+        horarios_json = [
+            {
+                'dia': horario.dia_semana,
+                'apertura': horario.hora_apertura.strftime('%H:%M'),  # Convertir a formato de cadena HH:MM
+                'cierre': horario.hora_cierre.strftime('%H:%M')      # Convertir a formato de cadena HH:MM
+            }
+            for horario in horarios
+        ]
+
+        # Obtener los tipos de servicio asociados al establecimiento
+        tipos_servicio_json = [
+            {'id': ts.id, 'nombre': ts.nombre}
+            for ts in establecimiento.tipo_servicio
+        ]
+        
+        # Obtener los tipos de cocina asociados al establecimiento
+        tipos_cocina_json = [
+            {'id': ts.id, 'nombre': ts.nombre}
+            for ts in establecimiento.tipo_cocina
+        ]
+
+        # Construir el JSON de respuesta
+        establecimiento_json = {
+            'id': establecimiento.id,
+            'nombre': establecimiento.nombre,
+            'direccion': establecimiento.direccion,
+            'latitud': str(establecimiento.latitud),
+            'longitud': str(establecimiento.longitud),
+            'descripcion': establecimiento.descripcion,
+            'tipo': establecimiento.tipo,
+            'tipo_servicio': tipos_servicio_json,
+            'tipo_cocina': tipos_cocina_json,
+            'numero_taza': establecimiento.numero_taza,
+            'numero_cubiertos': establecimiento.numero_cubiertos,
+            'numero_copas': establecimiento.numero_copas,
+            'petfriendly': establecimiento.petfriendly,
+            'accesibilidad': establecimiento.accesibilidad,
+            'horarios': horarios_json
+        }
+
+        return jsonify(establecimiento_json), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

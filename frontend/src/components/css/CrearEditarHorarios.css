@@ -112,3 +112,29 @@
 .ceh-button-close:hover {
   background-color: #c82333;
 }
+/* Asegura un tamaño consistente para los elementos */
+.ce-multiselect .css-1s2u09g-control {
+  padding: 5px; /* Espaciado interno */
+  font-size: 14px; /* Tamaño del texto */
+}
+
+.ce-multiselect .css-1okebmr-indicatorSeparator {
+  display: none; /* Quita la línea divisoria entre el texto y el botón */
+}
+
+.ce-multiselect .css-1nmdiq5-menu {
+  z-index: 1000; /* Asegura que el menú del dropdown se muestre por encima */
+}
+
+.ce-multiselect .css-12jo7m5 {
+  padding: 10px; /* Añade un espaciado más uniforme */
+  font-size: 14px; /* Tamaño del texto más consistente */
+}
+
+.ce-multiselect .css-1uccc91-singleValue {
+  padding: 2px 10px;
+}
+
+.ce-multiselect .css-18jjkcs-placeholder {
+  color: #888; /* Un color agradable para el placeholder */
+}
