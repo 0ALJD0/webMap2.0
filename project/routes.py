@@ -1,10 +1,14 @@
 from flask import Blueprint, request, jsonify, session, current_app
 from . import db
-from .models import Administrador, Establecimiento, Horario, Tipo_servicio, Tipo_cocina
-from .models import establecimiento_tipo_cocina, establecimiento_tipo_servicio
+from .models import Administrador, Establecimiento, Horario, Tipo_servicio, Tipo_cocina, Chat
+#from .models import establecimiento_tipo_cocina, establecimiento_tipo_servicio
 import openai
 import json
 from sqlalchemy import text
+import pandas as pd
+import spacy
+from collections import Counter
+from datetime import datetime
 
 bp = Blueprint('routes', __name__)
 
@@ -519,6 +523,13 @@ def preguntar_openai():
         data = request.get_json()
         pregunta_usuario = data.get('pregunta')
 
+        # Guardar el mensaje del usuario en la base de datos
+        mensaje_usuario = Chat(mensaje=pregunta_usuario)
+        db.session.add(mensaje_usuario)
+
+        # Confirmar los cambios en la base de datos
+        db.session.commit()
+
         # Obtener los establecimientos de la base de datos
         establecimientos = Establecimiento.query.all()
         establecimientos_info = [
@@ -564,5 +575,110 @@ def preguntar_openai():
         session['chat_history'].append({"role": "assistant", "content": respuesta})
 
         return jsonify({'respuesta': respuesta}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+##Proceso para la obtención del histograma:
+# Cargar el modelo de spaCy en español
+nlp = spacy.load("es_core_news_sm")
+
+# Características clave de los establecimientos
+caracteristicas_clave = {
+    "tipo_establecimiento": ["cafetería", "restaurante", "bar", "discoteca", "plaza de comida", "establecimiento movil","servicio de catering"],
+    "horarios": ["matutinos", "vespertinos", "nocturnos", "24 horas"],
+    "servicios": ["servicio a domicilio", "servicio al auto", "menú", "autoservicio","menú fijo","buffet"],
+    "tipo_cocina":["Argentina","Asiatica","Brasilera","China","Colombiana","Coreana","Costa Rica","Escandinava","Ecuatoriana","Venezolana","Italiana","Japonesa",
+                    "Kosher","Mexicana"",Rusa","Cocina Andina","Cocina Patrimonial","Comida rÃ¡pida","Frutas y Vegetales","Mariscos","Mediterranea","Novoandina",
+                    "Panaderia, pasteleri­a y reposteri­a","Parrilladas","Pizza","Vegetariana"],
+    "numero_tazas":["1","2",],
+    "numero_cubiertos":["1","2","3","4","5"],
+    "numero_copas":["1","2","3"],
+}
+# Función para extraer características de los textos con indicaciones explícitas
+def extraer_caracteristicas(texto):
+    """
+    Extrae características relevantes de un texto basado en palabras clave.
+
+    Args:
+        texto (str): Texto a analizar.
+
+    Returns:
+        dict: Diccionario con las características encontradas y su frecuencia.
+    """
+    # Procesar el texto con spaCy
+    doc = nlp(texto.lower())
+
+    # Contador para las características encontradas
+    caracteristicas_encontradas = Counter()
+
+    # Aquí puedes añadir cualquier instrucción explícita que desees
+    # Ejemplo: Puedes aplicar reglas de spaCy, como filtros personalizados en tokens.
+    for token in doc:
+        # Ejemplo de filtro explícito: si el token es un sustantivo (nsubj o obj), lo procesas
+        if token.pos_ in ['NOUN', 'PROPN']:  # Filtramos solo sustantivos y nombres propios
+            for categoria, palabras_clave in caracteristicas_clave.items():
+                if token.text in palabras_clave:
+                    caracteristicas_encontradas[categoria] += 1
+
+    return dict(caracteristicas_encontradas)
+
+
+#Obtener chats
+@bp.route('/chats', methods=['GET'])
+def obtener_chats():
+    try:
+        # Consultar todos los registros de la tabla 'chats'
+        chats = Chat.query.all()
+
+        # Serializar los datos en un formato JSON
+        chats_serializados = [
+            {
+                'id': chat.id,
+                'mensaje': chat.mensaje,
+                'fechayhora': chat.fechayhora.isoformat()  # Convertir a ISO 8601
+            } for chat in chats
+        ]
+
+        # Devolver los chats en formato JSON
+        return jsonify({'chats': chats_serializados}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+    # Ruta para obtener el histograma de las características
+@bp.route('/histograma', methods=['GET'])
+def obtener_histograma():
+    try:
+        # Consultar todos los chats
+        chats = Chat.query.all()
+
+        # Crear un DataFrame con los chats
+        df = pd.DataFrame([{
+            'fechayhora': chat.fechayhora.isoformat(),  # Convertir a ISO 8601
+            'mensaje': chat.mensaje
+        } for chat in chats])
+
+        # Procesar los mensajes para extraer características
+        df["caracteristicas"] = df["mensaje"].apply(extraer_caracteristicas)
+
+        # Expansión de las características
+        caracteristicas_expandido = []
+        for _, row in df.iterrows():
+            for caracteristica, frecuencia in row["caracteristicas"].items():
+                caracteristicas_expandido.append({
+                    "timestamp": row["fechayhora"],
+                    "caracteristica": caracteristica,
+                    "frecuencia": frecuencia
+                })
+
+        caracteristicas_df = pd.DataFrame(caracteristicas_expandido)
+        
+        # Agrupar por fecha (diario) y sumar las frecuencias de las características
+        caracteristicas_df["periodo"] = caracteristicas_df["timestamp"].dt.to_period("D")
+        caracteristicas_por_periodo = caracteristicas_df.groupby(["periodo", "caracteristica"])["frecuencia"].sum().reset_index()
+
+        # Devolver el histograma como JSON
+        return jsonify(caracteristicas_por_periodo.to_dict(orient="records")), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500

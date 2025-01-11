@@ -12,14 +12,15 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route
         path="/admin"
-        element={
+       /* element={
           // Asegurar que el usuario esté autenticado
           sessionStorage.getItem('authenticated') ? (
             <AdminPage />
           ) : (
             <Navigate to="/login" />
           )
-        }
+        }*/
+        element={<AdminPage />}
       />
     </Routes>
   );

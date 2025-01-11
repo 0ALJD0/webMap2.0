@@ -1,5 +1,5 @@
 from . import db
-
+from sqlalchemy import func
 class Administrador(db.Model):
     __tablename__ = 'administradores'
     id = db.Column(db.Integer, primary_key=True)
@@ -59,3 +59,10 @@ class Horario(db.Model):
     dia_semana = db.Column(db.String(20), nullable=False)
     hora_apertura = db.Column(db.Time, nullable=False)
     hora_cierre = db.Column(db.Time, nullable=False)
+
+class Chat(db.Model):
+    __tablename__ = 'chats'
+    id=db.Column(db.Integer, primary_key=True)
+    mensaje=db.Column(db.String(500), nullable=False)
+    fechayhora=db.Column(db.DateTime, nullable=False, server_default=func.now())
+    
