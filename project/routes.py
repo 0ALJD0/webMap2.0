@@ -585,43 +585,53 @@ nlp = spacy.load("es_core_news_sm")
 
 # Características clave de los establecimientos
 caracteristicas_clave = {
-    "tipo_establecimiento": ["cafetería", "restaurante", "bar", "discoteca", "plaza de comida", "establecimiento movil","servicio de catering"],
+    "tipo_establecimiento": ["cafeteria", "restaurante", "bar", "discoteca", "plaza de comida", "establecimiento movil","servicio de catering"],
     "horarios": ["matutinos", "vespertinos", "nocturnos", "24 horas"],
-    "servicios": ["servicio a domicilio", "servicio al auto", "menú", "autoservicio","menú fijo","buffet"],
-    "tipo_cocina":["Argentina","Asiatica","Brasilera","China","Colombiana","Coreana","Costa Rica","Escandinava","Ecuatoriana","Venezolana","Italiana","Japonesa",
-                    "Kosher","Mexicana"",Rusa","Cocina Andina","Cocina Patrimonial","Comida rÃ¡pida","Frutas y Vegetales","Mariscos","Mediterranea","Novoandina",
-                    "Panaderia, pasteleri­a y reposteri­a","Parrilladas","Pizza","Vegetariana"],
-    "numero_tazas":["1","2",],
-    "numero_cubiertos":["1","2","3","4","5"],
-    "numero_copas":["1","2","3"],
+    "servicios": ["servicio a domicilio", "servicio al auto", "menu", "autoservicio","menu fijo","buffet"],
+    "tipo_cocina":["argentina","asiatica","brasilera","china","colombiana","coreana","costa rica","escandinava","ecuatoriana","venezolana","italiana","japonesa",
+                    "kosher","mexicana"",rusa","cocina andina","cocina patrimonial","comida rapida","frutas y vegetales","mariscos","nediterranea","novoandina",
+                    "panaderia, pasteleri­a y reposteri­a","parrilladas","pizza","vegetariana"],
+    "numero_tazas":["1 taza","2 tazas"],
+    "numero_cubiertos":["1 cubierto","2 cubiertos","3 cubiertos","4 cubiertos","5 cubiertos",],
+    "numero_copas":["1 copa","2 copas","3 copas"],
 }
+
+
+
 # Función para extraer características de los textos con indicaciones explícitas
 def extraer_caracteristicas(texto):
     """
-    Extrae características relevantes de un texto basado en palabras clave.
+    Extrae características relevantes de un texto basado en palabras clave, con desglose por subcategorías.
 
     Args:
         texto (str): Texto a analizar.
 
     Returns:
-        dict: Diccionario con las características encontradas y su frecuencia.
+        dict: Diccionario con las características encontradas y el conteo por palabra clave.
     """
     # Procesar el texto con spaCy
     doc = nlp(texto.lower())
 
-    # Contador para las características encontradas
-    caracteristicas_encontradas = Counter()
+    # Diccionario para almacenar resultados
+    caracteristicas_encontradas = {categoria: Counter() for categoria in caracteristicas_clave.keys()}
 
-    # Aquí puedes añadir cualquier instrucción explícita que desees
-    # Ejemplo: Puedes aplicar reglas de spaCy, como filtros personalizados en tokens.
-    for token in doc:
-        # Ejemplo de filtro explícito: si el token es un sustantivo (nsubj o obj), lo procesas
-        if token.pos_ in ['NOUN', 'PROPN']:  # Filtramos solo sustantivos y nombres propios
-            for categoria, palabras_clave in caracteristicas_clave.items():
-                if token.text in palabras_clave:
-                    caracteristicas_encontradas[categoria] += 1
+    # Buscar combinaciones de palabras (frases de 2 o más palabras)
+    for categoria, palabras_clave in caracteristicas_clave.items():
+        # Buscar combinaciones de n palabras consecutivas
+        for n in range(2, len(doc) + 1):  # Comenzamos con combinaciones de 2 palabras hasta N palabras
+            for i in range(len(doc) - n + 1):
+                # Crear una combinación de n palabras consecutivas
+                combinacion = " ".join([doc[j].text for j in range(i, i + n)])
+                if combinacion in palabras_clave:
+                    caracteristicas_encontradas[categoria][combinacion] += 1
+        
+        # También buscamos las palabras individuales
+        for token in doc:
+            if token.text in palabras_clave:
+                caracteristicas_encontradas[categoria][token.text] += 1
 
-    return dict(caracteristicas_encontradas)
+    # Convertir los Contadores a diccionarios simples para serialización
+    return {categoria: dict(contador) for categoria, contador in caracteristicas_encontradas.items()}
 
 
 #Obtener chats
@@ -654,31 +664,48 @@ def obtener_histograma():
 
         # Crear un DataFrame con los chats
         df = pd.DataFrame([{
-            'fechayhora': chat.fechayhora.isoformat(),  # Convertir a ISO 8601
+            'fechayhora': chat.fechayhora.strftime('%Y-%m-%d %H:%M:%S'),  # Convertir a formato esperado
             'mensaje': chat.mensaje
         } for chat in chats])
 
+        # Convertir 'fechayhora' a tipo datetime
+        df["fechayhora"] = pd.to_datetime(df["fechayhora"], format='%Y-%m-%d %H:%M:%S')
+
         # Procesar los mensajes para extraer características
-        df["caracteristicas"] = df["mensaje"].apply(extraer_caracteristicas)
+        df["caracteristicas"] = df["mensaje"].apply(lambda mensaje: extraer_caracteristicas(mensaje))
 
-        # Expansión de las características
-        caracteristicas_expandido = []
-        for _, row in df.iterrows():
-            for caracteristica, frecuencia in row["caracteristicas"].items():
-                caracteristicas_expandido.append({
-                    "timestamp": row["fechayhora"],
-                    "caracteristica": caracteristica,
-                    "frecuencia": frecuencia
-                })
+        # Diccionario para almacenar los DataFrames de cada categoría
+        histogramas_por_categoria = {}
 
-        caracteristicas_df = pd.DataFrame(caracteristicas_expandido)
+        # Expansión de las características por categoría
+        for categoria in caracteristicas_clave.keys():
+            # Lista para almacenar las filas de la categoría
+            caracteristicas_expandido = []
+            for _, row in df.iterrows():
+                for palabra_clave, frecuencia in row["caracteristicas"].get(categoria, {}).items():
+                    caracteristicas_expandido.append({
+                        "timestamp": row["fechayhora"],
+                        "caracteristica": palabra_clave,
+                        "frecuencia": frecuencia
+                    })
+            
+            # Convertir la lista expandida a un DataFrame para cada categoría
+            caracteristicas_df = pd.DataFrame(caracteristicas_expandido)
+            
+            if not caracteristicas_df.empty:
+                # Agrupar por fecha (diario) y sumar las frecuencias de las características para esta categoría
+                caracteristicas_df["periodo"] = caracteristicas_df["timestamp"].dt.to_period("D")
+                
+                # Convertir el tipo 'Period' a cadena (formato 'YYYY-MM-DD')
+                caracteristicas_df["periodo"] = caracteristicas_df["periodo"].astype(str)
+                
+                caracteristicas_por_periodo = caracteristicas_df.groupby(["periodo", "caracteristica"])["frecuencia"].sum().reset_index()
+                
+                # Convertir el DataFrame a un diccionario (para ser serializado a JSON)
+                histogramas_por_categoria[categoria] = caracteristicas_por_periodo.to_dict(orient="records")
         
-        # Agrupar por fecha (diario) y sumar las frecuencias de las características
-        caracteristicas_df["periodo"] = caracteristicas_df["timestamp"].dt.to_period("D")
-        caracteristicas_por_periodo = caracteristicas_df.groupby(["periodo", "caracteristica"])["frecuencia"].sum().reset_index()
-
-        # Devolver el histograma como JSON
-        return jsonify(caracteristicas_por_periodo.to_dict(orient="records")), 200
+        # Devolver el histograma de cada categoría como JSON
+        return jsonify(histogramas_por_categoria), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

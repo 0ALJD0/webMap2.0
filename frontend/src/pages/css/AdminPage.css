@@ -2,22 +2,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #f7f7f7;
+  margin: 0px;
+  padding: 5px;
+  border-radius: 0px;
+  /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+  background-color: #d9dcdf;
 }
 
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 97%;
   margin-bottom: 20px;
-  padding: 15px;
+  margin-top: 0px;  
+  padding: 1.4%;
   border-radius: 10px;
-  background-color: #b8adab; /* Color de fondo suave y neutral */
+  background-color: #4f5558; /* Color de fondo suave y neutral */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar un efecto de relieve */
 }
 
@@ -29,14 +30,14 @@
 .admin-header h1 {
   margin: 0;
   font-size: 24px;
-  color: #333;
+  color: #ffffff;
 }
 
 .admin-header-buttons button {
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
-  background-color: #4CAF50;
+  background-color: #36393b;
   color: white;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -44,7 +45,7 @@
 }
 
 .admin-header-buttons button:hover {
-  background-color: #45a049;
+  background-color: #6a7276;
 }
 
 .admin-content {
@@ -57,6 +58,7 @@
 .btn-nuevo {
   padding: 10px 15px;
   border: none;
+  margin: 10px;
   border-radius: 5px;
   background-color: #007BFF;
   color: white;
@@ -94,10 +96,10 @@
 
 .admin-establecimientos-lista-container {
   width: 60%;
-  margin-top: 20px;
-  padding: 20px;
+  margin-top: 10px;
+  padding: 5px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
   background-color: #fff;
 }
 
@@ -108,10 +110,11 @@
 }
 
 .admin-mapa-container {
-  width: 35%;
-  height: 500px;
+  width: 75%;
+  height: 450px;
+  margin-top: 10px;
   margin-left: 20px;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: #fff;
@@ -125,4 +128,11 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
   z-index: 1000; /* Asegura que esté por encima de todo */
+}
+.admin-histograma-container{
+  margin: 20px;
+  padding: 13px;
+  width: 98%;
+  background-color: #fcfbfb;
+  border-radius: 10px;
 }

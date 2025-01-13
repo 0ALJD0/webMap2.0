@@ -6,6 +6,7 @@ import CrearEditarEstablecimiento from '../components/CrearEditarEstablecimiento
 import EstablecimientosLista from '../components/EstablecimientosLista';
 import CambiarContra from '../components/CambiarContra';
 import MapaUno from '../components/MapUno';
+import Histograma from '../components/Histograma';
 import './css/AdminPage.css';
 
 const AdminPage = () => {
@@ -80,9 +81,7 @@ const AdminPage = () => {
       </header>
 
       <div className="admin-content">
-        <button className="btn-nuevo" onClick={mostrarFormularioCrear}>
-          Nuevo Establecimiento
-        </button>
+        
         {mostrarFormulario && (
           <>
             <div className="backdrop" onClick={cerrarFormulario}></div>
@@ -113,6 +112,9 @@ const AdminPage = () => {
 
       <div className="admin-main-content">
         <div className="admin-establecimientos-lista-container">
+        <button className="btn-nuevo" onClick={mostrarFormularioCrear}>
+          Nuevo Establecimiento
+        </button>
           <EstablecimientosLista
             establecimientos={establecimientos}
             onEdit={handleEditEstablecimiento}
@@ -124,6 +126,9 @@ const AdminPage = () => {
           <MapaUno establecimientos={establecimientos} />
         </div>
       </div>
+      <div className="admin-histograma-container">
+          <Histograma />
+        </div>
     </div>
   );
 };
