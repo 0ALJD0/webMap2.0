@@ -589,7 +589,7 @@ caracteristicas_clave = {
     "horarios": ["matutinos", "vespertinos", "nocturnos", "24 horas"],
     "servicios": ["servicio a domicilio", "servicio al auto", "menu", "autoservicio","menu fijo","buffet"],
     "tipo_cocina":["argentina","asiatica","brasilera","china","colombiana","coreana","costa rica","escandinava","ecuatoriana","venezolana","italiana","japonesa",
-                    "kosher","mexicana"",rusa","cocina andina","cocina patrimonial","comida rapida","frutas y vegetales","mariscos","nediterranea","novoandina",
+                    "kosher","mexicana","rusa","cocina andina","cocina patrimonial","comida rapida","frutas y vegetales","mariscos","nediterranea","novoandina",
                     "panaderia, pasteleri­a y reposteri­a","parrilladas","pizza","vegetariana"],
     "numero_tazas":["1 taza","2 tazas"],
     "numero_cubiertos":["1 cubierto","2 cubiertos","3 cubiertos","4 cubiertos","5 cubiertos",],
