@@ -47,7 +47,7 @@
   }
   
   .ce-crearEditarEstablecimiento .ce-button-primary {
-    background-color: #007bff;
+    background-color: #1e2020;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -57,7 +57,7 @@
   }
   
   .ce-crearEditarEstablecimiento .ce-button-primary:hover {
-    background-color: #0056b3;
+    background-color: #6a7276;
   }
   
   .ce-crearEditarEstablecimiento .ce-button-secondary {
@@ -67,7 +67,7 @@
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    margin-left: 25px;
+    margin-left: 0px;
   }
   
   .ce-crearEditarEstablecimiento .ce-button-secondary:hover {
@@ -117,7 +117,8 @@
     margin-top: 10px;
   }
   .map-buttons{
-    padding: 3%;
+    padding: 2%;
+    margin-left: -9px;
   }
   .map-popup{
     padding: 2%;
@@ -125,4 +126,5 @@
   .ce-ubicacion p{
     color:#666;
     font-size: 1rem;
+   /* margin-left: -20px ;*/
   }
