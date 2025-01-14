@@ -1,17 +1,30 @@
-.agente-virtual {
+  .agente-virtual {
     position: absolute;
-    width: 100%;
-    bottom: 0%;
+    bottom: 0;
+    left: 50%; /* Centra horizontalmente */
+    transform: translateX(-50%); /* Ajusta la posición al centro */
+    width: 100%; 
     max-width: 400px;
-    margin: 0 auto;
     padding: 2%;
     border: 1px solid #ccc;
     border-radius: 8px;
+    background-color: white; /* Para que el fondo destaque */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Mejora visual */
+    display: flex; /* Habilita Flexbox */
+    flex-direction: column; /* Acomoda los hijos en columna */
+    align-items: center; /* Centra horizontalmente el contenido */
+    justify-content: space-between; /* Espaciado uniforme entre los elementos */
   }
-  
+    
   .chat-container {
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
     height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto; /* Permite desplazamiento vertical */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: #f9f9f9; /* Fondo para distinguir los mensajes */
+    box-sizing: border-box;
   }
   
   .chat {
@@ -35,15 +48,41 @@
     background-color: #f0f0f0;
   }
   
-  .input-message {
-    width: calc(100% - 80px);
-    height: 50px;
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
+  .av-bajo {
+    display: flex; /* Alinea el textarea y posibles botones (si los hubiera) */
+    align-items: center;
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    padding: 10px 0;
+    border-top: 1px solid #ccc; /* Línea divisoria superior */
+    background-color: #ffffff; /* Fondo limpio */
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Sombra superior */
+}
+
+.input-message {
+  width: 100%; /* Ocupa todo el ancho disponible */
+  height: 50px; /* Altura ajustable */
+  padding: 12px; /* Espaciado interno */
+  border: 1px solid #ccc; /* Bordes suaves */
+  border-radius: 8px; /* Bordes redondeados */
+  font-size: 14px; /* Tamaño de texto legible */
+  font-family: Arial, sans-serif; /* Fuente limpia y profesional */
+  color: #333; /* Color del texto */
+  background-color: #f9f9f9; /* Fondo claro */
+  resize: none; /* Evita el cambio de tamaño manual */
+  box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1); /* Sombra interna sutil */
+  outline: none; /* Elimina el borde azul al hacer clic */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+}
+.input-message:focus {
+  border-color: #007BFF; /* Color azul al enfocar */
+  box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.5); /* Sombra azul al enfocar */
+  background-color: #ffffff; /* Fondo más claro al enfocar */
+}
+
+.input-message::placeholder {
+  color: #aaa; /* Color del texto del placeholder */
+  font-style: italic; /* Estilo de fuente del placeholder */
+}
   
   .send-button {
     width: 80px;
