@@ -194,7 +194,7 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
           value={tipos.find(option => option.label === tipo) } // Asegurarte de mostrar la opción correcta basada en el label
           onChange={(selectedOption) => setTipo(selectedOption.label)} // Guardar solo el label
           options={tipos} 
-          placeholder="Seleccion um tipo"
+          placeholder="Selecciona un tipo"
         />
         {establecimiento &&(tipo === 'Cafetería' || tipo === 'Restaurante' || tipo === 'Bar' ) && (
           <div>

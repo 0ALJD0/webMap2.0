@@ -67,7 +67,7 @@
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    margin-left: 0px;
+    margin: 2px;
   }
   
   .ce-crearEditarEstablecimiento .ce-button-secondary:hover {
