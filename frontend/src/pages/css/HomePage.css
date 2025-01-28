@@ -6,11 +6,14 @@
 
 .hp-header {
   flex: 0 0 auto;
-  text-align: center;
-  background-color: #b8adab;
-  margin: 10px;
+  text-align:center;
+  color: #fff;
+  background-color: #4f5558;
+  margin: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .hp-main-content {
@@ -75,11 +78,25 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  border: none;
+  background: #ff6b6b; /* Color de fondo vibrante */
+  border: none; /* Sin bordes */
+  color: white; /* Texto blanco para contraste */
+  font-weight: bold;
+  font-size: 14px; /* Tamaño de fuente ajustado */
+  padding: 8px 12px; /* Espaciado interno */
+  border-radius: 4px; /* Bordes redondeados */
   cursor: pointer;
-  font-weight: bolder;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones suaves */
+}
+.hp-cerrar-boton:hover {
+  background: #ff4c4c; /* Color más oscuro al pasar el mouse */
+  transform: scale(1.05); /* Ligeramente más grande al pasar el mouse */
+}
+
+.hp-cerrar-boton:active {
+  background: #e04343; /* Color más oscuro al hacer clic */
+  transform: scale(0.95); /* Ligeramente más pequeño al hacer clic */
 }
 
 .hp-agente-virtual-boton {
@@ -87,20 +104,68 @@
   bottom: 5%;
   right: 2%;
   z-index: 1000;
+  cursor: pointer;
+  text-align: center;
 }
- .hp-agente-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .hp-agente-button:hover {
-    background-color: #0056b3;
-  }
+
+.hp-agente-logo {
+  position: relative;
+  display: inline-block;
+}
+
+.hp-agente-logo img {
+  width: 100px; /* Ajusta el ancho según necesites */
+  height: auto;
+  object-fit: contain;
+}
+
+.hp-agente-mensaje {
+  position: absolute;
+  top: 50%;
+  right: 120%; /* Ubica el mensaje a la izquierda del logo */
+  transform: translateY(-50%);
+  background: #fff;
+  color: #1e2020;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  opacity: 0; /* El mensaje siempre se muestra */
+}
+
+.hp-agente-logo:hover .hp-agente-mensaje {
+  opacity: 1;
+}
+
+/* Flecha que apunta al logo */
+.hp-agente-mensaje::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent #fff;
+}
+
+
+/* Mensaje debajo del logo que simula un botón */
+.hp-agente-titulo {
+  margin-top: 8px; /* Espacio entre el logo y el mensaje */
+  font-size: 12px; /* Tamaño del texto */
+  color: #ffffff;
+  font-weight: bold;
+  padding: 8px 20px; /* Agrega espacio alrededor del texto */
+  border: 2px solid #1e2020; /* Bordes azules */
+  border-radius: 25px; /* Bordes redondeados */
+  background: #1e2020; /* Fondo transparente */
+  cursor: pointer; /* Apunta como si fuera un botón */
+  text-align: center; /* Centra el texto dentro del "botón" */
+  position: relative;
+  top: 110%;
+}
 
 .hp-agente-virtual {
   position: absolute;
@@ -120,4 +185,9 @@
 
 .hp-agente-virtual.desplegado {
   transform: scaleY(1) translateY(0);
-}
+  height: 65%;
+  width: 30%;
+  background: none;
+  box-shadow: none;
+  border: none;
+  }

@@ -18,7 +18,7 @@
     margin-right: 5px;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
+    background-color: #1e2020;
     color: #ffffff;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -26,6 +26,6 @@
   
   .lh-button-edit:hover,
   .lh-button-delete:hover {
-    background-color: #45a049;
+    background-color: #6a7276;
   }
   

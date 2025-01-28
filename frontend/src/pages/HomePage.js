@@ -88,10 +88,12 @@ const HomePage = () => {
           </div>
         )}
         {!mostrarAgente && (
-          <div className="hp-agente-virtual-boton">
-            <button className="hp-agente-button" onClick={handleDesplegarAgente}>
-              Agente Virtual
-            </button>
+          <div className="hp-agente-virtual-boton"onClick={handleDesplegarAgente}>
+            <div className="hp-agente-logo">
+              <img src="./logo_agente.png" alt="Agente Virtual" />
+              <div className="hp-agente-mensaje">¿Tienes dudas? ¡Pregúntame!</div>
+              <div className="hp-agente-titulo">Agente Virtual</div> {/* Mensaje debajo del logo */}
+            </div>
           </div>
         )}
       </div>

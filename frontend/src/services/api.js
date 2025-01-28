@@ -180,4 +180,23 @@ export const cambiarContrasena = async (data) => {
     throw error; // Lanza el error para ser manejado en el componente
   }
 };
+
+export const obtenerDatos = async () => {
+  try {
+    const response = await api.get('/histograma');
+    const datos = response.data;
+
+    // Procesar las categorías únicas
+    const categoriasUnicas = Object.keys(datos);
+
+    return {
+      datos,
+      categoriasUnicas,
+      categoriaSeleccionada: categoriasUnicas.length > 0 ? categoriasUnicas[0] : null,
+    };
+  } catch (error) {
+    console.error('Error al obtener los datos:', error);
+    throw error; // Lanza el error para que sea manejado donde se use la función
+  }
+};
 export default api;

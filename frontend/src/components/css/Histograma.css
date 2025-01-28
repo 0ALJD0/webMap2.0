@@ -1,0 +1,26 @@
+/* Contenedor principal */
+/* Select para categorías */
+.histograma-select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  margin-bottom: 0px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+.histograma-controls {
+    display: flex;
+    align-items: center; /* Alinea verticalmente al centro */
+    gap: 10px; /* Espaciado entre el texto y el select */
+  }
+  
+.histograma-description {
+    margin: 0; /* Elimina el margen por defecto del <p> */
+    font-size: 20px; /* Ajusta el tamaño de la fuente */
+    color: #333; /* Color del texto */
+  }
+  

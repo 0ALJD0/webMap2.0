@@ -194,9 +194,9 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
           value={tipos.find(option => option.label === tipo) } // Asegurarte de mostrar la opción correcta basada en el label
           onChange={(selectedOption) => setTipo(selectedOption.label)} // Guardar solo el label
           options={tipos} 
-          placeholder="Seleccion um tipo"
+          placeholder="Selecciona un tipo"
         />
-        {(tipo === 'Cafetería' || tipo === 'Restaurante' || tipo === 'Bar' ) && (
+        {establecimiento &&(tipo === 'Cafetería' || tipo === 'Restaurante' || tipo === 'Bar' ) && (
           <div>
           <label>Tipos de Servicio:</label>
           <CreatableSelect
@@ -210,7 +210,7 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
           />
           </div>
         )}
-        {(tipo === 'Cafetería' || tipo === 'Restaurante' || tipo === 'Establecimiento móvil' || tipo === 'Plaza de comida' || tipo === 'Servicio Catering' ) && (
+        {establecimiento &&(tipo === 'Cafetería' || tipo === 'Restaurante' || tipo === 'Establecimiento móvil' || tipo === 'Plaza de comida' || tipo === 'Servicio Catering' ) && (
           <div> 
             <label>Tipos de Cocina:</label>
             <CreatableSelect
@@ -224,7 +224,7 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
             />
           </div>
         )}
-        {(tipo === 'Bar' ||tipo === 'Discoteca' ) && (
+        {establecimiento &&(tipo === 'Bar' ||tipo === 'Discoteca' ) && (
           <div>
             <label>Número de Copas 🍷</label>
             <input
@@ -237,26 +237,26 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
             />
           </div>
         )}
-        {(tipo === 'Cafetería' ) && (
+        {establecimiento &&(tipo === 'Cafetería' ) && (
           <div>
             <label>Número de Tazas 🍵</label>
             <input
               type="number"
               min="0"
-              max="3"
+              max="2"
               value={nTazas}
               onChange={(e) => setNTazas(e.target.value)}
               required
             />
           </div>
         )}
-        {(tipo === 'Restaurante' ) && (
+        {establecimiento &&(tipo === 'Restaurante' ) && (
           <div>
             <label>Número de Tenedores 🍴</label>
             <input
               type="number"
               min="0"
-              max="3"
+              max="5"
               value={nTenedores}
               onChange={(e) => setNTenedores(e.target.value)}
               required
