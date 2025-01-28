@@ -70,12 +70,25 @@ const IntroPage = () => {
   return (
     <div className="intro-container">
       <div className="intro-content">
-        <h1 className="intro-title">¡Bienvenido al Mapa Virtual Turístico Alimenticio!</h1>
-        <p className="intro-description">
-          Explora los mejores establecimientos de comida en tu zona. Descubre restaurantes, 
-          cafeterías, y más, con información detallada sobre cada uno.
-        </p>
-        <button className="intro-button" onClick={handleButtonClick}>¡Comienza a explorar!</button>
+        <div className="gallery-images">
+                {currentImages.map((image, index) => (
+                    <img 
+                        key={index} 
+                        src={image} 
+                        alt={`Restaurant ${index + 1}`} 
+                        className="gallery-image"
+                    />
+                ))}
+        </div>
+        <div className="intro-data">
+            <h1 className="intro-title">¡Bienvenido al Mapa Virtual Turístico Alimenticio!</h1>
+            <p className="intro-description">
+            Explora los mejores establecimientos de comida en tu zona. Descubre restaurantes, 
+            cafeterías, y más, con información detallada sobre cada uno.
+            </p>
+            <button className="intro-button" onClick={handleButtonClick}>¡Comienza a explorar!</button>
+        </div>
+
       </div>
 
       <div className="info-scroll">
@@ -106,16 +119,7 @@ const IntroPage = () => {
           ref={(el) => (sectionsRef.current[2] = el)}
         >
           <h2>Galería de Establecimientos</h2>
-          <div className="gallery-images">
-            {currentImages.map((image, index) => (
-                <img 
-                    key={index} 
-                    src={image} 
-                    alt={`Restaurant ${index + 1}`} 
-                    className="gallery-image"
-                />
-            ))}
-          </div>
+          
         </div>
       </div>
 

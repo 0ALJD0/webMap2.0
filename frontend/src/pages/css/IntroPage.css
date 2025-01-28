@@ -16,8 +16,11 @@ body {
   }
   
   .intro-content {
+    position: relative; /* Para que los elementos hijos se posicionen relativos a este contenedor */
     text-align: center;
-    padding: 50px;
+    padding: 1%;
+    width: 99%;
+    height: 500px;
     margin-top: 80px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
@@ -48,6 +51,8 @@ body {
   
   .intro-button:hover {
     background-color: #2980b9;
+    transform: scale(1.05);
+    opacity: 0.9;
   }
   
   /* Scroll Section */
@@ -59,9 +64,11 @@ body {
   .info-section {
     margin-bottom: 50px;
     text-align: center;
+    height: 500px;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    background-color: #0000007e;
   }
   
   .info-section.fade-in {
@@ -71,25 +78,41 @@ body {
   
   .info-section h2 {
     font-size: 28px;
-    color: #2c3e50;
+    color: #000000;
   }
   
   .info-section p {
     font-size: 18px;
-    color: #7f8c8d;
+    color: #3b4242;
     line-height: 1.6;
   }
   
   /* Image Gallery */
   .gallery-images {
+    position: relative; /* Mantener el diseño relativo al contenedor padre */
     display: flex;
     justify-content: center;
     margin-top: 20px;
   }
   
+  .intro-data {
+    position: absolute; /* Hacer que este contenedor se superponga */
+    top: 50%; /* Ajustar verticalmente para centrar */
+    left: 50%; /* Ajustar horizontalmente para centrar */
+    transform: translate(-50%, -50%); /* Centrar el contenido con respecto al contenedor */
+    z-index: 2; /* Asegurar que esté sobre la galería */
+    /*background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+    background-color:  rgba(243, 243, 243, 0.726);
+}
+
   .gallery-images img {
-    width: 400px;
-    height: 250px;
+    position: relative; /* Mantener las imágenes dentro de su contenedor */
+    z-index: 1; /* Las imágenes estarán detrás de intro-data */
+    width: 90%; /* En lugar de un tamaño fijo */
+    max-width: 400px; /* Limita el tamaño máximo */
+    height: 480px; /* Mantiene la proporción */
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
