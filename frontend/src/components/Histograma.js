@@ -12,6 +12,10 @@ const Histograma = () => {
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
   const [histogramaData, setHistogramaData] = useState(null);
+  const [añosDisponibles, setAñosDisponibles] = useState([]);
+  const [mesesDisponibles, setMesesDisponibles] = useState([]);
+  const [mesesSeleccionados, setMesesSeleccionados] = useState([]);
+  const [añoSeleccionado, setAñoSeleccionado] = useState(null);
   
 // Mapeo de categorías a nombres amigables
   const categoriasLabels = {
@@ -41,6 +45,9 @@ const Histograma = () => {
         setDatos(datos);
         setCategorias(categoriasUnicas);
         setCategoriaSeleccionada(categoriaSeleccionada);
+        // Obtener los años disponibles
+        const años = [...new Set(Object.values(datos).flat().map(item => new Date(item.periodo).getFullYear()))];
+        setAñosDisponibles(años);
       } catch (error) {
         console.error('Error al cargar los datos:', error);
       }
@@ -53,30 +60,53 @@ const Histograma = () => {
     if (!categoriaSeleccionada || !datos[categoriaSeleccionada]) return;
 
     const datosCategoria = datos[categoriaSeleccionada];
-        // Crear un mapa para resumir las frecuencias por mes
-        const frecuenciaPorMes = {};
-        datosCategoria.forEach((item) => {
-          const fecha = new Date(item.periodo); // Convertir a objeto Date
-          const mesAnio = `${fecha.toLocaleString('es-ES', { month: 'long' })} ${fecha.getFullYear()}`; // Mes Año
-          if (!frecuenciaPorMes[mesAnio]) {
-            frecuenciaPorMes[mesAnio] = {};
-          }
-          if (!frecuenciaPorMes[mesAnio][item.caracteristica]) {
-            frecuenciaPorMes[mesAnio][item.caracteristica] = 0;
-          }
-          frecuenciaPorMes[mesAnio][item.caracteristica] += item.frecuencia; // Sumar frecuencia
-        });
+
     
-        // Crear las etiquetas (meses) y los datasets
-        const periodos = Object.keys(frecuenciaPorMes).sort(
-          (a, b) => new Date(a) - new Date(b) // Ordenar por fecha
-        );
-        const caracteristicas = [...new Set(datosCategoria.map((item) => item.caracteristica))];
+    // Filtrar meses disponibles basados en el año seleccionado
+    const obtenerMesesDisponibles = (año) => {
+      const meses = new Set();
+      Object.values(datosCategoria).flat().forEach((item) => {
+        const fecha = new Date(item.periodo);
+        if (fecha.getFullYear() === año) {
+          meses.add(fecha.toLocaleString('es-ES', { month: 'long' }));
+        }
+      });
+      return [...meses];
+    };
+
+    if (añoSeleccionado) {
+      const meses = obtenerMesesDisponibles(añoSeleccionado);
+      setMesesDisponibles(meses);
+    }
+
+  }, [categoriaSeleccionada, datos, añoSeleccionado]);
+
+
+  useEffect(() => {
+    if (!añoSeleccionado || !mesesSeleccionados.length) return;
+
+    const datosCategoria = datos[categoriaSeleccionada];
+    const frecuenciaPorMes = {};
     
-        const datasets = caracteristicas.map((caracteristica) => {
-          const frecuencias = periodos.map(
-            (mesAnio) => frecuenciaPorMes[mesAnio][caracteristica] || 0
-          );
+    datosCategoria.forEach((item) => {
+      const fecha = new Date(item.periodo);
+      const mesAnio = `${fecha.toLocaleString('es-ES', { month: 'long' })} ${fecha.getFullYear()}`;
+      if (añoSeleccionado && mesesSeleccionados.includes(fecha.toLocaleString('es-ES', { month: 'long' }))) {
+        if (!frecuenciaPorMes[mesAnio]) {
+          frecuenciaPorMes[mesAnio] = {};
+        }
+        if (!frecuenciaPorMes[mesAnio][item.caracteristica]) {
+          frecuenciaPorMes[mesAnio][item.caracteristica] = 0;
+        }
+        frecuenciaPorMes[mesAnio][item.caracteristica] += item.frecuencia;
+      }
+    });
+
+    const periodos = Object.keys(frecuenciaPorMes).sort((a, b) => new Date(a) - new Date(b));
+    const caracteristicas = [...new Set(datosCategoria.map((item) => item.caracteristica))];
+
+    const datasets = caracteristicas.map((caracteristica) => {
+      const frecuencias = periodos.map((mesAnio) => frecuenciaPorMes[mesAnio][caracteristica] || 0);
       return {
         label: caracteristica,
         data: frecuencias,
@@ -88,11 +118,25 @@ const Histograma = () => {
       labels: periodos,
       datasets,
     });
-  }, [categoriaSeleccionada, datos]);
 
-  const handleCategoriaChange = (e) => {
-    setCategoriaSeleccionada(e.target.value);
-  };
+    }, [categoriaSeleccionada, datos, añoSeleccionado, mesesSeleccionados]);
+
+    //Obtenemos el cambio de categoria
+    const handleCategoriaChange = (e) => {
+      setCategoriaSeleccionada(e.target.value);
+    };
+
+    //Obtenemos el cambio de Año
+    const handleAñoChange = (e) => {
+      setAñoSeleccionado(Number(e.target.value));
+      setMesesSeleccionados([]);  // Resetea los meses seleccionados
+    };
+
+    //Obtenemos el cambio en Meses
+    const handleMesesChange = (e) => {
+      const selectedMeses = Array.from(e.target.selectedOptions, option => option.value);
+      setMesesSeleccionados(selectedMeses);
+    };
     // Función para exportar el gráfico como imagen
     const exportarComoImagen = () => {
       const canvas = document.getElementById('histogramaChart'); // Obtén el canvas
@@ -138,6 +182,37 @@ const Histograma = () => {
                 </option>
                 ))}
             </select>
+          <p className="histograma-description">Seleccione el año:</p>
+          <select
+            className="histograma-select"
+            onChange={handleAñoChange}
+            value={añoSeleccionado || ''}
+          >
+            <option value="">Seleccione un año</option>
+            {añosDisponibles.map((año) => (
+              <option key={año} value={año}>
+                {año}
+              </option>
+            ))}
+          </select>
+
+          {añoSeleccionado ? (
+            <>
+              <p className="histograma-description">Seleccione los meses:</p>
+              <select
+                multiple
+                className="histograma-select"
+                onChange={handleMesesChange}
+                value={mesesSeleccionados}
+              >
+                {mesesDisponibles.map((mes) => (
+                  <option key={mes} value={mes}>
+                    {mes}
+                  </option>
+                ))}
+              </select>
+            </>
+          ):(<p></p>)}
         </div>    
         {histogramaData ? (
             <div className="histograma-chart-container">
