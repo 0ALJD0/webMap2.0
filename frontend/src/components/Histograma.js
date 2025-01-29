@@ -12,18 +12,28 @@ const Histograma = () => {
   const [categorias, setCategorias] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
   const [histogramaData, setHistogramaData] = useState(null);
-
+  
+// Mapeo de categorías a nombres amigables
+  const categoriasLabels = {
+    tipo_cocina: 'Tipo de Cocina',
+    tipo_establecimiento: 'Tipo de Establecimiento',
+    servicios: 'Tipo de Servicio',
+    numero_copas: 'Número de Copas',
+    numero_tazas:'Número de Tazas',
+    numero_cubiertos:'Número de Cubiertos',
+    horarios:'Horarios',
+  };
   const options = {
     responsive: true,
     plugins: {
       legend: { position: 'top' },
       title: {
         display: true,
-        text: `Histograma de la categoría: ${categoriaSeleccionada}`,
+        text: `Histograma de la categoría: ${categoriasLabels[categoriaSeleccionada] || categoriaSeleccionada}`, // Usar el mapeo aquí
       },
     },
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,7 +93,35 @@ const Histograma = () => {
   const handleCategoriaChange = (e) => {
     setCategoriaSeleccionada(e.target.value);
   };
-
+    // Función para exportar el gráfico como imagen
+    const exportarComoImagen = () => {
+      const canvas = document.getElementById('histogramaChart'); // Obtén el canvas
+      const image = canvas.toDataURL('image/png'); // Convierte a imagen PNG
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = `histograma_${categoriaSeleccionada}.png`; // Nombre del archivo
+      link.click(); // Simula un clic para descargar la imagen
+    };
+    //Función para exportar el grafico como csv
+    const exportarComoCSV = () => {
+      const csvRows = [];
+      const headers = ['Mes', ...histogramaData.datasets.map(d => d.label)];
+      csvRows.push(headers.join(','));
+    
+      histogramaData.labels.forEach((label, index) => {
+        const row = [label];
+        histogramaData.datasets.forEach((dataset) => {
+          row.push(dataset.data[index]);
+        });
+        csvRows.push(row.join(','));
+      });
+    
+      const csvString = csvRows.join('\n');
+      const link = document.createElement('a');
+      link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+      link.download = `histograma_${categoriaSeleccionada}.csv`;
+      link.click();
+    };
   return (
     <div className="histograma-container">
         <h2 className="histograma-title">Histograma de frecuencia de las consultas de los usuarios</h2>
@@ -96,14 +134,21 @@ const Histograma = () => {
             >
                 {categorias.map((categoria) => (
                 <option key={categoria} value={categoria}>
-                    {categoria}
+                    {categoriasLabels[categoria] || categoria} {/* Usar el mapeo o el valor original */}
                 </option>
                 ))}
             </select>
         </div>    
         {histogramaData ? (
             <div className="histograma-chart-container">
-            <Bar options={options} data={histogramaData} />
+            <Bar id="histogramaChart" // Asignar un ID al canvas para poder acceder a él
+            options={options} data={histogramaData} />
+            <button onClick={exportarComoImagen} className="export-btn">
+              Exportar como imagen
+            </button>
+            <button onClick={exportarComoCSV} className="export-btn">
+              Exportar como CSV
+            </button>
             </div>
         ) : (
             <p className="histograma-loading">Cargando datos del histograma...</p>

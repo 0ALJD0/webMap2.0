@@ -67,12 +67,13 @@ export const preguntarAgenteVirtual = async (pregunta) => {
 //Funcion para el login
 export const login = async (usuario, contrasena) => {
   try {
-    console.log(usuario.usuario, usuario.contrasena,'api');
+    //console.log(usuario.usuario, usuario.contrasena,'api');
     
     const response = await api.post('/login', { usuario:usuario.usuario, contrasena:usuario.contrasena });
     if (response.data.token) {
       console.log(response.data.token);
       sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('authenticated', 'true'); // Esto asegura que puedas usarlo en la ruta protegida
     }
     if (response.data.message === 'Login successful') {
       return response.data;
