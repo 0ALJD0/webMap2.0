@@ -190,10 +190,17 @@ export const obtenerDatos = async () => {
     // Procesar las categorías únicas
     const categoriasUnicas = Object.keys(datos);
 
+    // Crear una estructura más organizada para los filtros
+    const filtros = categoriasUnicas.reduce((acc, categoria) => {
+      acc[categoria] = [...new Set(datos[categoria].map(item => item.caracteristica))]; // Usamos Set para eliminar duplicados
+      return acc;
+    }, {});
+    console.log(filtros);
     return {
       datos,
       categoriasUnicas,
       categoriaSeleccionada: categoriasUnicas.length > 0 ? categoriasUnicas[0] : null,
+      filtros,
     };
   } catch (error) {
     console.error('Error al obtener los datos:', error);
