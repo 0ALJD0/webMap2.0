@@ -195,6 +195,7 @@ const Histograma = () => {
         histogramaData && histogramaData.labels.length > 0 ? (
             <div className='histrograma-grafico'>
               <Bar data={histogramaData}
+              style={{padding: '30px'}}
                />
               <div className='histograma-botones'>
                 <button onClick={exportarComoImagen} className="export-boton">
@@ -206,7 +207,7 @@ const Histograma = () => {
               </div>
             </div>
           ) : (
-            <p>Seleccione una categoría para ver el histograma.</p>
+            <p className='parrafo-histograma'>Seleccione una categoría para ver el histograma.</p>
           )
         ) : (
           <Spinner/>

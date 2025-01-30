@@ -11,12 +11,14 @@
   outline: none;
   cursor: pointer;
   transition: border-color 0.3s ease;
+  width: 100%;
 }
 .histograma-controls {
     display: flex;
     align-items: start; /* Alinea verticalmente al centro */
     flex-direction: column; /* Hace que los elementos se apilen verticalmente */
     gap: 10px; /* Espaciado entre el texto y el select */
+    margin-top: 5%;
   }
   
 .histograma-titulo {
@@ -29,7 +31,7 @@
 
   .histograma-chart-container {
     display: flex;
-    align-items: center; /* Alinea los elementos en la parte superior */
+    align-items: start; /* Alinea los elementos en la parte superior */
     justify-content: space-around; /* Separa los elementos en los extremos */
     gap: 20px; /* Espacio entre el gráfico y los controles */
   }
@@ -37,4 +39,51 @@
   .histrograma-grafico {
     flex: 1; /* Ocupa todo el espacio disponible */
   }
-  
+  /* Contenedor del histograma */
+.histrograma-grafico {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra todos los elementos */
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.486);
+  border-radius: 3%;
+}
+
+/* Contenedor de los botones */
+.histograma-botones {
+  display: flex;
+  justify-content: center; /* Centra los botones */
+  gap: 15px; /* Espacio uniforme entre botones */
+  margin-top: 20px; /* Espaciado respecto al gráfico */
+  margin-bottom: 20px;
+}
+
+/* Estilo moderno para los botones */
+.export-boton {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(135deg, #3498db, #6dd5fa); /* Gradiente moderno */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.export-boton:hover {
+  background: linear-gradient(135deg, #2980b9, #54a0ff); /* Cambio de color en hover */
+  transform: translateY(-2px); /* Efecto de elevación */
+  box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.export-boton:active {
+  transform: scale(0.95); /* Pequeño efecto al hacer clic */
+}
+
+.parrafo-histograma{
+  margin: 10%;
+}
