@@ -14,13 +14,27 @@
 }
 .histograma-controls {
     display: flex;
-    align-items: center; /* Alinea verticalmente al centro */
+    align-items: start; /* Alinea verticalmente al centro */
+    flex-direction: column; /* Hace que los elementos se apilen verticalmente */
     gap: 10px; /* Espaciado entre el texto y el select */
   }
   
-.histograma-description {
-    margin: 0; /* Elimina el margen por defecto del <p> */
-    font-size: 20px; /* Ajusta el tamaño de la fuente */
+.histograma-titulo {
+    margin: 1%; /* Elimina el margen por defecto del <p> */
+    font-size: 32px; /* Ajusta el tamaño de la fuente */
     color: #333; /* Color del texto */
+    font-weight: bolder;
+    align-self: center;
+  }
+
+  .histograma-chart-container {
+    display: flex;
+    align-items: center; /* Alinea los elementos en la parte superior */
+    justify-content: space-around; /* Separa los elementos en los extremos */
+    gap: 20px; /* Espacio entre el gráfico y los controles */
+  }
+  
+  .histrograma-grafico {
+    flex: 1; /* Ocupa todo el espacio disponible */
   }
   

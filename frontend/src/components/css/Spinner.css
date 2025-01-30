@@ -1,0 +1,40 @@
+.spinner-container {
+    margin: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .bar {
+    width: 10px; /* El tamaño de cada barra */
+    height: 30px;
+    margin: 0 5px;
+    background-color: #3498db; /* Color de las barras */
+    animation: bounce 1s ease-in-out infinite; /* Animación por defecto */
+  }
+  
+  /* Generamos una animación para que las barras suban y bajen */
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0); /* Posición inicial */
+    }
+    50% {
+      transform: translateY(-20px); /* Subir las barras */
+    }
+  }
+  
+  /* Animación aleatoria con diferentes tiempos */
+  .bar:nth-child(1) {
+    animation-duration: 1.2s;
+  }
+  .bar:nth-child(2) {
+    animation-duration: 1.4s;
+  }
+  .bar:nth-child(3) {
+    animation-duration: 1.6s;
+  }
+  .bar:nth-child(4) {
+    animation-duration: 1.8s;
+  }
+  
