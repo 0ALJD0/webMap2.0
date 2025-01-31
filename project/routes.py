@@ -158,7 +158,7 @@ def add_establecimiento():
         data = request.get_json()
         nombre = data.get('nombre')
         # Verificar si el nombre ya existe
-        if Establecimiento.query.filter_by(nombre=nombre).first():
+        if Establecimiento.query.filter_by(nombre=nombre, eliminado=False).first():
             return jsonify({'message': 'Establecimiento con este nombre ya existe'}), 409
         
         direccion = data.get('direccion')
@@ -228,7 +228,7 @@ def edit_establecimiento(id):
         
 
         nuevo_nombre = data.get('nombre')
-        if nuevo_nombre and Establecimiento.query.filter(Establecimiento.nombre == nuevo_nombre, Establecimiento.id != id).first():
+        if nuevo_nombre and Establecimiento.query.filter(Establecimiento.nombre == nuevo_nombre, Establecimiento.id != id, Establecimiento.eliminado==False).first():
             return jsonify({'message': 'Establecimiento con este nombre ya existe'}), 409
 
         # Actualizar atributos básicos del establecimiento

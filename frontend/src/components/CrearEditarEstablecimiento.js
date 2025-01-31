@@ -48,6 +48,8 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
   const[nCopas, setNCopas] = useState(1);
   const[nTazas, setNTazas] = useState(1);
   const[nTenedores, setNTenedores] = useState(1);
+  const[petFrinedly, setPetFrinedly] = useState(false);
+  const[accesibility, setAccesibility] = useState(false);
   const [opcionesTipoCocina, setOpcionesTipoCocina] = useState([]);
   const [tipoCocinaSeleccionados, setTipoCocinaSeleccionados] = useState([]);
   const [error, setError] = useState(''); // Aquí se define el estado y la función setError
@@ -68,6 +70,8 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
       setNCopas(establecimiento.numero_copas);
       setNTazas(establecimiento.numero_taza);
       setNTenedores(establecimiento.numero_cubiertos);
+      setPetFrinedly(establecimiento.petfriendly);
+      setAccesibility(establecimiento.accesibilidad);
       // Cargar tipos de servicio
       const cargarTiposDeServicio = async () => {
         const tipos = await obtenerTiposDeServicio();
@@ -146,7 +150,10 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
         tipo_servicio: tipoServiciosSeleccionados.map(servicio => servicio.value),
         tipo_cocina: tipoCocinaSeleccionados.map(cocina => cocina.value),
         numero_copas:nCopas,
-        nuemero_taza:nTenedores,
+        numero_taza:nTazas,
+        numero_cubiertos: nTenedores,
+        petfriendly:petFrinedly,
+        accesibilidad: accesibility,
       };
       if (establecimiento) {
         await actualizarEstablecimiento(establecimiento.id, payload);
@@ -227,43 +234,108 @@ const CrearEditarEstablecimiento = ({ establecimiento, onSuccess, onCancel  }) =
         {establecimiento &&(tipo === 'Bar' ||tipo === 'Discoteca' ) && (
           <div>
             <label>Número de Copas 🍷</label>
-            <input
-              type="number"
-              min="0"
-              max="3"
-              value={nCopas}
-              onChange={(e) => setNCopas(e.target.value)}
-              required
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <button 
+                className='button-selector'
+                type="button" 
+                onClick={() => setNCopas((prev) => Math.max(0, prev - 1))}
+              >
+                ➖
+              </button>
+              <input 
+                type="number" 
+                value={nCopas}  
+                readOnly 
+                style={{ width: "40px", textAlign: "center" }}
+              />
+              <button 
+                className='button-selector'
+                type="button" 
+                onClick={() => setNCopas((prev) => Math.min(3, prev + 1))}
+              >
+                ➕
+              </button>
+            </div>
           </div>
         )}
         {establecimiento &&(tipo === 'Cafetería' ) && (
           <div>
             <label>Número de Tazas 🍵</label>
-            <input
-              type="number"
-              min="0"
-              max="2"
-              value={nTazas}
-              onChange={(e) => setNTazas(e.target.value)}
-              required
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <button 
+                className='button-selector'
+                type="button" 
+                onClick={() => setNTazas((prev) => Math.max(0, prev - 1))}
+              >
+                ➖
+              </button>
+              <input 
+                type="number" 
+                value={nTazas} 
+                readOnly 
+                style={{ width: "40px", textAlign: "center" }}
+              />
+              <button 
+                className='button-selector'
+                type="button" 
+                onClick={() => setNTazas((prev) => Math.min(2, prev + 1))}
+              >
+                ➕
+              </button>
+            </div>
           </div>
         )}
         {establecimiento &&(tipo === 'Restaurante' ) && (
           <div>
             <label>Número de Tenedores 🍴</label>
-            <input
-              type="number"
-              min="0"
-              max="5"
-              value={nTenedores}
-              onChange={(e) => setNTenedores(e.target.value)}
-              required
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <button 
+                className='button-selector'
+                type="button" 
+                onClick={() => setNTenedores((prev) => Math.max(0, prev - 1))}
+              >
+                ➖
+              </button>
+              <input 
+                type="number" 
+                value={nTenedores} 
+                readOnly 
+                style={{ width: "40px", textAlign: "center" }}
+              />
+              <button 
+                className='button-selector'
+                type="button" 
+                onClick={() => setNTenedores((prev) => Math.min(5, prev + 1))}
+              >
+                ➕
+              </button>
+            </div>
           </div>
         )}
-        
+        <div className='checkbox-inputs'>
+          <div className='checbox-container'>
+            <label> PetFriendly</label>
+            <input
+              className='checkbox-input'
+              type="checkbox"
+              id="switch"
+              checked={petFrinedly}
+              onChange={() => setPetFrinedly(!petFrinedly)}
+            />
+            <label htmlFor="switch" className="checkbox-label"></label>
+          </div>
+          <div className='checbox-container'>
+            <label> Accesibilidad</label>
+            <input
+              className='checkbox-input'
+              type="checkbox"
+              id="switch2"
+              checked={accesibility}
+              onChange={() => setAccesibility(!accesibility)}
+            />
+            <label htmlFor="switch2" className="checkbox-label"></label>
+          </div>
+        </div>
         <label>Dirección:</label>
         <input type="text" placeholder="Dirección *" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
         <label>Ubicación:</label>

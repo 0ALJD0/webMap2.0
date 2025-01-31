@@ -138,3 +138,62 @@
 .ce-multiselect .css-18jjkcs-placeholder {
   color: #888; /* Un color agradable para el placeholder */
 }
+.button-selector{
+  height: 30px;
+  margin: 0.5%;
+  margin-bottom: 2%;
+}
+/* Estilos para el interruptor */
+.checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-label {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background-color 0.4s;
+}
+
+/* Círculo interior */
+.checkbox-label:before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.4s;
+}
+
+/* Cambia el color y mueve el círculo cuando está activo */
+.checkbox-input:checked + .checkbox-label {
+  background-color: #4caf50;
+}
+
+.checkbox-input:checked + .checkbox-label:before {
+  transform: translateX(26px);
+}
+
+.checkbox-inputs {
+  margin: 3%;
+  display: flex;
+  justify-content: left; /* Centra los elementos horizontalmente */
+  gap: 20px; /* Espacio uniforme entre los checkboxes */
+  flex-wrap: wrap; /* Permite que los elementos se ajusten si la pantalla es pequeña */
+}
+
+.checbox-container {
+  display: flex;
+  align-items: center; /* Alinea los elementos verticalmente */
+  gap: 10px; /* Espacio entre el texto y el switch */
+}

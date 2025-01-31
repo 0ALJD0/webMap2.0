@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap  } from 're
 import './css/Map.css'; 
 import L from 'leaflet';
 import 'leaflet-search';
-import 'leaflet-search/dist/leaflet-search.min.css';
+//import 'leaflet-search/dist/leaflet-search.min.css';
 
 
 // Componente para añadir la barra de búsqueda
@@ -13,11 +13,10 @@ const SearchControl = ({ establecimientos }) => {
   const searchRef = useRef(null);
 
   useEffect(() => {
-        // Limpiar controles duplicados
-        if (searchRef.current) {
-          map.removeControl(searchRef.current);
-        }
-    // Crear una nueva capa con los marcadores
+    if (searchRef.current) {
+      map.removeControl(searchRef.current);
+    }
+
     const markersLayer = L.layerGroup(
       establecimientos.map((establecimiento) => {
         const marker = L.marker(
@@ -30,15 +29,13 @@ const SearchControl = ({ establecimientos }) => {
             <p><b>Tipo:</b> ${establecimiento.tipo}</p>
           </div>
         `);
-        marker.options.title = establecimiento.nombre; // Título para la búsqueda
+        marker.options.title = establecimiento.nombre;
         return marker;
       })
     );
 
-    // Añadir los marcadores al mapa
     markersLayer.addTo(map);
 
-    // Configurar y añadir el control de búsqueda
     searchRef.current = new L.Control.Search({
       layer: markersLayer,
       propertyName: 'title',
@@ -47,11 +44,17 @@ const SearchControl = ({ establecimientos }) => {
       moveToLocation: (latlng, title, map) => {
         map.setView(latlng, 15);
       },
+      collapsed: false, // Hace que la barra de búsqueda siempre esté visible
+      textPlaceholder: "Buscar establecimiento...",
+      textErr: "No encontrado",
     });
 
     searchRef.current.addTo(map);
 
-    // Limpieza para evitar controles duplicados
+    // Agregar clase personalizada para modificar el estilo
+    const searchContainer = searchRef.current.getContainer();
+    searchContainer.classList.add("custom-search-control");
+
     return () => {
       if (searchRef.current) {
         map.removeControl(searchRef.current);
@@ -59,7 +62,7 @@ const SearchControl = ({ establecimientos }) => {
     };
   }, [establecimientos, map]);
 
-  return null; // No renderiza nada
+  return null;
 };
 
   // Crear el icono con el emoji 🍽️

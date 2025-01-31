@@ -84,3 +84,63 @@
   border-bottom: 0.5px solid #ddd;
   margin: 5px 0;
 }
+.custom-search-control {
+  position: absolute !important;
+  top: 10px;
+  left: 500%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  width: 300px;
+}
+
+.custom-search-control input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.custom-search-control button {
+  background: #00ff95;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  margin-left: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-search-control button:hover {
+  background: #0056b3;
+}
+
+/* Estilos para la lista de sugerencias */
+.leaflet-control-search .search-tooltip {
+  background: white !important;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-control-search .search-tooltip li {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.leaflet-control-search .search-tooltip li:hover,
+.leaflet-control-search .search-tooltip li.active {
+  background: #007bff;
+  color: white;
+}
+
+/* Permitir navegación con tab y enter */
+.leaflet-control-search input:focus + .search-tooltip {
+  display: block !important;
+}
