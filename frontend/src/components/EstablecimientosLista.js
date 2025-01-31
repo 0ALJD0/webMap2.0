@@ -3,7 +3,7 @@ import React from 'react';
 import { eliminarEstablecimiento } from '../services/api';
 import './css/EstablecimientosLista.css';
 
-const EstablecimientosLista = ({ establecimientos, onEdit, onEliminar, mostrarMensaje  }) => {
+const EstablecimientosLista = ({ establecimientos, onEdit, onEliminar, mostrarMensaje, ubicacion }) => {
   const handleEliminar = async (id) => {
     try {
       const response = await eliminarEstablecimiento(id);
@@ -14,6 +14,9 @@ const EstablecimientosLista = ({ establecimientos, onEdit, onEliminar, mostrarMe
       alert('Error eliminando establecimiento');
     }
   };
+  const handleUbicacion = async (data)=>{
+    ubicacion(data);
+  }
   return (
     <div className="el-container">
       {establecimientos.map(est => (
@@ -23,6 +26,7 @@ const EstablecimientosLista = ({ establecimientos, onEdit, onEliminar, mostrarMe
           <p className='el-address'>Tipo: {est.tipo} </p>
           <button onClick={() => onEdit(est)} className="el-button el-button-edit">Editar</button>
           <button onClick={() => handleEliminar(est.id)} className="el-button el-button-delete">Eliminar</button>
+          <button onClick={()=> handleUbicacion([est.longitud, est.latitud])} className="el-button el-button-edit">Ir</button>
         </div>
       ))}
     </div>

@@ -112,7 +112,7 @@
 
 .admin-mapa-container {
   width: 75%;
-  height: 450px;
+  height: 550px;
   margin-top: 10px;
   margin-left: 20px;
   padding: 10px;
@@ -136,4 +136,18 @@
   width: 98%;
   background-color: #fcfbfb;
   border-radius: 10px;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2%;
+}
+
+.search-bar input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
 }

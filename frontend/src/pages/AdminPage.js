@@ -16,6 +16,8 @@ const AdminPage = () => {
   const [establecimientoSeleccionado, setEstablecimientoSeleccionado] = useState(null);
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate();
+  const [filtro, setFiltro] = useState("");
+  const [ubicacionTemporal, setUbicacionTemporal] = useState([]);
 
   /*useEffect(() => {
     fetchEstablecimientos()
@@ -35,6 +37,11 @@ const AdminPage = () => {
     fetchAndSetEstablecimientos();
   }, []);
 
+  // Filtra los establecimientos según el nombre escrito
+  const establecimientosFiltrados = establecimientos.filter(est =>
+    est.nombre.toLowerCase().includes(filtro.toLowerCase())
+  );
+  
   const handleLogout = async () => {
     try {
       await logoutAdmin();
@@ -55,6 +62,9 @@ const AdminPage = () => {
     setEstablecimientoSeleccionado(null); // Reiniciar el estado seleccionado al abrir el formulario
     setMostrarFormulario(true);
   };
+  const handleubicacionTemporal =async (data) =>{
+    setUbicacionTemporal(data);
+  }
 
   const cerrarFormulario = () => {
     setMostrarFormulario(false);
@@ -112,18 +122,27 @@ const AdminPage = () => {
 
       <div className="admin-main-content">
         <div className="admin-establecimientos-lista-container">
-        <button className="btn-nuevo" onClick={mostrarFormularioCrear}>
-          Nuevo Establecimiento
-        </button>
+        <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Escribe el nombre de un establecimiento"
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+            />
+          </div>
+          <button className="btn-nuevo" onClick={mostrarFormularioCrear}>
+            Nuevo Establecimiento
+          </button>
           <EstablecimientosLista
-            establecimientos={establecimientos}
+            establecimientos={establecimientosFiltrados}
             onEdit={handleEditEstablecimiento}
             onEliminar={fetchAndSetEstablecimientos}
             mostrarMensaje={mostrarMensajeTemporal}
+            ubicacion={handleubicacionTemporal}
           />
         </div>
         <div className="admin-mapa-container">
-          <MapaUno establecimientos={establecimientos} />
+          <MapaUno establecimientos={establecimientos} ubicacion={ubicacionTemporal}/>
         </div>
       </div>
       <div className="admin-histograma-container">
