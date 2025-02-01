@@ -46,13 +46,11 @@ const IntroPage = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const index = sectionsRef.current.indexOf(entry.target);
-        if (entry.isIntersecting) {
-          setInView((prev) => {
-            const updated = [...prev];
-            updated[index] = true;
-            return updated;
-          });
-        }
+        setInView((prev) => {
+          const updated = [...prev];
+          updated[index] = entry.isIntersecting; // Activar si está en viewport, desactivar si sale
+          return updated;
+        });
       });
     }, { threshold: 0.5 });
 
@@ -65,6 +63,39 @@ const IntroPage = () => {
 
   const handleButtonClick = () => {
     navigate('/home'); // Redirige a la página de inicio
+  };
+  const [showButton, setShowButton] = useState(false);
+  
+  // Detectar el scroll y mostrar/ocultar el botón
+  useEffect(() => {
+    const handleScroll = () => {
+      const lastSection = document.querySelector(".info-section:last-child");
+      if (lastSection) {
+        const lastSectionBottom = lastSection.getBoundingClientRect().bottom;
+        setShowButton(lastSectionBottom < window.innerHeight);
+      }
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  
+  // Función para desplazarse al inicio
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowButton(window.scrollY > 300); // Aparece después de 300px de scroll
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -90,43 +121,84 @@ const IntroPage = () => {
         </div>
 
       </div>
+      
+      <div className="arrow-container">
+        <img src="./img/chevron-down.png" alt="Desliza hacia abajo" className="arrow" />
+      </div>
 
       <div className="info-scroll">
-        <div 
-          className={`info-section ${inView[0] ? 'fade-in' : ''}`} 
-          ref={(el) => (sectionsRef.current[0] = el)}
-        >
-          <h2>¿Cómo usar el Mapa?</h2>
-          <p>
-            El mapa interactivo te permitirá visualizar los mejores establecimientos alimenticios. 
-            Puedes buscar por categoría o ubicación, y descubrir las opciones que mejor se adapten 
-            a tus gustos.
-          </p>
-        </div>
-
+          <div 
+            className={`floating-title ${inView[0] ? 'fade-in' : ''}`} 
+            ref={(el) => (sectionsRef.current[0] = el)}
+          >
+            <h1>¿Cómo usar esta aplicación?</h1>
+          </div>
         <div 
           className={`info-section ${inView[1] ? 'fade-in' : ''}`} 
           ref={(el) => (sectionsRef.current[1] = el)}
         >
-          <h2>Agente Virtual</h2>
-          <p>
-            Si tienes dudas, no te preocupes. Nuestro agente virtual está aquí para asistirte en todo momento.
-          </p>
+          <div className="info-content">
+            <div className="info-text">
+              <h2>¿Cómo usar el Mapa?</h2>
+              <p>
+                El mapa interactivo te permitirá visualizar los mejores establecimientos alimenticios. 
+                Puedes buscar por categoría o ubicación, y descubrir las opciones que mejor se adapten 
+                a tus gustos.
+              </p>
+            </div>
+            <div className="info-image">
+              <img src="./img/MapaInteractivo.jpeg" alt="Mapa interactivo" />
+            </div>
+          </div>
         </div>
 
         <div 
           className={`info-section ${inView[2] ? 'fade-in' : ''}`} 
           ref={(el) => (sectionsRef.current[2] = el)}
         >
-          <h2>Galería de Establecimientos</h2>
-          
+          <div className="info-content">
+            <div className="info-text">
+              <h2>Agente Virtual</h2>
+              <p>
+                Si tienes dudas, no te preocupes. Nuestro agente virtual está aquí para asistirte en todo momento.
+              </p>
+          </div>
+          <div className="info-image">
+            <img src="./img/AgenteVirtual.jpeg" alt="Agente virtual" />
+          </div>
+        </div>
+        </div>
+
+        <div 
+          className={`info-section ${inView[3] ? 'fade-in' : ''}`} 
+          ref={(el) => (sectionsRef.current[3] = el)}
+        >
+          <div className="info-content">
+            <div className="info-text">
+              <h2>Galería de Establecimientos</h2>
+              <p>Explora los mejores lugares para disfrutar de una buena comida.</p>
+            </div>
+            <div className="info-image">
+              <img src="/ruta-de-tu-imagen3.jpg" alt="Galería de establecimientos" />
+            </div>
+          </div>
         </div>
       </div>
-
+                      
       <div className="intro-footer">
         <p>Administrado por el Observatorio Territorial ULEAM</p>
       </div>
+
+      <div className={`scroll-to-top ${showButton ? 'visible' : ''}`} onClick={handleScrollToTop}>
+        <img 
+          src="./img/up-chevron.png" 
+          alt="Ir arriba" 
+          className="scroll-to-top-img" 
+        />
+      </div>
+
     </div>
+     
   );
 };
 export default IntroPage;

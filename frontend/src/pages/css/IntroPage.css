@@ -54,7 +54,46 @@ body {
     transform: scale(1.05);
     opacity: 0.9;
   }
-  
+ /* Flecha indicadora */
+ .arrow-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  }
+
+  .arrow {
+    width: 70px;  /* Ajusta el tamaño según necesites */
+    height: auto;
+    animation: bounce 1.5s infinite; /* Hace que la flecha rebote */
+  }
+
+  /* Animación de rebote */
+  @keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+  }
+  /* Título flotante */
+  .floating-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.7);
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    margin-bottom: 100px; /* Ajusta este valor para crear más espacio entre el título y la siguiente sección */
+  }
+
+  /* Efecto de aparición */
+  .floating-title.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
   /* Scroll Section */
   .info-scroll {
     width: 100%;
@@ -63,12 +102,14 @@ body {
   
   .info-section {
     margin-bottom: 50px;
-    text-align: center;
     height: 500px;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     background-color: #0000007e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .info-section.fade-in {
@@ -87,6 +128,51 @@ body {
     line-height: 1.6;
   }
   
+  .info-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1200px;
+  }
+
+    /* Estilo para el texto */
+  .info-text {
+    width: 50%;
+    text-align: left;
+    padding: 20px;
+    color: white;
+  }
+
+  .info-text h2 {
+    font-size: 28px;
+    color: white;
+  }
+
+  .info-text p {
+    font-size: 18px;
+    color: #ddd;
+    line-height: 1.6;
+  }
+  /* Estilo para la imagen */
+  .info-image {
+    width: 45%;
+  }
+
+  .info-image img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  }
+
+  .info-image img:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+
   /* Image Gallery */
   .gallery-images {
     position: relative; /* Mantener el diseño relativo al contenedor padre */
@@ -134,4 +220,39 @@ body {
     position: relative;
     bottom: 0;
   }
+  .scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px; /* Tamaño del contenedor */
+    height: 60px; /* Mantener la proporción cuadrada */
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    z-index: 9999; /* Por encima de todo */
+    background-color: white; /* Sin fondo */
+    border-radius: 50%; /* Contenedor redondeado */
+    padding: 0; /* Eliminar padding */
+    overflow: hidden; /* Ocultar cualquier parte que sobresalga */
+    display: flex; /* Usar flexbox para centrar la imagen */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    border-style: solid;
+    border-color: #3b4242; 
+  }
+
+  .scroll-to-top-img {
+      width: 85%; /* La imagen ocupa todo el contenedor */
+      height: 85%; /* La imagen ocupa todo el contenedor */
+      object-fit: cover; /* Asegura que la imagen no se distorsione */
+  }
   
+  .scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .scroll-to-top:hover {
+    transform: scale(1.1);
+  }
