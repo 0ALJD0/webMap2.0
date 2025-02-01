@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Map from '../components/Map';
 import EstablecimientosTabla from '../components/EstablecimientosTabla';
 import AgenteVirtual from '../components/AgenteVirtual';
+import BarraBusqueda from '../components/BarraBusqueda';
 import { fetchEstablecimientos } from '../services/api';
 import './css/HomePage.css';
 
@@ -59,7 +60,8 @@ const HomePage = () => {
         <Header />
       </header>
       <div className="hp-main-content">
-        <Map establecimientos={establecimientos} onEstablecimientoSelect={handleEstablecimientoSelect} />
+        <BarraBusqueda establecimientos={establecimientos} onSeleccionarEstablecimiento={handleEstablecimientoSelect}/>
+        <Map establecimientos={establecimientos} zoom={tablaEstablecimiento}/>
         {mostrarTabla && (
           <div className={`hp-establecimientos-tabla ${plegadoTabla ? 'plegado' : 'desplegado'}`}>
             <button className="hp-plegar-boton" onClick={() => setPlegadoTabla(!plegadoTabla)}>

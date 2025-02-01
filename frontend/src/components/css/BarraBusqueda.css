@@ -1,0 +1,62 @@
+.barra-busqueda {
+    position: absolute;
+    top: 20px;
+    left: 19%;
+    transform: translateX(-50%);
+    width: 500px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 50px;
+    padding: 8px 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+  }
+  
+  .barra-busqueda input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 50px;
+  }
+  
+  .barra-busqueda .icono-busqueda {
+    font-size: 18px;
+    color: #888;
+    margin-right: 10px;
+  }
+  .icono-limpiar {
+    color: gray;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+  .icono-limpiar:hover {
+    color: black;
+  }
+  .sugerencias-lista {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 5px;
+  }
+  
+  .sugerencia {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .sugerencia:hover,
+  .sugerencia.activa {
+    background: #f0f0f0;
+  }
+  
