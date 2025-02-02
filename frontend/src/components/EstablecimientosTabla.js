@@ -1,6 +1,7 @@
 // src/components/EstablecimientosTabla.js
 import React from 'react';
 import './css/EstablecimientosTabla.css';
+import { FaMapMarkerAlt, FaRegClock, FaStore, FaInfoCircle } from 'react-icons/fa'; // Iconos de react-icons
 
 const EstablecimientosTabla = ({ establecimiento }) => {
   if (!establecimiento) {
@@ -16,38 +17,49 @@ const EstablecimientosTabla = ({ establecimiento }) => {
   return (
     <div className="el-detalles">
       <h2>Detalles del Establecimiento</h2>
-      <table className="el-table">
-        <tbody>
-          <tr>
-            <td className="el-table-header">Nombre:</td>
-            <td className="el-table-value">{nombre}</td>
-          </tr>
-          <tr>
-            <td className="el-table-header">Dirección:</td>
-            <td className="el-table-value">{direccion}</td>
-          </tr>
-          <tr>
-            <td className="el-table-header">Descripción:</td>
-            <td className="el-table-value">{descripcion}</td>
-          </tr>
-          <tr>
-            <td className="el-table-header">Tipo:</td>
-            <td className="el-table-value">{tipo}</td>
-          </tr>
-          <tr>
-            <td className="el-table-header">Horarios:</td>
-            <td className="el-table-value">
-              <div className="el-horarios-container">
-                {horarios.map((horario, index) => (
-                  <div key={index} className="el-horario">
-                    {horario.dia}, desde {horario.apertura} hasta {horario.cierre}
-                  </div>
-                ))}
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="el-detalles-contenedor">
+        <div className="el-detalle-item">
+          <FaStore className="el-icon" />
+          <div>
+            <strong>Nombre:</strong>
+            <span>{nombre}</span>
+          </div>
+        </div>
+        <div className="el-detalle-item">
+          <FaMapMarkerAlt className="el-icon" />
+          <div>
+            <strong>Dirección:</strong>
+            <span>{direccion}</span>
+          </div>
+        </div>
+        <div className="el-detalle-item">
+          <FaInfoCircle className="el-icon" />
+          <div>
+            <strong>Descripción:</strong>
+            <span>{descripcion}</span>
+          </div>
+        </div>
+        <div className="el-detalle-item">
+          <FaStore className="el-icon" />
+          <div>
+            <strong>Tipo:</strong>
+            <span>{tipo}</span>
+          </div>
+        </div>
+        <div className="el-detalle-item">
+          <FaRegClock className="el-icon" />
+          <div>
+            <strong>Horarios:</strong>
+            <div className="el-horarios-container">
+              {horarios.map((horario, index) => (
+                <div key={index} className="el-horario">
+                  {horario.dia}, desde {horario.apertura} hasta {horario.cierre}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

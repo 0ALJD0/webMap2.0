@@ -31,7 +31,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 35%;
+  width: 37.5%;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   z-index: 1000;
@@ -74,7 +74,7 @@
   font-weight: bolder;
 }
 
-.hp-cerrar-boton {
+.hp-cerrar-boton1 {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -88,13 +88,14 @@
   cursor: pointer;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
   transition: background-color 0.3s ease, transform 0.2s ease; /* Transiciones suaves */
+  z-index: 9999
 }
-.hp-cerrar-boton:hover {
+.hp-cerrar-boton1:hover {
   background: #ff4c4c; /* Color más oscuro al pasar el mouse */
   transform: scale(1.05); /* Ligeramente más grande al pasar el mouse */
 }
 
-.hp-cerrar-boton:active {
+.hp-cerrar-boton1:active {
   background: #e04343; /* Color más oscuro al hacer clic */
   transform: scale(0.95); /* Ligeramente más pequeño al hacer clic */
 }

@@ -86,7 +86,7 @@ const HomePage = () => {
             <div className="contenido-agente">
               {!plegadoAgente && (
                 <div>
-                    <button className="hp-cerrar-boton" onClick={handleCerrarAgente}>X</button>
+                    <button className="hp-cerrar-boton1" onClick={handleCerrarAgente}>X</button>
                     <AgenteVirtual />
                 </div>
                 )}
