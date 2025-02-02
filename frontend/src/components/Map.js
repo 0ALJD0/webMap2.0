@@ -7,13 +7,19 @@ import 'leaflet-search';
 import "leaflet-routing-machine";
 import 'leaflet.locatecontrol'; // Importa el plugin
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'; // Importa los estilos
+import { FaUtensils  } from "react-icons/fa";
+import ReactDOMServer from "react-dom/server";
 
-  // Crear el icono con el emoji 🍽️
-  const emojiIcon = L.divIcon({
-    className: 'custom-icon',
-    html: '<div class="icon-background">🍽️</div>',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+  // Crear el icono con FaMapMarkerAlt de react-icons
+  const customIcon = L.divIcon({
+    className: "custom-icon",
+    html: ReactDOMServer.renderToString(
+      <div className="icon-background">
+        <FaUtensils size={20} color="white" />
+      </div>
+    ),
+    iconSize: [40, 50], // Ajustamos tamaño para el pin
+    iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
   });
 
 const MoverMapa = ({ zoom }) => {
@@ -67,7 +73,7 @@ const Map = ({ establecimientos, zoom, rutas }) => {
           <Marker
             key={establecimiento.id}
             position={[parseFloat(establecimiento.latitud), parseFloat(establecimiento.longitud)]}
-            icon={emojiIcon}
+            icon={customIcon}
             
           >
             <Popup>

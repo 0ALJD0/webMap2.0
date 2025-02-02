@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header';
 import Map from '../components/Map';
 import EstablecimientosTabla from '../components/EstablecimientosTabla';
 import AgenteVirtual from '../components/AgenteVirtual';
@@ -61,9 +60,6 @@ const HomePage = () => {
 
   return (
     <div className="hp-homepage">
-      <header className="hp-header">
-        <Header />
-      </header>
       <div className="hp-main-content">
         <BarraBusqueda establecimientos={establecimientos} onSeleccionarEstablecimiento={handleEstablecimientoSelect} onCalcularRuta={handleRuta}/>
         <Map establecimientos={establecimientos} zoom={tablaEstablecimiento} rutas={ruta}/>
@@ -74,7 +70,6 @@ const HomePage = () => {
             </button>
             {!plegadoTabla && (
               <div className="hp-tabla-contenido">
-                <button className="hp-cerrar-boton" onClick={handleCerrarTabla}>X</button>
                 <EstablecimientosTabla establecimiento={tablaEstablecimiento} />
               </div>
             )}
