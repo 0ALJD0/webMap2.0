@@ -19,7 +19,7 @@ body {
     position: relative; /* Para que los elementos hijos se posicionen relativos a este contenedor */
     text-align: center;
     padding: 1%;
-    width: 99%;
+    width: 95%;
     height: 500px;
     margin-top: 80px;
     background-color: rgba(255, 255, 255, 0.8);
@@ -172,14 +172,6 @@ body {
     transform: scale(1.05);
     opacity: 0.9;
   }
-
-  /* Image Gallery */
-  .gallery-images {
-    position: relative; /* Mantener el diseño relativo al contenedor padre */
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
   
   .intro-data {
     position: absolute; /* Hacer que este contenedor se superponga */
@@ -193,26 +185,47 @@ body {
     background-color:  rgba(243, 243, 243, 0.726);
 }
 
-  .gallery-images img {
-    position: relative; /* Mantener las imágenes dentro de su contenedor */
-    z-index: 1; /* Las imágenes estarán detrás de intro-data */
-    width: 90%; /* En lugar de un tamaño fijo */
-    max-width: 400px; /* Limita el tamaño máximo */
-    height: 480px; /* Mantiene la proporción */
+  /* Contenedor de la galería */
+  .gallery-images {
+    position: relative;
+    display: flex;
+    justify-content: center; /* Centra las imágenes */
+    align-items: center; /* Centra verticalmente */
+    gap: 50px; /* 🔥 Separación entre imágenes */
+    margin-top: 50px;
+  }
+
+  /* Imágenes en la galería */
+  .gallery-image {
+    position: relative;
+    width: 80%; /* Tamaño base */
+    max-width: 350px; /* 🔥 Ajusta el tamaño máximo */
+    height: 400px; /* 🔥 Mantiene la proporción */
     object-fit: cover;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0.8;
+    z-index: 1;
   }
-  
-  .gallery-images img:hover {
+
+  /* 🔥 Efecto para la imagen en el centro */
+  .center-image {
+    transform: scale(1.2); /* Agranda la imagen central */
+    opacity: 1;
+    z-index: 2;
+  }
+
+  /* Efecto hover para todas las imágenes */
+  .gallery-image:hover {
     transform: scale(1.05);
     opacity: 0.9;
   }
+
   
   /* Footer */
   .intro-footer {
-    width: 100%;
+    width: 97%;
     background-color: #2c3e50;
     color: white;
     padding: 20px;
@@ -224,35 +237,32 @@ body {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 60px; /* Tamaño del contenedor */
-    height: 60px; /* Mantener la proporción cuadrada */
+    width: 55px;
+    height: 55px;
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-    z-index: 9999; /* Por encima de todo */
-    background-color: white; /* Sin fondo */
-    border-radius: 50%; /* Contenedor redondeado */
-    padding: 0; /* Eliminar padding */
-    overflow: hidden; /* Ocultar cualquier parte que sobresalga */
-    display: flex; /* Usar flexbox para centrar la imagen */
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-    border-style: solid;
-    border-color: #3b4242; 
+    z-index: 9999;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2c3e50;
+    border-radius: 10%;
   }
 
-  .scroll-to-top-img {
-      width: 85%; /* La imagen ocupa todo el contenedor */
-      height: 85%; /* La imagen ocupa todo el contenedor */
-      object-fit: cover; /* Asegura que la imagen no se distorsione */
+  .scroll-to-top svg { 
+      width: 85%;
+      height: 85%;
+      color: #f7f7f7;
   }
-  
+
   .scroll-to-top.visible {
-    opacity: 1;
-    visibility: visible;
+      opacity: 1;
+      visibility: visible;
   }
-  
+
   .scroll-to-top:hover {
-    transform: scale(1.1);
+      transform: scale(1.1);
   }

@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom'; // Usar useNavigate en lugar de useHistory
 import './css/IntroPage.css'; // Asegúrate de importar el CSS
+import { GoMoveToTop } from "react-icons/go";
 
 const IntroPage = () => {
     const navigate = useNavigate();
     const [currentImages, setCurrentImages] = useState([]);
+    const [centerImageIndex, setCenterImageIndex] = useState(null);
+    const imagesRef = useRef([]);
     const galleryImages = [
         './img/r1.jpg',
         './img/r2.jpg',
@@ -40,8 +43,34 @@ const IntroPage = () => {
     
         return () => clearInterval(intervalId); // Limpiar el intervalo al desmontar el componente
       }, [galleryImages.length]); // Asegurarse de que no se repita si cambia la longitud
-
-  // Detectar cuando una sección entra en el viewport
+      useEffect(() => {
+        const handleScroll = () => {
+          let closestIndex = 0;
+          let minDistance = Number.POSITIVE_INFINITY;
+    
+          imagesRef.current.forEach((img, index) => {
+            if (img) {
+              const rect = img.getBoundingClientRect();
+              const centerDistance = Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2);
+              
+              if (centerDistance < minDistance) {
+                minDistance = centerDistance;
+                closestIndex = index;
+              }
+            }
+          });
+    
+          setCenterImageIndex(closestIndex);
+        };
+    
+        window.addEventListener("scroll", handleScroll);
+        handleScroll(); // Ejecutar una vez al inicio
+        return () => window.removeEventListener("scroll", handleScroll);
+      }, [currentImages]); // Se actualiza cada vez que cambian las imágenes
+    
+  
+  
+      // Detectar cuando una sección entra en el viewport
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -102,15 +131,18 @@ const IntroPage = () => {
     <div className="intro-container">
       <div className="intro-content">
         <div className="gallery-images">
-                {currentImages.map((image, index) => (
-                    <img 
-                        key={index} 
-                        src={image} 
-                        alt={`Restaurant ${index + 1}`} 
-                        className="gallery-image"
-                    />
-                ))}
-        </div>
+          {currentImages.map((image, index) => {
+          const isCenter = index === Math.floor(currentImages.length / 2); // Detecta la imagen del centro
+          return (
+            <img 
+              key={index} 
+              src={image} 
+              alt={`Restaurant ${index + 1}`} 
+              className={`gallery-image ${isCenter ? 'center-image' : ''}`}
+            />
+          );
+    })}
+  </div>
         <div className="intro-data">
             <h1 className="intro-title">¡Bienvenido al Mapa Virtual Turístico Alimenticio!</h1>
             <p className="intro-description">
@@ -131,7 +163,7 @@ const IntroPage = () => {
             className={`floating-title ${inView[0] ? 'fade-in' : ''}`} 
             ref={(el) => (sectionsRef.current[0] = el)}
           >
-            <h1>¿Cómo usar esta aplicación?</h1>
+            <h1>¿Qué puedes hacer en nuestra aplicación?</h1>
           </div>
         <div 
           className={`info-section ${inView[1] ? 'fade-in' : ''}`} 
@@ -139,11 +171,11 @@ const IntroPage = () => {
         >
           <div className="info-content">
             <div className="info-text">
-              <h2>¿Cómo usar el Mapa?</h2>
+              <h2>Usar el mapa de establecimientos</h2>
               <p>
-                El mapa interactivo te permitirá visualizar los mejores establecimientos alimenticios. 
-                Puedes buscar por categoría o ubicación, y descubrir las opciones que mejor se adapten 
-                a tus gustos.
+                Dentro del mapa interactivo podrás explorar los establecimientos alimenticios recopilados en nuestra base de datos. 
+                Podrás buscarlos por nombre o ubicación y encontrar el que mejor se adapte a tus necesidades.
+                Tienes un sinnúmero de opciones de filtrado y características para hacer tu búsqueda más sencilla. 
               </p>
             </div>
             <div className="info-image">
@@ -158,9 +190,12 @@ const IntroPage = () => {
         >
           <div className="info-content">
             <div className="info-text">
-              <h2>Agente Virtual</h2>
+              <h2>Preguntarle a nuestro Agente Virtual con IA</h2>
               <p>
-                Si tienes dudas, no te preocupes. Nuestro agente virtual está aquí para asistirte en todo momento.
+              ¿Tienes alguna duda? Nuestro agente virtual está aquí para asistirte en todo momento. 
+              Con él, podrás descubrir las mejores opciones que se adapten a tus necesidades. 
+              Puedes preguntarle desde tipos de comida que te apetezcan hasta los horarios de atención. 
+              El agente siempre estará disponible para ayudarte con tus dudas.
               </p>
           </div>
           <div className="info-image">
@@ -190,11 +225,7 @@ const IntroPage = () => {
       </div>
 
       <div className={`scroll-to-top ${showButton ? 'visible' : ''}`} onClick={handleScrollToTop}>
-        <img 
-          src="./img/up-chevron.png" 
-          alt="Ir arriba" 
-          className="scroll-to-top-img" 
-        />
+        <GoMoveToTop />
       </div>
 
     </div>
