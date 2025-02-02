@@ -5,11 +5,12 @@
 
 .el-detalles {
   font-family: Arial, sans-serif;
-  margin: 20px;
+  margin: 65px 30px 30px 8px; /* Aumenta el margen superior */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%;
 }
 
 .el-detalles h2 {
@@ -22,11 +23,27 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  max-height: 500px;
+  overflow: auto;
+  scrollbar-width: thin; /* Cambia el ancho del scroll en navegadores compatibles */
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent; /* Establece el color del scroll y el fondo */
+}
+.el-detalles-contenedor::-webkit-scrollbar {
+  width: 8px; /* Establece el ancho del scrollbar */
+}
+
+.el-detalles-contenedor::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* Color del "thumb" del scroll */
+  border-radius: 10px; /* Bordes redondeados del "thumb" */
+}
+
+.el-detalles-contenedor::-webkit-scrollbar-track {
+  background: transparent; /* Fondo transparente para el track */
 }
 
 .el-detalle-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 15px; /* Espaciado entre el icono y el texto */
   font-size: 16px;
   background-color: #fff;

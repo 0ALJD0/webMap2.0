@@ -13,35 +13,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
   transform: translate(-50%, -50%);
+  position: relative;
 }
 
 .icon-background {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  width: 40px;
+  height: 40px;
   background-color: red; /* Cambia esto al color que desees */
   border-radius: 50%;
-  border: 2px solid white; /* Borde blanco para simular el borde del marcador */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Sombra para dar profundidad */
-  font-size: 24px; /* Tamaño del emoji */
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
 .custom-icon::after {
   content: '';
   position: absolute;
-  bottom: -10px; /* Ajusta la posición vertical de la punta */
-  left: 55%;
+  bottom: -12px; /* Ajusta la posición vertical de la punta */
+  left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  box-shadow: 0 0 10px rgba(0, 17, 255, 0); /* Sombra para dar profundidad */
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-top: 10px solid red; /* Debe ser del mismo color que el fondo */
+  border-top: 12px solid red; /* Mismo color que el fondo */
 }
 
 /* Estilos para los popups */

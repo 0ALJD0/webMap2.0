@@ -3,13 +3,19 @@ import React from 'react';
 import { useEffect } from "react";
 import { MapContainer, TileLayer,Marker, Popup , useMap } from 'react-leaflet';
 import L from 'leaflet';
-  // Crear el icono con el emoji 🍽️
-  const emojiIcon = L.divIcon({
-    className: 'custom-icon',
-    html: '<div class="icon-background">🍽️</div>',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
+import { FaUtensils  } from "react-icons/fa";
+import ReactDOMServer from "react-dom/server";
+    // Crear el icono con FaMapMarkerAlt de react-icons
+    const customIcon = L.divIcon({
+      className: "custom-icon",
+      html: ReactDOMServer.renderToString(
+        <div className="icon-background">
+          <FaUtensils size={20} color="white" />
+        </div>
+      ),
+      iconSize: [40, 50], // Ajustamos tamaño para el pin
+      iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
+    });
 const MapaUno = ({ establecimientos, ubicacion}) => {
 
 return (
@@ -32,7 +38,7 @@ return (
       <Marker
         key={establecimiento.id}
         position={[parseFloat(establecimiento.latitud), parseFloat(establecimiento.longitud)]}
-        icon={emojiIcon}
+        icon={customIcon}
       >
         <Popup>
           <div className="mp-popup-content">
