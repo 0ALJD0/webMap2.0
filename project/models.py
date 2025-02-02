@@ -73,4 +73,15 @@ class Chat(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     mensaje=db.Column(db.String(500), nullable=False)
     fechayhora=db.Column(db.DateTime, nullable=False, server_default=func.now())
-    
+
+class Valoracion(db.Model):
+    __tablename__ = 'valoraciones'
+    id = db.Column(db.Integer, primary_key=True)
+    puntuacion = db.Column(db.Integer, nullable=False)  # Puntuación de 1 a 5
+    establecimiento_id = db.Column(db.Integer, db.ForeignKey('establecimientos.id'), nullable=False)
+    nombre_anonimo = db.Column(db.String(100))  # Opcional, para un nombre anónimo
+    comentario = db.Column(db.String(500))  # Opcional, para comentarios adicionales
+    fecha = db.Column(db.DateTime, default=db.func.now())  # Fecha de la valoración
+
+    # Relación con Establecimiento
+    establecimiento = db.relationship('Establecimiento', backref='valoraciones')

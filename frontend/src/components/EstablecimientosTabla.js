@@ -2,6 +2,8 @@
 import React from 'react';
 import './css/EstablecimientosTabla.css';
 import { FaStore, FaMapMarkerAlt, FaInfoCircle, FaRegClock, FaWheelchair, FaDog, FaUtensils, FaConciergeBell, FaWineGlass, FaCoffee } from 'react-icons/fa'; // Iconos de react-icons
+import {FaStarHalfStroke } from 'react-icons/fa6';
+import ValoracionEstablecimiento from './ValoracionEstablecimiento';
 
 const EstablecimientosTabla = ({ establecimiento }) => {
   if (!establecimiento) {
@@ -12,7 +14,9 @@ const EstablecimientosTabla = ({ establecimiento }) => {
     );
   }
 
-  const {  nombre,
+  const {  
+    id,
+    nombre,
     direccion,
     descripcion,
     tipo,
@@ -129,6 +133,12 @@ const EstablecimientosTabla = ({ establecimiento }) => {
             </div>
           </div>
         )}
+        <div className="el-detalle-item">
+            <FaStarHalfStroke  className="el-icon" />
+            <div>
+              <ValoracionEstablecimiento  establecimientoId={id}/>
+            </div>
+          </div>
       </div>
     </div>
   );

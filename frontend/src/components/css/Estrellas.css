@@ -1,0 +1,37 @@
+/* Estilos para el contenedor de estrellas */
+.estrellas-container {
+    display: flex;
+    flex-direction: row; /* Asegura que las estrellas estén en línea */
+    align-items: center; /* Centra las estrellas verticalmente */
+    gap: 6px; /* Espaciado entre estrellas */
+    justify-content: center; /* Centra horizontalmente si es necesario */
+    padding: 8px 0;
+  }
+  
+  /* Estilos individuales de cada estrella */
+  .estrella-wrapper {
+    display: inline-flex; /* Evita que se rompa la alineación */
+  }
+  
+  /* Estilos para los iconos de estrellas */
+  .estrella {
+    display: inline-block; /* Asegura que las estrellas estén en línea */
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  }
+  
+  /* Estrella llena */
+  .estrella.llena {
+    color: #ffc107; /* Amarillo dorado */
+  }
+  
+  /* Estrella vacía */
+  .estrella.vacia {
+    color: #ccc; /* Gris claro */
+  }
+  
+  /* Efecto al pasar el mouse sobre las estrellas */
+  .estrella:hover {
+    transform: scale(1.1); /* Pequeño aumento de tamaño al pasar el mouse */
+  }

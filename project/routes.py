@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify, session, current_app
 from . import db
-from .models import Administrador, Establecimiento, Horario, Tipo_servicio, Tipo_cocina, Chat
+from .models import Administrador, Establecimiento, Horario, Tipo_servicio, Tipo_cocina, Chat, Valoracion
 #from .models import establecimiento_tipo_cocina, establecimiento_tipo_servicio
 import openai
 import json
-from sqlalchemy import text
+from sqlalchemy import text, func
 import pandas as pd
 import spacy
 from collections import Counter
@@ -716,5 +716,66 @@ def obtener_histograma():
         # Devolver el histograma de cada categoría como JSON
         return jsonify(histogramas_por_categoria), 200
 
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+#Ruta para calcular las valoraciones
+@bp.route('/establecimientos/<int:establecimiento_id>/valoraciones/promedio', methods=['GET'])
+def obtener_promedio_valoraciones(establecimiento_id):
+    try:
+        # Calcular el promedio de las valoraciones
+        promedio = db.session.query(func.avg(Valoracion.puntuacion)).filter(
+            Valoracion.establecimiento_id == establecimiento_id
+        ).scalar()
+
+        # Si no hay valoraciones, devolver 0
+        promedio = round(promedio, 2) if promedio else 0
+
+        return jsonify({'promedio': promedio}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+# Ruta para crear una valoración
+@bp.route('/establecimientos/<int:establecimiento_id>/valoraciones', methods=['POST'])
+def crear_valoracion(establecimiento_id):
+    try:
+        data = request.get_json()
+        puntuacion = data.get('puntuacion')
+        nombre_anonimo = data.get('nombre_anonimo', 'Anónimo')  # Opcional, valor por defecto 'Anónimo'
+        comentario = data.get('comentario', '')  # Opcional
+
+        # Validar la puntuación
+        if not puntuacion or puntuacion < 1 or puntuacion > 5:
+            return jsonify({'message': 'La puntuación debe ser un número entre 1 y 5'}), 400
+
+        # Crear la valoración
+        nueva_valoracion = Valoracion(
+            puntuacion=puntuacion,
+            establecimiento_id=establecimiento_id,
+            nombre_anonimo=nombre_anonimo,  # Opcional
+            comentario=comentario  # Opcional
+        )
+        db.session.add(nueva_valoracion)
+        db.session.commit()
+
+        return jsonify({'message': 'Valoración creada exitosamente'}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+# Ruta para obtener las valoraciones de un establecimiento    
+@bp.route('/establecimientos/<int:establecimiento_id>/valoraciones', methods=['GET'])
+def obtener_valoraciones(establecimiento_id):
+    try:
+        valoraciones = Valoracion.query.filter_by(establecimiento_id=establecimiento_id).all()
+        valoraciones_json = [{
+            'id': v.id,
+            'puntuacion': v.puntuacion,
+            'nombre_anonimo': v.nombre_anonimo,  # Opcional
+            'comentario': v.comentario,  # Opcional
+            'fecha': v.fecha.isoformat() if v.fecha else None
+        } for v in valoraciones]
+
+        return jsonify(valoraciones_json), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500

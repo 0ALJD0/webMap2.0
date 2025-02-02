@@ -1,0 +1,107 @@
+/* Valoraciones.css */
+.valoraciones-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .valoraciones-container h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  .promedio {
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .valoraciones-form {
+    margin-bottom: 24px;
+  }
+  
+  .valoraciones-form label {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #555;
+  }
+  .valoracion{
+    display: flex; /* Hace que el contenido del label se alinee en fila */
+    align-items: start; /* Centra verticalmente el texto y las estrellas */
+    gap: 8px; /* Espaciado entre el texto del label y las estrellas */
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .valoraciones-form input,
+  .valoraciones-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .valoraciones-form textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .valoraciones-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .valoraciones-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .historial-valoraciones {
+    margin-top: 24px;
+  }
+  
+  .historial-valoraciones h3 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  .historial-valoraciones ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .historial-valoraciones li {
+    background-color: white;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .historial-valoraciones li strong {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .historial-valoraciones li p {
+    margin: 8px 0;
+    color: #555;
+  }
+  
+  .historial-valoraciones li small {
+    font-size: 12px;
+    color: #888;
+  }

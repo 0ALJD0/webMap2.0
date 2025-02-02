@@ -207,4 +207,36 @@ export const obtenerDatos = async () => {
     throw error; // Lanza el error para que sea manejado donde se use la función
   }
 };
+export const obtenerPromedioValoraciones = async (establecimientoId) => {
+  try {
+    const response = await api.get(`/establecimientos/${establecimientoId}/valoraciones/promedio`);
+    return response.data.promedio; // Devuelve el promedio de valoraciones
+  } catch (error) {
+    console.error('Error al obtener el promedio de valoraciones:', error);
+    throw error;
+  }
+};
+export const crearValoracion = async (establecimientoId, puntuacion, nombreAnonimo = 'Anónimo', comentario = '') => {
+  try {
+    const datosValoracion = {
+      puntuacion: puntuacion,
+      nombre_anonimo: nombreAnonimo,
+      comentario: comentario
+    };
+    const response = await api.post(`/establecimientos/${establecimientoId}/valoraciones`, datosValoracion);
+    return response.data; // Devuelve la respuesta del backend
+  } catch (error) {
+    console.error('Error al crear la valoración:', error);
+    throw error;
+  }
+};
+export const obtenerValoraciones = async (establecimientoId) => {
+  try {
+    const response = await api.get(`/establecimientos/${establecimientoId}/valoraciones`);
+    return response.data; // Devuelve la lista de valoraciones
+  } catch (error) {
+    console.error('Error al obtener las valoraciones:', error);
+    throw error;
+  }
+};
 export default api;
