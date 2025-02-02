@@ -1,0 +1,61 @@
+.filtro-wrapper {
+    position: absolute;
+    top: 3%;
+    right: 30%;
+    /*background: rgba(255, 255, 255, 0.9);*/
+    padding: 10px;
+    border-radius: 10px;
+    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+.filtro-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 8px;
+    max-width: 300px; /* Ajusta este valor según sea necesario */
+  }
+  
+  .filtro-container::-webkit-scrollbar {
+    display: none; /* Oculta la barra de desplazamiento */
+  }
+  
+  .filtro-boton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #0078A8;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  }
+  
+  .filtro-boton.activo {
+    background: #004f70;
+  }
+  
+  .filtro-boton:hover {
+    background: #005f8b;
+  }
+  
+  .filtro-flecha {
+    background: #fcfcfc;
+    border-radius: 100%;
+    border: none;
+    color: #0078A8;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+  }
+  
+  .filtro-flecha:hover {
+    color: #005f8b;
+  }

@@ -1,12 +1,20 @@
+from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from sqlalchemy import func
 class Administrador(db.Model):
     __tablename__ = 'administradores'
     id = db.Column(db.Integer, primary_key=True)
     usuario = db.Column(db.String(50), unique=True, nullable=False)
-    contrasena = db.Column(db.String(255), nullable=False)
+    contrasena_hash = db.Column(db.String(255), nullable=False)  # Ahora es obligatorio
     establecimientos = db.relationship('Establecimiento', backref='administrador', lazy=True)
 
+    def set_contrasena(self, contrasena):
+        """Genera un hash de la contraseña y lo almacena en contrasena_hash."""
+        self.contrasena_hash = generate_password_hash(contrasena)
+
+    def check_contrasena(self, contrasena):
+        """Verifica si la contraseña proporcionada coincide con el hash almacenado."""
+        return check_password_hash(self.contrasena_hash, contrasena)
 
 # Tabla intermedia entre Establecimiento y Tipo_servicio
 establecimiento_tipo_servicio = db.Table(

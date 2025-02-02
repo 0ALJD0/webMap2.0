@@ -3,6 +3,7 @@ import Map from '../components/Map';
 import EstablecimientosTabla from '../components/EstablecimientosTabla';
 import AgenteVirtual from '../components/AgenteVirtual';
 import BarraBusqueda from '../components/BarraBusqueda';
+import FiltroEstablecimientos from '../components/FiltroEstablecimientos';
 import { fetchEstablecimientos } from '../services/api';
 import './css/HomePage.css';
 
@@ -14,12 +15,13 @@ const HomePage = () => {
   const [mostrarAgente, setMostrarAgente] = useState(false);
   const [plegadoAgente, setPlegadoAgente] = useState(false);
   const [ruta, setRuta] = useState([]);
-
+  const [establecimientosFiltrados, setEstablecimientosFiltrados] = useState([]);
   useEffect(() => {
     const fetchEstablecimientosData = async () => {
       try {
         const data = await fetchEstablecimientos();
         setEstablecimientos(data);  // Actualiza el estado con los establecimientos obtenidos
+        setEstablecimientosFiltrados(data);  // Inicializa los establecimientos filtrados con todos los establecimientos
       } catch (error) {
         console.error('Error fetching establecimientos:', error);
       }
@@ -54,6 +56,17 @@ const HomePage = () => {
   const limpiarRuta=()=>{
     setRuta([]);
   }
+  // Función para actualizar establecimientos filtrados
+  const handleFiltrar = (filtrosSeleccionados) => {
+    console.log(filtrosSeleccionados);
+    if (filtrosSeleccionados.length === 0) {
+      setEstablecimientosFiltrados(establecimientos);
+    } else {
+      setEstablecimientosFiltrados(
+        establecimientos.filter(e => filtrosSeleccionados.includes(e.tipo))
+      );
+    }
+  };
  /* <button className="hp-plegar-boton1" onClick={() => setPlegadoAgente(!plegadoAgente)}>
   {plegadoAgente ? '↑' : '↓'}
   </button>
@@ -64,7 +77,8 @@ const HomePage = () => {
     <div className="hp-homepage">
       <div className="hp-main-content">
         <BarraBusqueda establecimientos={establecimientos} onSeleccionarEstablecimiento={handleEstablecimientoSelect} onCalcularRuta={handleRuta}/>
-        <Map establecimientos={establecimientos} zoom={tablaEstablecimiento} rutas={ruta} onLimpiarRuta={limpiarRuta}/>
+        <FiltroEstablecimientos onFiltrar={handleFiltrar} />
+        <Map establecimientos={establecimientosFiltrados} zoom={tablaEstablecimiento} rutas={ruta} onLimpiarRuta={limpiarRuta}/>
         {mostrarTabla && (
           <div className={`hp-establecimientos-tabla ${plegadoTabla ? 'plegado' : 'desplegado'}`}>
             <button className="hp-plegar-boton" onClick={() => setPlegadoTabla(!plegadoTabla)}>

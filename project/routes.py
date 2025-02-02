@@ -9,6 +9,7 @@ import pandas as pd
 import spacy
 from collections import Counter
 from datetime import datetime
+from werkzeug.security import check_password_hash, generate_password_hash
 
 bp = Blueprint('routes', __name__)
 
@@ -21,13 +22,12 @@ def login():
         contrasena = data.get('contrasena')
 
         admin = Administrador.query.filter_by(usuario=usuario).first()
-        if admin and admin.contrasena == contrasena:
-            session['admin_id'] = admin.id  # Establecer la sesión
+        if admin and admin.check_contrasena(contrasena):
+            session['admin_id'] = admin.id
             return jsonify({'message': 'Login successful'}), 200
         return jsonify({'message': 'Invalid credentials'}), 401
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 #ruta para realizar el logout
 @bp.route('/logout', methods=['POST'])
 def logout():
@@ -426,21 +426,30 @@ def delete_horario(id):
 @bp.route('/admin/password', methods=['PUT'])
 def update_password():
     try:
+        # Verificar si el administrador está autenticado
         if 'admin_id' not in session:
             return jsonify({'message': 'Not authorized'}), 403
 
+        # Obtener los datos del cuerpo de la solicitud
         data = request.get_json()
         new_password = data.get('new_password')
 
+        # Validar que se proporcionó una nueva contraseña
         if not new_password:
             return jsonify({'message': 'New password is required'}), 400
 
+        # Obtener el administrador actual
         admin = Administrador.query.get(session['admin_id'])
-        admin.contrasena = new_password
+
+        # Actualizar la contraseña usando el método set_contrasena
+        admin.set_contrasena(new_password)  # Genera el hash y lo guarda en contrasena_hash
         db.session.commit()
 
+        # Devolver una respuesta exitosa
         return jsonify({'message': 'Password updated successfully'}), 200
+
     except Exception as e:
+        # Manejar errores inesperados
         return jsonify({'error': str(e)}), 500
     
 #Mostrar los horarios de un establecimiento
