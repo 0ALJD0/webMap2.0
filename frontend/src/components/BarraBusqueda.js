@@ -3,6 +3,7 @@ import './css/BarraBusqueda.css';
 import { FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5"; // Ícono de la "X"
 import { TbArrowRampRight } from "react-icons/tb";
+import { PiBroom } from "react-icons/pi";
 
 
 const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcularRuta  }) => {
@@ -72,7 +73,6 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
               const lngString = position.coords.longitude;
               setDesdeLat(latString.toString());
               setDesdeLng(lngString.toString());
-              console.log(latString,lngString);
             },
             (error) => {
               console.error("Error obteniendo ubicación:", error);
@@ -109,6 +109,11 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
         }
 
       };
+      const limpiarRuta = () => {
+        setDesde(""); // Limpia el estado local
+        setHacia(""); // Limpia el estado local
+        onCalcularRuta(null); // Notifica al padre (si es necesario)
+      };
 
   return (
     <div className="contenedor-barra-busqueda">
@@ -123,10 +128,10 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
           onKeyDown={manejarTecla}
         />
         {busqueda && (
-          <IoClose className="icono-limpiar" onClick={limpiarBusqueda} />
+          <IoClose className="icono-limpiar"  onClick={limpiarBusqueda} ></IoClose>
         )}
         {/* Botón "¿Cómo llegar?" */}
-        <TbArrowRampRight className="boton-como-llegar" onClick={() => setMostrarMenuRuta(!mostrarMenuRuta)}/>
+        <TbArrowRampRight className="boton-como-llegar" title="¿Como llegar?" onClick={() => setMostrarMenuRuta(!mostrarMenuRuta)}/>
         {sugerencias.length > 0 && (
           <div className="sugerencias-lista">
             {sugerencias.map((establecimiento, index) => (
@@ -162,6 +167,12 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
             value={hacia}
             onChange={(e) => setHacia(e.target.value)}
           />
+          {(desde || hacia) && (
+            <div>
+              <p className="p-limpiar"> Limpiar</p>
+              <PiBroom  className="icono-limpiar" onClick={limpiarRuta} />
+            </div>
+          )}
 
           <button className="boton-calcular-ruta" onClick={manejarCalcularRuta}>Ir</button>
         </div>

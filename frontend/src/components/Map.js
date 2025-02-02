@@ -1,12 +1,11 @@
 // src/components/Map.js
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap  } from 'react-leaflet';
+import UbicacionActual from './UbicacionActual'
 import './css/Map.css'; 
 import L from 'leaflet';
 import 'leaflet-search';
 import "leaflet-routing-machine";
-import 'leaflet.locatecontrol'; // Importa el plugin
-import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'; // Importa los estilos
 
   // Crear el icono con el emoji 🍽️
   const emojiIcon = L.divIcon({
@@ -30,7 +29,7 @@ const MoverMapa = ({ zoom }) => {
   return null;
 };
 
-const Ruta = ({ rutas }) => {
+const Ruta = ({ rutas, onLimpiarRuta  }) => {
   const map = useMap(); // Obtiene la referencia del mapa actual
 
   useEffect(() => {
@@ -41,17 +40,39 @@ const Ruta = ({ rutas }) => {
           L.latLng(parseFloat(rutas.hacia.lat), parseFloat(rutas.hacia.lng)),
         ],
         routeWhileDragging: true,
+        collapsible: true, // Permite colapsar el panel de instrucciones
+        show: true, // Muestra el panel de instrucciones
+        addWaypoints: false, // Evita agregar puntos intermedios
+        draggableWaypoints: false, // Evita arrastrar los puntos de la ruta
+        fitSelectedRoutes: true, // Ajusta el mapa a la ruta seleccionada
+        lineOptions: {
+          styles: [{ color: '#0078A8', opacity: 0.7, weight: 5 }], // Estilo de la línea de la ruta
+        },
+        createMarker: () => null, // No mostrar marcadores en los puntos de la ruta
       }).addTo(map);
+      // Agregar una clase personalizada al panel de instrucciones
+      const container = routingControl.getContainer();
+      if (container) {
+        container.classList.add('custom-instructions');
+        const limpiarButton = document.createElement('button');
+        limpiarButton.innerText = 'Limpiar ruta';
+        limpiarButton.className = 'limpiar-ruta-button';
+        limpiarButton.onclick = onLimpiarRuta;
+        container.appendChild(limpiarButton);
+      }
 
+      // Guardar la instancia del control de ruta para limpiarlo después
+      map.routingControl = routingControl;
       return () => {
         map.removeControl(routingControl);
+        delete map.routingControl;
       };
     }
-  }, [map, rutas]);
+  }, [map, rutas, onLimpiarRuta]);
 
   return null; // No renderiza nada, solo agrega la ruta al mapa
 };
-const Map = ({ establecimientos, zoom, rutas }) => {
+const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta  }) => {
 
   return (
     <div className="map-container">
@@ -61,14 +82,15 @@ const Map = ({ establecimientos, zoom, rutas }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
+
         <MoverMapa zoom={zoom} />
-        <Ruta rutas={rutas} />
+        <Ruta rutas={rutas} onLimpiarRuta ={onLimpiarRuta} />
+        <UbicacionActual />
         {establecimientos.map((establecimiento) => (
           <Marker
             key={establecimiento.id}
             position={[parseFloat(establecimiento.latitud), parseFloat(establecimiento.longitud)]}
             icon={emojiIcon}
-            
           >
             <Popup>
             <div className="mp-popup-content" >

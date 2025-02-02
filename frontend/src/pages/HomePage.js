@@ -51,7 +51,9 @@ const HomePage = () => {
 
   const handleRuta=(rutas)=>{
     setRuta(rutas);
-    console.log(rutas);
+  }
+  const limpiarRuta=()=>{
+    setRuta([]);
   }
  /* <button className="hp-plegar-boton1" onClick={() => setPlegadoAgente(!plegadoAgente)}>
   {plegadoAgente ? '↑' : '↓'}
@@ -66,7 +68,7 @@ const HomePage = () => {
       </header>
       <div className="hp-main-content">
         <BarraBusqueda establecimientos={establecimientos} onSeleccionarEstablecimiento={handleEstablecimientoSelect} onCalcularRuta={handleRuta}/>
-        <Map establecimientos={establecimientos} zoom={tablaEstablecimiento} rutas={ruta}/>
+        <Map establecimientos={establecimientos} zoom={tablaEstablecimiento} rutas={ruta} onLimpiarRuta={limpiarRuta}/>
         {mostrarTabla && (
           <div className={`hp-establecimientos-tabla ${plegadoTabla ? 'plegado' : 'desplegado'}`}>
             <button className="hp-plegar-boton" onClick={() => setPlegadoTabla(!plegadoTabla)}>
