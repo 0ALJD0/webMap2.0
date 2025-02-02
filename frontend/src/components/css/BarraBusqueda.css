@@ -10,7 +10,7 @@
     border-radius: 50px;
     padding: 8px 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 9999;
+    z-index: 9997;
   }
   
   .barra-busqueda input {
@@ -60,3 +60,92 @@
     background: #f0f0f0;
   }
   
+  /* Botón "Cómo llegar" */
+.boton-como-llegar {
+    display: flex;
+    align-items: center;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background 0.3s ease;
+    z-index: 9999;
+}
+
+.boton-como-llegar:hover {
+    background: #0056b3;
+}
+
+.boton-como-llegar .icono-ruta {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Menú de Ruta */
+.menu-ruta {
+    position: absolute;
+    top: 20px;
+    left: 16%;
+    transform: translateX(-50%);
+    width: 425px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-ruta label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.menu-ruta input {
+    width: 98%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+}
+
+.menu-ruta input:focus {
+    border-color: #007bff;
+}
+
+.boton-calcular-ruta {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.boton-calcular-ruta:hover {
+    background: #218838;
+}
+
+.boton-ubicacion-actual{
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+.boton-ubicacion-actual:hover {
+    background: #218838;
+}

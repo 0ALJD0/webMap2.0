@@ -4,6 +4,9 @@ import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap  } from 're
 import './css/Map.css'; 
 import L from 'leaflet';
 import 'leaflet-search';
+import "leaflet-routing-machine";
+import 'leaflet.locatecontrol'; // Importa el plugin
+import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'; // Importa los estilos
 
   // Crear el icono con el emoji 🍽️
   const emojiIcon = L.divIcon({
@@ -26,17 +29,40 @@ const MoverMapa = ({ zoom }) => {
 
   return null;
 };
-const Map = ({ establecimientos, zoom }) => {
+
+const Ruta = ({ rutas }) => {
+  const map = useMap(); // Obtiene la referencia del mapa actual
+
+  useEffect(() => {
+    if (map && rutas?.desde && rutas?.hacia) {
+      const routingControl = L.Routing.control({
+        waypoints: [
+          L.latLng(parseFloat(rutas.desde.lat), parseFloat(rutas.desde.lng)),
+          L.latLng(parseFloat(rutas.hacia.lat), parseFloat(rutas.hacia.lng)),
+        ],
+        routeWhileDragging: true,
+      }).addTo(map);
+
+      return () => {
+        map.removeControl(routingControl);
+      };
+    }
+  }, [map, rutas]);
+
+  return null; // No renderiza nada, solo agrega la ruta al mapa
+};
+const Map = ({ establecimientos, zoom, rutas }) => {
 
   return (
     <div className="map-container">
-      <MapContainer center={[-0.95156069, -80.6914418]} zoom={13} zoomControl={false} className="leaflet-map">
+      <MapContainer center={[-0.95156069, -80.6914418]} zoom={13} zoomControl={false} className="leaflet-map" >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
         <MoverMapa zoom={zoom} />
+        <Ruta rutas={rutas} />
         {establecimientos.map((establecimiento) => (
           <Marker
             key={establecimiento.id}

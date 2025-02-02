@@ -14,6 +14,7 @@ const HomePage = () => {
   const [plegadoTabla, setPlegadoTabla] = useState(false);
   const [mostrarAgente, setMostrarAgente] = useState(false);
   const [plegadoAgente, setPlegadoAgente] = useState(false);
+  const [ruta, setRuta] = useState([]);
 
   useEffect(() => {
     const fetchEstablecimientosData = async () => {
@@ -48,6 +49,10 @@ const HomePage = () => {
     setTimeout(() => setPlegadoAgente(false), 100); // Pequeño retraso para permitir la animación
   };
 
+  const handleRuta=(rutas)=>{
+    setRuta(rutas);
+    console.log(rutas);
+  }
  /* <button className="hp-plegar-boton1" onClick={() => setPlegadoAgente(!plegadoAgente)}>
   {plegadoAgente ? '↑' : '↓'}
   </button>
@@ -60,8 +65,8 @@ const HomePage = () => {
         <Header />
       </header>
       <div className="hp-main-content">
-        <BarraBusqueda establecimientos={establecimientos} onSeleccionarEstablecimiento={handleEstablecimientoSelect}/>
-        <Map establecimientos={establecimientos} zoom={tablaEstablecimiento}/>
+        <BarraBusqueda establecimientos={establecimientos} onSeleccionarEstablecimiento={handleEstablecimientoSelect} onCalcularRuta={handleRuta}/>
+        <Map establecimientos={establecimientos} zoom={tablaEstablecimiento} rutas={ruta}/>
         {mostrarTabla && (
           <div className={`hp-establecimientos-tabla ${plegadoTabla ? 'plegado' : 'desplegado'}`}>
             <button className="hp-plegar-boton" onClick={() => setPlegadoTabla(!plegadoTabla)}>
