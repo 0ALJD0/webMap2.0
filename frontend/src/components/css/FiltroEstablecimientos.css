@@ -1,16 +1,27 @@
-.filtro-wrapper {
-    position: absolute;
-    top: 3%;
-    right: 30%;
-    /*background: rgba(255, 255, 255, 0.9);*/
-    padding: 10px;
-    border-radius: 10px;
-    /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+/* Contenedores principales de cada filtro */
+.filtro-tipos-wrapper {
+  position: absolute;
+  top: 1%;
+  right: 30%;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filtro-valoraciones-wrapper {
+  position: absolute;
+  top: 7%; /* Posición más abajo que el primer filtro */
+  right: 30%;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .filtro-container {
     display: flex;
     overflow-x: auto;
@@ -47,12 +58,12 @@
   }
   
   .filtro-flecha {
-    background: #fcfcfc;
+    background: none;
     border-radius: 100%;
     border: none;
-    color: #0078A8;
+    color: #2e96be;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 35px;
     padding: 5px;
   }
   

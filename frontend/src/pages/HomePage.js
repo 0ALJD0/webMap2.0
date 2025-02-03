@@ -4,7 +4,7 @@ import EstablecimientosTabla from '../components/EstablecimientosTabla';
 import AgenteVirtual from '../components/AgenteVirtual';
 import BarraBusqueda from '../components/BarraBusqueda';
 import FiltroEstablecimientos from '../components/FiltroEstablecimientos';
-import { fetchEstablecimientos } from '../services/api';
+import { fetchEstablecimientos, obtenerPromedioValoraciones  } from '../services/api';
 import './css/HomePage.css';
 
 const HomePage = () => {
@@ -56,16 +56,36 @@ const HomePage = () => {
   const limpiarRuta=()=>{
     setRuta([]);
   }
-  // Función para actualizar establecimientos filtrados
-  const handleFiltrar = (filtrosSeleccionados) => {
-    console.log(filtrosSeleccionados);
-    if (filtrosSeleccionados.length === 0) {
+  // Función para manejar los filtros
+  const handleFiltrar = async ({ tipos, valoraciones }) => {
+    let filtrados = establecimientos;
+
+    // Si no hay filtros seleccionados, mostrar todos los establecimientos
+    if (tipos.length === 0 && valoraciones.length === 0) {
       setEstablecimientosFiltrados(establecimientos);
-    } else {
-      setEstablecimientosFiltrados(
-        establecimientos.filter(e => filtrosSeleccionados.includes(e.tipo))
+      return;
+    }
+
+    // Filtrar por tipo de establecimiento
+    if (tipos.length > 0) {
+      filtrados = filtrados.filter(e => tipos.includes(e.tipo));
+    }
+
+    // Filtrar por valoración
+    if (valoraciones.length > 0) {
+      const establecimientosConPromedio = await Promise.all(
+        filtrados.map(async (establecimiento) => {
+          const promedio = await obtenerPromedioValoraciones(establecimiento.id);
+          return { ...establecimiento, promedio };
+        })
+      );
+
+      filtrados = establecimientosConPromedio.filter(establecimiento =>
+        valoraciones.some(valoracion => Math.floor(establecimiento.promedio) === valoracion)
       );
     }
+
+    setEstablecimientosFiltrados(filtrados);
   };
  /* <button className="hp-plegar-boton1" onClick={() => setPlegadoAgente(!plegadoAgente)}>
   {plegadoAgente ? '↑' : '↓'}
