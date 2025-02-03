@@ -98,7 +98,7 @@ const HomePage = () => {
       <div className="hp-main-content">
         <BarraBusqueda establecimientos={establecimientos} onSeleccionarEstablecimiento={handleEstablecimientoSelect} onCalcularRuta={handleRuta}/>
         <FiltroEstablecimientos onFiltrar={handleFiltrar} />
-        <Map establecimientos={establecimientosFiltrados} zoom={tablaEstablecimiento} rutas={ruta} onLimpiarRuta={limpiarRuta}/>
+        <Map establecimientos={establecimientosFiltrados} zoom={tablaEstablecimiento} rutas={ruta} onLimpiarRuta={limpiarRuta} seleccionarEst={handleEstablecimientoSelect}/>
         {mostrarTabla && (
           <div className={`hp-establecimientos-tabla ${plegadoTabla ? 'plegado' : 'desplegado'}`}>
             <button className="hp-plegar-boton" onClick={() => setPlegadoTabla(!plegadoTabla)}>

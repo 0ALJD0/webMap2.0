@@ -1,6 +1,6 @@
 // src/components/Map.js
-import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMap  } from 'react-leaflet';
+import React, { /*useState*/ useEffect, /*useRef*/ } from 'react';
+import { MapContainer, TileLayer, Marker, ZoomControl, useMap  } from 'react-leaflet';
 import UbicacionActual from './UbicacionActual'
 import './css/Map.css'; 
 import L from 'leaflet';
@@ -80,7 +80,7 @@ const Ruta = ({ rutas, onLimpiarRuta  }) => {
 
   return null; // No renderiza nada, solo agrega la ruta al mapa
 };
-const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta  }) => {
+const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta, seleccionarEst  }) => {
 
   return (
     <div className="map-container">
@@ -99,24 +99,10 @@ const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta  }) => {
             key={establecimiento.id}
             position={[parseFloat(establecimiento.latitud), parseFloat(establecimiento.longitud)]}
             icon={customIcon}
-            
+            eventHandlers={{
+              click: () => seleccionarEst(establecimiento),
+            }}
           >
-            <Popup>
-            <div className="mp-popup-content" >
-                <div className="mp-popup-section">
-                  <h2 className="mp-popup-title">Nombre</h2>
-                  <p className="mp-popup-text">{establecimiento.nombre}</p>
-                </div>
-                <div className="mp-popup-section">
-                  <h2 className="mp-popup-title">Dirección</h2>
-                  <p className="mp-popup-text">{establecimiento.direccion}</p>
-                </div>
-                <div className="mp-popup-section">
-                  <h2 className="mp-popup-title">Tipo</h2>
-                  <p className="mp-popup-text">{establecimiento.tipo}</p>
-                </div>
-              </div>
-            </Popup>
           </Marker>
         ))}
       </MapContainer>
