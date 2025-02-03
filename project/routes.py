@@ -37,61 +37,57 @@ def logout():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-#ruta para obtener los establecimientos
+# Función helper reutilizable
+def obtener_datos_establecimientos():
+    establecimientos = Establecimiento.query.filter_by(eliminado=False).all()
+    datos = []
+    
+    for est in establecimientos:
+        # Cálculo del promedio de valoraciones
+        promedio = db.session.query(
+            func.avg(Valoracion.puntuacion).label('promedio')
+        ).filter(
+            Valoracion.establecimiento_id == est.id
+        ).scalar()
+        promedio_valoraciones = str(round(promedio, 2) if promedio is not None else 0)
+
+        # Construir el objeto de datos
+        datos.append({
+            'id': est.id,
+            'nombre': est.nombre,
+            'direccion': est.direccion,
+            'latitud': str(est.latitud),
+            'longitud': str(est.longitud),
+            'descripcion': est.descripcion,
+            'tipo': est.tipo,
+            'tipo_servicio': [{'id': ts.id, 'nombre': ts.nombre} for ts in est.tipo_servicio],
+            'tipo_cocina': [{'id': ts.id, 'nombre': ts.nombre} for ts in est.tipo_cocina],
+            'numero_taza': est.numero_taza,
+            'numero_cubiertos': est.numero_cubiertos,
+            'numero_copas': est.numero_copas,
+            'petfriendly': est.petfriendly,
+            'accesibilidad': est.accesibilidad,
+            'horarios': [
+                {
+                    'dia': horario.dia_semana,
+                    'apertura': horario.hora_apertura.strftime('%H:%M'),
+                    'cierre': horario.hora_cierre.strftime('%H:%M')
+                } for horario in est.horarios
+            ],
+            'promedio_valoraciones': promedio_valoraciones  # Campo añadido
+        })
+    
+    return datos
+
+# Ruta original modificada
 @bp.route('/establecimientos', methods=['GET'])
 def obtener_establecimientos():
     try:
-
-
-        establecimientos = Establecimiento.query.filter_by(eliminado=False).all()
-        lista_establecimientos = []
-
-        for establecimiento in establecimientos:
-            horarios = Horario.query.filter_by(establecimiento_id=establecimiento.id).all()
-            horarios_json = [
-                {
-                    'dia': horario.dia_semana,
-                    'apertura': horario.hora_apertura.strftime('%H:%M'),  # Convertir a formato de cadena HH:MM
-                    'cierre': horario.hora_cierre.strftime('%H:%M')      # Convertir a formato de cadena HH:MM
-                }
-                for horario in horarios
-            ]
-
-            tipos_servicio_json = [
-                {'id': ts.id, 'nombre': ts.nombre}
-                for ts in establecimiento.tipo_servicio
-            ]
-            
-            tipos_cocina_json = [
-                {'id': ts.id, 'nombre': ts.nombre}
-                for ts in establecimiento.tipo_cocina
-            ]
-
-            lista_establecimientos.append({
-                'id': establecimiento.id,
-                'nombre': establecimiento.nombre,
-                'direccion': establecimiento.direccion,
-                'latitud': str(establecimiento.latitud),
-                'longitud': str(establecimiento.longitud),
-                'descripcion': establecimiento.descripcion,
-                'tipo': establecimiento.tipo,
-                ################################################################
-                'tipo_servicio': tipos_servicio_json,
-                'tipo_cocina': tipos_cocina_json,
-                'numero_taza': establecimiento.numero_taza,
-                'numero_cubiertos': establecimiento.numero_cubiertos,
-                'numero_copas': establecimiento.numero_copas,
-                'petfriendly': establecimiento.petfriendly,
-                'accesibilidad': establecimiento.accesibilidad,
-                'horarios': horarios_json
-            })
-
-        return jsonify(lista_establecimientos), 200
-
+        return jsonify(obtener_datos_establecimientos()), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-#ruta para obtener los establecimientos
+#ruta para obtener establecimiento
 @bp.route('/establecimiento/<int:id>', methods=['GET'])
 def obtener_establecimiento(id):
     try:
@@ -477,55 +473,6 @@ def obtener_horarios(establecimiento_id):
 
 openai.api_key =current_app.config['OPENAI_API_KEY']
 
-# @bp.route('/preguntar', methods=['POST'])
-# def preguntar_openai():
-#     try:
-#         data = request.get_json()
-#         pregunta_usuario = data.get('pregunta')
-
-#         # Obtener los establecimientos de la base de datos
-#         establecimientos = Establecimiento.query.all()
-#         establecimientos_info = [
-#             {
-#                 'nombre': est.nombre,
-#                 'direccion': est.direccion,
-#                 'latitud': str(est.latitud),
-#                 'longitud': str(est.longitud),
-#                 'descripcion': est.descripcion,
-#                 'tipo': est.tipo,
-#                 'horarios': [
-#                     {
-#                         'dia': horario.dia_semana,
-#                         'apertura': str(horario.hora_apertura),
-#                         'cierre': str(horario.hora_cierre)
-#                     } for horario in est.horarios
-#                 ]
-#             } for est in establecimientos
-#         ]
-
-#         # Preparar el mensaje para la API de OpenAI
-#         mensaje = f"""
-#         Esta es la información de los establecimientos:
-#         {establecimientos_info}
-
-#         Pregunta del usuario:
-#         {pregunta_usuario}
-#         """
-
-#         # Realizar la solicitud a la API de OpenAI
-#         response = openai.ChatCompletion.create(
-#             model="gpt-3.5-turbo",
-#             messages=[
-#                 {"role": "system", "content": "Eres un asistente virtual que ayuda a los usuarios con información sobre establecimientos."},
-#                 {"role": "user", "content": mensaje}
-#             ]
-#         )
-
-#         respuesta = response['choices'][0]['message']['content']
-
-#         return jsonify({'respuesta': respuesta}), 200
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
 @bp.route('/preguntar', methods=['POST'])
 def preguntar_openai():
     try:
@@ -540,24 +487,7 @@ def preguntar_openai():
         db.session.commit()
 
         # Obtener los establecimientos de la base de datos
-        establecimientos = Establecimiento.query.all()
-        establecimientos_info = [
-            {
-                'nombre': est.nombre,
-                'direccion': est.direccion,
-                'latitud': str(est.latitud),
-                'longitud': str(est.longitud),
-                'descripcion': est.descripcion,
-                'tipo': est.tipo,
-                'horarios': [
-                    {
-                        'dia': horario.dia_semana,
-                        'apertura': str(horario.hora_apertura),
-                        'cierre': str(horario.hora_cierre)
-                    } for horario in est.horarios
-                ]
-            } for est in establecimientos
-        ]
+        establecimientos_info = obtener_datos_establecimientos()
 
         # Inicializar el historial de mensajes si no existe
         if 'chat_history' not in session:
@@ -565,11 +495,42 @@ def preguntar_openai():
 
         # Añadir el mensaje del usuario al historial
         session['chat_history'].append({"role": "user", "content": pregunta_usuario})
+        # Construye los mensajes para OpenAI
+        system_message = """
+        Eres un asistente virtual especializado en establecimientos. Sigue estas reglas:
+        1 **Solo responde con información de los establecimientos proporcionados**.
+        2 **Nunca inventes nombres, direcciones, horarios, valoraciones u otros datos**.
+        3 Si el usuario pregunta algo fuera de los establecimientos, responde: "Solo puedo ayudarte con información de establecimientos".
+        4 Si no hay datos para responder, di: "No tengo información sobre eso en mi base de datos".
+        5 Usa lenguaje natural y evita listas técnicas.
+        6 Destaca: nombre, tipo, dirección, valoración, servicios y horarios.
+        7 Usa emojis (⭐, 🐾, ♿) y formato claro.
+        8 Omite datos irrelevantes (ej: coordenadas, IDs).
+        9 **Formatea las respuestas de manera natural y amigable**.
+        10 **Nunca muestres datos en formato técnico** (ej: evitar "Latitud: X, Longitud: Y").
+        11 **Organiza la información en párrafos o viñetas sencillas**.
+        12 **Destaca los datos más relevantes** (nombre, tipo, dirección, valoración, horarios).
 
+        **Ejemplo de respuesta VÁLIDA**:
+        "El restaurante *Prueba1* está ubicado en *asdsadas*. Es un establecimiento de cocina brasileña con un promedio de valoración de ⭐4.5. Horario de atención: Lunes a Viernes de 08:00 a 20:00. Es pet friendly y cuenta con accesibilidad."
+
+        **Ejemplo de respuesta INVÁLIDA** (¡EVÍTALO!):
+        "Nombre: Prueba1. Dirección: asdsadas. Tipo: Restaurante..."
+
+        Ejemplos de respuestas válidas:
+        - Usuario: "¿Qué restaurantes tienen valoración superior a 4 estrellas?"
+        - Asistente: "Los restaurantes con valoración superior a 4 estrellas son [X], [Y] y [Z], según mis registros".
+
+        Ejemplos de respuestas inválidas (¡EVÍTALOS!):
+        - "Sí, hay varios restaurantes con esa valoración...".
+        - "Te recomiendo el restaurante [Nombre], aunque no aparece en mis datos".
+
+        Datos de establecimientos (JSON):
+        """ + json.dumps(establecimientos_info)
         # Crear la solicitud a la API de OpenAI con el historial de mensajes
         messages = [
-            {"role": "system", "content": "Eres un asistente virtual que ayuda a los usuarios con información sobre establecimientos. Solo puedes hablar sobre los establecimientos, obiviamente puedes interactuar con el usuario, pero que el tema solo sea de los establecimientos"},
-            {"role": "system", "content": f"Esta es la información de los establecimientos: {establecimientos_info}"}
+            {"role": "system", "content":system_message },
+            
         ] + session['chat_history']
 
         # Realizar la solicitud a la API de OpenAI
