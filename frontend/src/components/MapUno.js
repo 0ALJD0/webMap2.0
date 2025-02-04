@@ -65,7 +65,7 @@ return (
 // Componente para cambiar la vista del mapa
 const CentrarMapa = ({ ubicacion }) => {
 const map = useMap();
-console.log(ubicacion);
+//console.log(ubicacion);
 useEffect(() => {
   if (ubicacion && ubicacion.length === 2) {
     map.setView([ubicacion[1], ubicacion[0]], 15); // Cambia el centro del mapa sin afectar el zoom

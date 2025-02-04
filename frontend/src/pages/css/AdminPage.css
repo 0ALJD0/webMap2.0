@@ -70,6 +70,21 @@
 .btn-nuevo:hover {
   background-color: #3e4040;
 }
+.btn-importar {
+  padding: 10px 15px;
+  border: none;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: #1e2020;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.btn-importar:hover {
+  background-color: #3e4040;
+}
 
 .popup {
   position: fixed;
@@ -80,7 +95,7 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .popup-content {
@@ -128,7 +143,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
-  z-index: 1000; /* Asegura que esté por encima de todo */
+  z-index: 9998; /* Asegura que esté por encima de todo */
 }
 .admin-histograma-container{
   margin: 20px;

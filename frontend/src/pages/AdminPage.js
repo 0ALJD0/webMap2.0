@@ -7,6 +7,7 @@ import EstablecimientosLista from '../components/EstablecimientosLista';
 import CambiarContra from '../components/CambiarContra';
 import MapaUno from '../components/MapUno';
 import Histograma from '../components/Histograma';
+import Importar from '../components/Importar';
 import './css/AdminPage.css';
 
 const AdminPage = () => {
@@ -18,6 +19,7 @@ const AdminPage = () => {
   const navigate = useNavigate();
   const [filtro, setFiltro] = useState("");
   const [ubicacionTemporal, setUbicacionTemporal] = useState([]);
+  const [showImportar, setShowImportar] = useState(false);
 
   /*useEffect(() => {
     fetchEstablecimientos()
@@ -133,6 +135,10 @@ const AdminPage = () => {
           <button className="btn-nuevo" onClick={mostrarFormularioCrear}>
             Nuevo Establecimiento
           </button>
+          <button className='btn-importar' onClick={() => setShowImportar(true)}>Importar Establecimientos</button>
+            {showImportar && (
+                <Importar onCancel={() => setShowImportar(false)} />
+            )}
           <EstablecimientosLista
             establecimientos={establecimientosFiltrados}
             onEdit={handleEditEstablecimiento}

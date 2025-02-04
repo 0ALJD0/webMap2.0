@@ -102,7 +102,6 @@ export const logoutAdmin = async () => {
 //Funcion para c  rear establecimientos
 export const crearEstablecimiento = async (datosEstablecimiento) => {
   try {
-    console.log(datosEstablecimiento);
     const response = await api.post('/establecimientos', datosEstablecimiento);
     return response.data;
   } catch (error) {
@@ -195,7 +194,6 @@ export const obtenerDatos = async () => {
       acc[categoria] = [...new Set(datos[categoria].map(item => item.caracteristica))]; // Usamos Set para eliminar duplicados
       return acc;
     }, {});
-    console.log(filtros);
     return {
       datos,
       categoriasUnicas,
