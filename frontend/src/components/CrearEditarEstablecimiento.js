@@ -2,7 +2,7 @@
 import React, { useState, useEffect  } from 'react';
 import Select from 'react-select';
 import CreatableSelect  from 'react-select';
-import { MultiSelect } from 'react-multi-select-component';
+//import { MultiSelect } from 'react-multi-select-component';
 import { crearEstablecimiento, actualizarEstablecimiento, fetchTipoServicios, fetchEstablecimiento, fetchTipoCocina  } from '../services/api';
 import CrearEditarHorarios from '../components/CrearEditarHorarios';
 import SeleccionarUbicacion from './SeleccionarUbicacion';

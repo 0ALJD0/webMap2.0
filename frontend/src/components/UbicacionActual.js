@@ -1,6 +1,6 @@
 import { useMap, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import { useEffect, useState } from 'react';
+import { /*useEffect,*/ useState } from 'react';
 import { RiUserLocationFill } from "react-icons/ri";
 import { MdMyLocation } from "react-icons/md";
 import ReactDOMServer from "react-dom/server";
@@ -10,6 +10,7 @@ import './css/UbicacionActual.css';
 const UbicacionActual = () => {
   const map = useMap();
   const [ubicacion, setUbicacion] = useState(null);
+  const [ubicacionActiva, setUbicacionActiva] = useState(false);
 
   // Icono para el marcador de ubicación actual
   const ubicacionIcon = L.divIcon({
@@ -46,7 +47,14 @@ const UbicacionActual = () => {
       alert("Geolocalización no soportada en este navegador.");
     }
   };
-
+  const handleClick = () => {
+    if (!ubicacionActiva) {
+      obtenerUbicacion();
+    } else {
+      limpiarUbicacion();
+    }
+    setUbicacionActiva(!ubicacionActiva); // Cambia el estado
+  };
   // Limpiar el marcador de ubicación actual
   const limpiarUbicacion = () => {
     setUbicacion(null);
@@ -54,7 +62,7 @@ const UbicacionActual = () => {
 
   return (
     <div className="ubicacion-actual-control">
-      <MdMyLocation className='ubicacion-actual-boton' onClick={obtenerUbicacion}> Ver mi ubicación</MdMyLocation>
+      <MdMyLocation  title={ubicacionActiva ? "Limpiar ubicación" : "Ver mi ubicación"} className='ubicacion-actual-boton' onClick={handleClick}></MdMyLocation>
       {ubicacion && (
         <Marker position={[ubicacion.lat, ubicacion.lng]} icon={ubicacionIcon}>
           <Popup>Tu ubicación actual</Popup>

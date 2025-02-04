@@ -35,10 +35,10 @@ const HomePage = () => {
     setMostrarTabla(true);
     setPlegadoTabla(false);
   };
-  const handleCerrarTabla = () => {
+  /*const handleCerrarTabla = () => {
     setPlegadoTabla(true);
     setTimeout(() => setMostrarTabla(false), 300);  // Espera el tiempo de la transición
-  };
+  };*/
 
   const handleCerrarAgente = () => {
     setPlegadoAgente(true);

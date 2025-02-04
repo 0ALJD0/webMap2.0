@@ -1,6 +1,6 @@
 // src/components/Map.js
 import React, { /*useState*/ useEffect, /*useRef*/ } from 'react';
-import { MapContainer, TileLayer, Marker, ZoomControl, useMap  } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, /*ZoomControl,*/ useMap  } from 'react-leaflet';
 import UbicacionActual from './UbicacionActual'
 import './css/Map.css'; 
 import L from 'leaflet';
@@ -89,7 +89,6 @@ const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta, seleccionarEst  }) 
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-
 
         <MoverMapa zoom={zoom} />
         <Ruta rutas={rutas} onLimpiarRuta ={onLimpiarRuta} />

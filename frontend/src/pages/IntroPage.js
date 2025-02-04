@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, /*useMemo,*/ useRef } from 'react';
 import { useNavigate } from 'react-router-dom'; // Usar useNavigate en lugar de useHistory
 import './css/IntroPage.css'; // Asegúrate de importar el CSS
 import { GoMoveToTop } from "react-icons/go";
