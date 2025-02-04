@@ -25,7 +25,7 @@ const Importar = ({ onCancel }) => {
     const handlePreview = (file) => {
         Papa.parse(file, {
             complete: (result) => {
-                if (result.data.length > 1) {
+                if (result.data.length > 0) {
                     setPreviewData(result.data.slice(0, 5)); // Mostrar las primeras 5 filas
                 } else {
                     setMensaje("El archivo CSV parece estar vacío o mal estructurado.");
