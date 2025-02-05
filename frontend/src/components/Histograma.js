@@ -35,13 +35,105 @@ const Histograma = () => {
         const { datos, categoriasUnicas } = await obtenerDatos();
         setDatos(datos);
         setCategorias(categoriasUnicas);
+
+      // Generar el histograma por defecto al cargar los datos
+      generarHistogramaPorDefecto(datos, categoriasUnicas);
       } catch (error) {
         console.error('Error al cargar los datos:', error);
       }
     };
     fetchData();
   }, []);
-
+  const generarHistogramaPorDefecto = (datos, categorias) => {
+    // Estructura para almacenar la frecuencia por mes, categoría y característica
+    const frecuenciaPorMes = {};
+  
+    // Iterar sobre todas las categorías
+    categorias.forEach((categoria) => {
+      const datosCategoria = datos[categoria];
+  
+      if (!datosCategoria) return;
+  
+      // Filtrar por año y mes si están seleccionados
+      let datosFiltrados = datosCategoria;
+      if (añoSeleccionado) {
+        datosFiltrados = datosFiltrados.filter(
+          (item) => new Date(item.periodo).getFullYear() === parseInt(añoSeleccionado)
+        );
+      }
+      if (mesSeleccionado) {
+        datosFiltrados = datosFiltrados.filter(
+          (item) =>
+            new Date(item.periodo).toLocaleString('es-ES', { month: 'long' }) === mesSeleccionado
+        );
+      }
+  
+      // Procesar los datos filtrados
+      datosFiltrados.forEach((item) => {
+        const fecha = new Date(item.periodo);
+        const mesAnio = `${fecha.toLocaleString('es-ES', { month: 'long' })} ${fecha.getFullYear()}`;
+  
+        if (!frecuenciaPorMes[mesAnio]) {
+          frecuenciaPorMes[mesAnio] = {};
+        }
+  
+        if (!frecuenciaPorMes[mesAnio][categoria]) {
+          frecuenciaPorMes[mesAnio][categoria] = {};
+        }
+  
+        if (!frecuenciaPorMes[mesAnio][categoria][item.caracteristica]) {
+          frecuenciaPorMes[mesAnio][categoria][item.caracteristica] = 0;
+        }
+  
+        frecuenciaPorMes[mesAnio][categoria][item.caracteristica] += item.frecuencia;
+      });
+    });
+  
+    // Obtener los periodos ordenados
+    const periodos = Object.keys(frecuenciaPorMes).sort((a, b) => {
+      const [mesA, anioA] = a.split(' ');
+      const [mesB, anioB] = b.split(' ');
+  
+      const mesesOrdenados = [
+        'enero',
+        'febrero',
+        'marzo',
+        'abril',
+        'mayo',
+        'junio',
+        'julio',
+        'agosto',
+        'septiembre',
+        'octubre',
+        'noviembre',
+        'diciembre',
+      ];
+  
+      return anioA - anioB || mesesOrdenados.indexOf(mesA) - mesesOrdenados.indexOf(mesB);
+    });
+  
+    // Crear datasets para cada categoría
+    const datasets = categorias.map((categoria, index) => {
+      const caracteristicas = [...new Set(datos[categoria].map((item) => item.caracteristica))];
+    
+      return {
+        label: categoria,
+        data: periodos.map((mesAnio) => {
+          const frecuenciasCaracteristicas = frecuenciaPorMes[mesAnio][categoria] || {};
+          return Object.values(frecuenciasCaracteristicas).reduce((sum, freq) => sum + freq, 0);
+        }),
+        backgroundColor: caracteristicas.map((_, i) =>
+          `rgba(${Math.floor(100 + i * 50)}, ${Math.floor(150 + i * 30)}, ${Math.floor(200 - i * 40)}, 0.5)`
+        ),
+      };
+    });
+  
+    // Actualizar el estado del histograma
+    setHistogramaData({
+      labels: periodos,
+      datasets,
+    });
+  };
   useEffect(() => {
     if (!categoriaSeleccionada || !datos[categoriaSeleccionada]) return;
 

@@ -4,7 +4,7 @@ from .models import Administrador, Establecimiento, Horario, Tipo_servicio, Tipo
 #from .models import establecimiento_tipo_cocina, establecimiento_tipo_servicio
 import openai
 import json
-from sqlalchemy import text, func
+from sqlalchemy import text, func, extract, and_, or_
 import pandas as pd
 import spacy
 from collections import Counter
@@ -738,5 +738,63 @@ def obtener_valoraciones(establecimiento_id):
         } for v in valoraciones]
 
         return jsonify(valoraciones_json), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@bp.route('/establecimientos/valoraciones/agrupado', methods=['GET'])
+def obtener_valoraciones_agrupadas():
+    try:
+        año = request.args.get('año', type=int)
+        mes = request.args.get('mes', type=int)
+        categoria = request.args.get('categoria')
+        valoracion = request.args.get('valoracion', type=int)
+
+        # Mapear categorías con sus atributos o relaciones
+        CATEGORIAS = {
+            'tipo_establecimiento': {'campo': 'tipo'},
+            'numero_tazas': {'campo': 'numero_taza'},
+            'numero_cubiertos': {'campo': 'numero_cubiertos'},
+            'numero_copas': {'campo': 'numero_copas'},
+            'servicios': {'relacion': 'tipo_servicio'},
+            'tipo_cocina': {'relacion': 'tipo_cocina'}
+        }
+
+        results = []
+        datos_establecimientos = obtener_datos_establecimientos()
+
+        for cat in (CATEGORIAS.keys() if not categoria else [categoria]):
+            config = CATEGORIAS[cat]
+            agrupados = {}
+
+            for est in datos_establecimientos:
+                if 'campo' in config:
+                    valor_caracteristica = est[config['campo']]
+                elif 'relacion' in config:
+                    valor_caracteristica = [item['nombre'] for item in est[config['relacion']]]
+                    valor_caracteristica = ", ".join(valor_caracteristica) if valor_caracteristica else "Sin datos"
+                else:
+                    valor_caracteristica = "Sin datos"
+
+                key = (est['id'], est['promedio_valoraciones'], valor_caracteristica)
+
+                if key not in agrupados:
+                    agrupados[key] = {'cantidad': 0, 'promedio': 0, 'mes': mes, 'año': año}
+
+                agrupados[key]['cantidad'] += 1
+                agrupados[key]['promedio'] += float(est['promedio_valoraciones'])
+
+            for (id_est, prom_val, caracteristica), data in agrupados.items():
+                promedio_final = data['promedio'] / data['cantidad'] if data['cantidad'] else 0
+                results.append({
+                    'categoria': cat,
+                    'año': data['año'],
+                    'mes': data['mes'],
+                    'promedio': round(promedio_final, 2),
+                    'cantidad': data['cantidad'],
+                    'caracteristica': caracteristica
+                })
+
+        return jsonify(results), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
