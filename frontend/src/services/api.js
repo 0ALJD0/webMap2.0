@@ -237,4 +237,14 @@ export const obtenerValoraciones = async (establecimientoId) => {
     throw error;
   }
 };
+
+export const obtenerEstadisticas = async() => {
+  try {
+    const response = await api.get('/estadisticas/establecimientos');
+    return response.data; // Devuelve las estadísticas
+  } catch (error) {
+    console.error('Error al obtener las estadísticas:', error);
+    throw error;
+  }
+};
 export default api;

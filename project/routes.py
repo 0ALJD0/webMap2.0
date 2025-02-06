@@ -7,7 +7,7 @@ import json
 from sqlalchemy import text, func, extract, and_, or_
 import pandas as pd
 import spacy
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -741,60 +741,72 @@ def obtener_valoraciones(establecimiento_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-@bp.route('/establecimientos/valoraciones/agrupado', methods=['GET'])
-def obtener_valoraciones_agrupadas():
-    try:
-        año = request.args.get('año', type=int)
-        mes = request.args.get('mes', type=int)
-        categoria = request.args.get('categoria')
-        valoracion = request.args.get('valoracion', type=int)
+tipos_validos = [
+    "Cafetería", "Restaurante", "Bar", "Discoteca", "Plaza de comida", 
+    "Establecimiento móvil", "Servicio Catering"
+]
 
-        # Mapear categorías con sus atributos o relaciones
-        CATEGORIAS = {
-            'tipo_establecimiento': {'campo': 'tipo'},
-            'numero_tazas': {'campo': 'numero_taza'},
-            'numero_cubiertos': {'campo': 'numero_cubiertos'},
-            'numero_copas': {'campo': 'numero_copas'},
-            'servicios': {'relacion': 'tipo_servicio'},
-            'tipo_cocina': {'relacion': 'tipo_cocina'}
+    
+@bp.route('/estadisticas/establecimientos', methods=['GET'])
+def obtener_estadisticas_establecimientos():
+    try:
+        establecimientos = Establecimiento.query.filter_by(eliminado=False).all()
+        estadisticas = {}
+
+        tipos_validos = {
+            "Cafetería", "Restaurante", "Bar", "Discoteca",
+            "Plaza de comida", "Establecimiento móvil", "Servicio Catering"
         }
 
-        results = []
-        datos_establecimientos = obtener_datos_establecimientos()
+        for est in establecimientos:
+            if est.tipo not in tipos_validos:
+                continue
 
-        for cat in (CATEGORIAS.keys() if not categoria else [categoria]):
-            config = CATEGORIAS[cat]
-            agrupados = {}
+            # Obtener todas las valoraciones del establecimiento
+            valoraciones = Valoracion.query.filter_by(establecimiento_id=est.id).all()
 
-            for est in datos_establecimientos:
-                if 'campo' in config:
-                    valor_caracteristica = est[config['campo']]
-                elif 'relacion' in config:
-                    valor_caracteristica = [item['nombre'] for item in est[config['relacion']]]
-                    valor_caracteristica = ", ".join(valor_caracteristica) if valor_caracteristica else "Sin datos"
+            # Diccionario para rastrear meses y sumar puntuaciones
+            meses_puntuaciones = defaultdict(lambda: {'count': 0, 'sum': 0})
+
+            for valoracion in valoraciones:
+                if valoracion.fecha:
+                    mes_anio = valoracion.fecha.strftime("%Y-%m")
+                    meses_puntuaciones[mes_anio]['count'] += 1
+                    meses_puntuaciones[mes_anio]['sum'] += valoracion.puntuacion
+
+            # Procesar cada mes único del establecimiento
+            for mes_anio, datos in meses_puntuaciones.items():
+                if mes_anio not in estadisticas:
+                    estadisticas[mes_anio] = {
+                        tipo: {'cantidad_est': 0, 'sum_puntuaciones': 0, 'total_ratings': 0}
+                        for tipo in tipos_validos
+                    }
+
+                # Incrementar cantidad de establecimientos en el mes
+                estadisticas[mes_anio][est.tipo]['cantidad_est'] += 1
+                # Acumular puntuaciones y conteo de valoraciones
+                estadisticas[mes_anio][est.tipo]['sum_puntuaciones'] += datos['sum']
+                estadisticas[mes_anio][est.tipo]['total_ratings'] += datos['count']
+
+        # Calcular promedios
+        resultado = []
+        for mes_anio, tipos in estadisticas.items():
+            for tipo in tipos_validos:
+                datos = tipos[tipo]
+                if datos['total_ratings'] > 0:
+                    promedio = round(datos['sum_puntuaciones'] / datos['total_ratings'], 2)
                 else:
-                    valor_caracteristica = "Sin datos"
-
-                key = (est['id'], est['promedio_valoraciones'], valor_caracteristica)
-
-                if key not in agrupados:
-                    agrupados[key] = {'cantidad': 0, 'promedio': 0, 'mes': mes, 'año': año}
-
-                agrupados[key]['cantidad'] += 1
-                agrupados[key]['promedio'] += float(est['promedio_valoraciones'])
-
-            for (id_est, prom_val, caracteristica), data in agrupados.items():
-                promedio_final = data['promedio'] / data['cantidad'] if data['cantidad'] else 0
-                results.append({
-                    'categoria': cat,
-                    'año': data['año'],
-                    'mes': data['mes'],
-                    'promedio': round(promedio_final, 2),
-                    'cantidad': data['cantidad'],
-                    'caracteristica': caracteristica
+                    promedio = 0
+                resultado.append({
+                    "mes_anio": mes_anio,
+                    "categoria": "tipo_establecimiento",
+                    "caracteristica": tipo,
+                    "cantidad_establecimientos": datos['cantidad_est'],
+                    "promedio_puntuaciones": promedio
                 })
 
-        return jsonify(results), 200
+        return jsonify(resultado), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+

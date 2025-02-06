@@ -9,6 +9,7 @@ import MapaUno from '../components/MapUno';
 import Histograma from '../components/Histograma';
 import Importar from '../components/Importar';
 import './css/AdminPage.css';
+import Histograma2 from '../components/Histograma2';
 
 const AdminPage = () => {
   const [establecimientos, setEstablecimientos] = useState([]);
@@ -153,7 +154,10 @@ const AdminPage = () => {
       </div>
       <div className="admin-histograma-container">
           <Histograma />
-        </div>
+      </div>
+      <div className="admin-histograma-container">
+          <Histograma2 />
+      </div>
     </div>
   );
 };

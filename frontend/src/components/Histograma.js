@@ -4,8 +4,9 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { obtenerDatos } from '../services/api';
 import './css/Histograma.css';
 import Spinner from './Spinner';
+import zoomPlugin from "chartjs-plugin-zoom"; 
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, zoomPlugin);
 
 const Histograma = () => {
   const [datos, setDatos] = useState({});
@@ -122,9 +123,14 @@ const Histograma = () => {
           const frecuenciasCaracteristicas = frecuenciaPorMes[mesAnio][categoria] || {};
           return Object.values(frecuenciasCaracteristicas).reduce((sum, freq) => sum + freq, 0);
         }),
+        barThickness: 40,
         backgroundColor: caracteristicas.map((_, i) =>
           `rgba(${Math.floor(100 + i * 50)}, ${Math.floor(150 + i * 30)}, ${Math.floor(200 - i * 40)}, 0.5)`
+        
         ),
+        barPercentage: 0.5,
+        categoryPercentage: 0.9,
+        stack: 'Stack 1',
       };
     });
   
@@ -213,6 +219,8 @@ const Histograma = () => {
         data: frecuencias,
         backgroundColor: `rgba(${Math.floor(100 + index * 50)}, ${Math.floor(150 + index * 30)}, ${Math.floor(200 - index * 40)}, 0.5)`,
         stack: 'Stack 0', // Hace que las barras sean apiladas
+        barThickness: 40,
+        barPercentage: 0.9,
       };
     });
 
@@ -222,6 +230,54 @@ const Histograma = () => {
     });
 
   }, [categoriaSeleccionada, caracteristicaSeleccionada, añoSeleccionado, mesSeleccionado, datos]);
+
+    // Opciones del gráfico
+    const opciones = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        title: {
+          display: true,
+          text: `Tendencia de busqueda ${
+             categoriaSeleccionada || caracteristicaSeleccionada ? (
+              categoriaSeleccionada && !caracteristicaSeleccionada ? (categoriaSeleccionada):(` ${categoriaSeleccionada} y ${caracteristicaSeleccionada}`)
+            ):(`general`)
+            } por Mes y Año`,
+        },
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: "x", // Habilitar desplazamiento horizontal
+          },
+          zoom: {
+            wheel: {
+              enabled: true, // Habilitar zoom con la rueda del mouse
+            },
+            pinch: {
+              enabled: true, // Habilitar zoom con gestos en dispositivos táctiles
+            },
+            mode: "x", // Habilitar zoom horizontal
+          },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: "Frecuencia"
+          },
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Mes-Año",
+          },
+        },
+      },
+    };
 
    // Función para exportar el gráfico como imagen
    const exportarComoImagen = () => {
@@ -286,7 +342,7 @@ const Histograma = () => {
         {datos && Object.keys(datos).length > 0 ? (
         histogramaData && histogramaData.labels.length > 0 ? (
             <div className='histrograma-grafico'>
-              <Bar data={histogramaData}
+              <Bar data={histogramaData} options={opciones}
               style={{padding: '30px'}}
                />
               <div className='histograma-botones'>
