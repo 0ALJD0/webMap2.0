@@ -20,8 +20,8 @@ const UbicacionActual = () => {
             <RiUserLocationFill  />
         </div>
     ),
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
   });
 
   // Obtener la ubicación actual

@@ -5,12 +5,13 @@
 
 .el-detalles {
   font-family: Arial, sans-serif;
-  margin: 65px 30px 30px 8px; /* Aumenta el margen superior */
+  margin: 65px 30px 10px 7px; /* Aumenta el margen superior */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 90%;
+  height: 660px; /* Si deseas una altura fija, ajusta aquí */
 }
 
 .el-detalles h2 {
@@ -23,7 +24,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 500px;
+  max-height: 600px;
   overflow: auto;
   scrollbar-width: thin; /* Cambia el ancho del scroll en navegadores compatibles */
   scrollbar-color: rgba(0, 0, 0, 0.5) transparent; /* Establece el color del scroll y el fondo */
@@ -44,7 +45,7 @@
 .el-detalle-item {
   display: flex;
   align-items: flex-start;
-  gap: 15px; /* Espaciado entre el icono y el texto */
+  gap: 10px; /* Espaciado entre el icono y el texto */
   font-size: 16px;
   background-color: #fff;
   padding: 15px;
@@ -64,6 +65,7 @@
 
 .el-detalle-item span {
   color: #555;
+  margin-left: 5px;
 }
 
 .el-horarios-container {
@@ -86,9 +88,6 @@
   object-fit: cover;
   border-radius: 50%;
 }
-
-.el-detalle-item div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+.title-detalle-start{
+  font-size: 20px; /* Ajusta el valor según necesites */
 }
