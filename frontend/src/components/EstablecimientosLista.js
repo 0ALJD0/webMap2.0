@@ -47,7 +47,7 @@ const EstablecimientosLista = ({ establecimientos, onEdit, onEliminar, mostrarMe
       ))}
       {confirmarEliminar && (
         <div className="popup-overlay">
-          <div className="popup-content">
+          <div className="popup-content-lista">
             <h3>¿Está seguro que desea eliminar el establecimiento "{establecimientoAEliminar?.nombre}"?</h3>
             <div className="popup-buttons">
               <button className="el-button el-button-cancel" onClick={cerrarConfirmacion}>Cancelar</button>

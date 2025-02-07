@@ -314,24 +314,28 @@ const Histograma = () => {
       <h2 className='histograma-titulo'>Histograma de tendencias de las consultas</h2>
       <div className="histograma-chart-container">
         <div className="histograma-controls">
+          <label htmlFor="categoria">Categoría</label>
           <select className='histograma-select' onChange={e => setCategoriaSeleccionada(e.target.value)} value={categoriaSeleccionada}>
             <option value="">Seleccione una categoría</option>
             {categorias.map(categoria => (
               <option key={categoria} value={categoria}>{categoriasLabels[categoria] || categoria}</option>
             ))}
           </select>
+          <label htmlFor="caracteristica">Características</label>
           <select className='histograma-select' onChange={e => setCaracteristicaSeleccionada(e.target.value)} value={caracteristicaSeleccionada} disabled={!caracteristicas.length}>
             <option value="">Todas las características</option>
             {caracteristicas.map(caracteristica => (
               <option key={caracteristica} value={caracteristica}>{caracteristica}</option>
             ))}
           </select>
+          <label htmlFor="anio">Año</label>
           <select className='histograma-select' onChange={e => setAñoSeleccionado(e.target.value)} value={añoSeleccionado} disabled={!años.length}>
             <option value="">Todos los años</option>
             {años.map(año => (
               <option key={año} value={año}>{año}</option>
             ))}
           </select>
+          <label htmlFor="mes">Mes</label>
           <select className='histograma-select' onChange={e => setMesSeleccionado(e.target.value)} value={mesSeleccionado} disabled={!meses.length}>
             <option value="">Todos los meses</option>
             {meses.map(mes => (

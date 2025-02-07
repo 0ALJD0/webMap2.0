@@ -1,6 +1,7 @@
   import React, { useEffect, useState } from "react";
   import { Bar } from "react-chartjs-2";
   import Select from "react-select";
+  import './css/Histograma.css';
   import { obtenerEstadisticas } from "../services/api";
   import {
     Chart as ChartJS,
@@ -168,28 +169,44 @@
 
 
 
-    return (
-      <div>
-        <h1>N Establecimientos Valorados x Mes y Año/ Promedio de Valoración de los estblecimientos</h1>
-          <div style={{ width: '300px' }}>
-            <Select
-              options={tiposEstablecimiento}
-              placeholder="Filtrar por tipo"
-              onChange={setFiltroTipo}
-              isClearable
-            />
+        return (
+          <div>
+            <h1>Hisrograma de valoración de establecimientos</h1>
+            <div className="histograma-chart-container">
+              {/* Contenedor de los filtros */}
+              <div className="histograma-controls">
+              <div>
+                <label htmlFor="tipo-establecimiento" className="histograma-label">Filtrar por tipo</label>
+                <Select
+                  className="histograma-select2"
+                  options={tiposEstablecimiento}
+                  placeholder="Filtrar por tipo"
+                  onChange={setFiltroTipo}
+                  isClearable
+                  id="tipo-establecimiento"
+                />
+              </div>
+              <div>
+                <label htmlFor="filtro-estrellas" className="histograma-label">Filtrar por valoración</label>
+                <Select
+                  className="histograma-select2"
+                  options={opcionesEstrellas}
+                  placeholder="Filtrar por valoración"
+                  onChange={setFiltroEstrella}
+                  isClearable
+                  id="filtro-estrellas"
+                />
+              </div>
+              </div>
+        
+              {/* Contenedor del gráfico */}
+              <div className="histograma-grafico2">
+                <Bar data={prepararDatosGrafico()} options={opciones}
+                style={{padding: '30px'}} />
+              </div>
+            </div>
           </div>
-          <div style={{ width: '300px' }}>
-            <Select
-              options={opcionesEstrellas}
-              placeholder="Filtrar por valoración"
-              onChange={setFiltroEstrella}
-              isClearable
-            />
-          </div>
-        <Bar data={prepararDatosGrafico()} options={opciones} />
-      </div>
-    );
+        );
   };
 
   export default Histograma2;

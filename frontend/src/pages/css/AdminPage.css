@@ -122,7 +122,8 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: -20px; /* Ajusta el valor según lo necesites */
+  margin-top: -10px; /* Ajusta el valor según lo necesites */
+  margin-bottom: 20px;
 }
 
 .admin-mapa-container {

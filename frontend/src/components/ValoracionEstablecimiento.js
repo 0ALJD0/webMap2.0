@@ -116,7 +116,7 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
 
       {/* Popup de confirmación */}
       {mostrarPopup && (
-        <div className="popup">
+        <div className="popup-valoraciones">
           <p>¡Opinión enviada exitosamente!</p>
         </div>
       )}

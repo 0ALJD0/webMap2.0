@@ -1,26 +1,69 @@
 /* Contenedor principal */
 /* Select para categorías */
 .histograma-select {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
-  margin-bottom: 0px;
-  outline: none;
-  cursor: pointer;
-  transition: border-color 0.3s ease;
   width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
 }
+
+
+.histograma-select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.histograma-select:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.histograma-select option {
+  padding: 10px;
+}
+
+.histograma-select2 {
+  width: 250px; /* Ancho fijo */
+  font-size: 16px;
+  border-radius: 8px; /* Bordes redondeados */
+  
+}
+.histograma-label {
+  font-size: 16px;  /* Tamaño de la fuente más grande */
+  font-weight: 600;  /* Peso de la fuente */
+  color: #333;  /* Color gris oscuro */
+  margin-bottom: 8px;  /* Espacio debajo del label */
+  display: block;  /* Que el label ocupe toda la línea */
+  white-space: nowrap;
+}
+
+.histograma-select2 .css-1s2u09g-control { /* Estilo del contenedor */
+  border: 2px solid #007bff !important; /* Borde azul */
+  border-radius: 8px !important; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
 .histograma-controls {
     display: flex;
     align-items: start; /* Alinea verticalmente al centro */
     flex-direction: column; /* Hace que los elementos se apilen verticalmente */
     gap: 10px; /* Espaciado entre el texto y el select */
     margin-top: 5%;
+    max-width: 300px; /* Ajusta el ancho del contenedor */
   }
-  
+  .histograma-controls label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 2px;
+    margin-right: 50%;
+  }
+
 .histograma-titulo {
     margin: 1%; /* Elimina el margen por defecto del <p> */
     font-size: 32px; /* Ajusta el tamaño de la fuente */
@@ -28,7 +71,19 @@
     font-weight: bolder;
     align-self: center;
   }
+  .histograma-grafico2 {
+    max-width: 2000px; /* Ajusta el ancho máximo */
+    max-height: 1700px; /* Ajusta la altura máxima */
 
+    padding: 10px; /* Reducir el padding */
+  }
+  
+  .histograma-grafico2 canvas {
+    width: 100% !important; 
+    height: 100% !important;
+  }
+  
+  /*Esto engloba el*/
   .histograma-chart-container {
     display: flex;
     align-items: start; /* Alinea los elementos en la parte superior */
@@ -47,7 +102,6 @@
   justify-content: center;
   width: 100%;
   margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.486);
   border-radius: 3%;
 }
 
@@ -66,7 +120,7 @@
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background: linear-gradient(135deg, #3498db, #6dd5fa); /* Gradiente moderno */
+  background-color: #1e2020; /* Color sólido */
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -75,7 +129,7 @@
 }
 
 .export-boton:hover {
-  background: linear-gradient(135deg, #2980b9, #54a0ff); /* Cambio de color en hover */
+  background-color: #6a7276; /* Color sólido en hover */
   transform: translateY(-2px); /* Efecto de elevación */
   box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
 }

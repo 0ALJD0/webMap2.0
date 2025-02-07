@@ -94,7 +94,13 @@ const AdminPage = () => {
       </header>
 
       <div className="admin-content">
-        
+        <div className="admin-histograma-container">
+            <Histograma />
+        </div>
+        <div className="admin-histograma-container">
+            <Histograma2 />
+        </div>
+
         {mostrarFormulario && (
           <>
             <div className="backdrop" onClick={cerrarFormulario}></div>
@@ -151,12 +157,6 @@ const AdminPage = () => {
         <div className="admin-mapa-container">
           <MapaUno establecimientos={establecimientos} ubicacion={ubicacionTemporal}/>
         </div>
-      </div>
-      <div className="admin-histograma-container">
-          <Histograma />
-      </div>
-      <div className="admin-histograma-container">
-          <Histograma2 />
       </div>
     </div>
   );
