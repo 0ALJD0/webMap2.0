@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import { crearEstablecimiento } from '../services/api';
+import { crearEstablecimiento, agregarHorario } from '../services/api';
 import './css/Importar.css';
 
 const Importar = ({ onCancel }) => {
@@ -50,14 +50,14 @@ const Importar = ({ onCancel }) => {
                     setMensaje('El archivo CSV parece estar vacío o mal estructurado.');
                     return;
                 }
-                console.log(result.data);
+                
                 const headers = Object.keys(data[0]); // Extraer claves del primer objeto
-                console.log("Los headers",headers);
+                
                 const rows = data;
-                console.log("Los rows",rows);
+    
                 const requiredFields = [
                     'nombre', 'direccion', 'tipo', 'tipo_servicio', 'tipo_cocina', 
-                    'latitud', 'longitud', 'descripcion','numero_cubiertos', 'numero_copas','numero_taza'
+                    'latitud', 'longitud', 'descripcion','numero_cubiertos', 'numero_copas','numero_taza','horarios'
                 ];
 
                 if (!requiredFields.every(field => headers.includes(field))) {
@@ -83,9 +83,33 @@ const Importar = ({ onCancel }) => {
                     establecimiento.tipo_cocina = establecimiento.tipo_cocina ? establecimiento.tipo_cocina.split(';').map(Number) : [];
                     
                     try {
-                        await crearEstablecimiento(establecimiento);
+                        // 1️⃣ Crear el establecimiento
+                        const response = await crearEstablecimiento(establecimiento);
+                        console.log(response);
+                        const establecimientoId = response.establecimiento.id; // Obtener el ID devuelto por el backend
+                        
+                        // 2️⃣ Enviar los horarios a la API
+                        if (row.horarios) {
+                            const horarios = row.horarios.split(';').map((horarioStr) => {
+                                const match = horarioStr.match(/(\w+)\s(\d{1,2}:\d{2})\s-\s(\d{1,2}:\d{2})/);
+                                if (match) {
+                                    return {
+                                        dia_semana: match[1], 
+                                        hora_apertura: match[2], 
+                                        hora_cierre: match[3]
+                                    };
+                                } else {
+                                    console.error(`Formato incorrecto en horarios: ${horarioStr}`);
+                                    return null;
+                                }
+                            }).filter(Boolean);
+    
+                            for (const horario of horarios) {
+                                await agregarHorario(establecimientoId, horario);
+                            }
+                        }
                     } catch (error) {
-                        setMensaje(`Error al importar: ${error.response.data.message}`);
+                        setMensaje(`Error al importar: ${error.response?.data?.message || error.message}`);
                         return;
                     }
                 }
@@ -98,8 +122,8 @@ const Importar = ({ onCancel }) => {
     };
 
     const handleDownloadTemplate = () => {
-        const csvContent = `nombre,direccion,tipo,tipo_servicio,tipo_cocina,latitud,longitud,petfriendly,accesibilidad,descripcion,numero_taza,numero_cubiertos,numero_copas\n` +
-            `La Tablita2,Calle1 Av2,Restaurante,1;2,3;4,-0.951560696, -80.691441,true,false,Descripcion Generica,1,1,1`;
+        const csvContent = `nombre,direccion,tipo,tipo_servicio,tipo_cocina,latitud,longitud,petfriendly,accesibilidad,descripcion,numero_taza,numero_cubiertos,numero_copas,horarios\n` +
+            `La Tablita2,Calle1 Av2,Restaurante,1;2,3;4,-0.951560696, -80.691441,true,false,Descripcion Generica,1,1,1,Lunes 9:00 - 19:00; Martes 9:00 - 19:00`;
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -159,7 +183,7 @@ const Importar = ({ onCancel }) => {
                         nombre,direccion,tipo,tipo_servicio,tipo_cocina,latitud,longitud,petfriendly,accesibilidad,
                         descripcion,numero_taza,numero_cubiertos,numero_copas
                         <br />
-                        La Tablita2,Calle1 Av2,Restaurante,1;2,3;4,-0.951560696, -80.691441,true,false,Descripcion Generica,1,1,1
+                        La Tablita2,Calle1 Av2,Restaurante,1;2,3;4,-0.951560696, -80.691441,true,false,Descripcion Generica,1,1,1,Lunes 9:00 - 19:00; Martes 9:00 - 19:00
                         <br />
                         Si un campo como descripcion o direccion contendrás comas escribirlo en tre comillas:
                         <br />
