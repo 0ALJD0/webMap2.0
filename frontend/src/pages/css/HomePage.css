@@ -168,9 +168,9 @@
   color: #ffffff;
   font-weight: bold;
   padding: 8px 20px; /* Agrega espacio alrededor del texto */
-  border: 2px solid #1e2020; /* Bordes azules */
+  border: 2px solid #007bff; /* Bordes azules */
   border-radius: 25px; /* Bordes redondeados */
-  background: #1e2020; /* Fondo transparente */
+  background: #007bff; /* Fondo transparente */
   cursor: pointer; /* Apunta como si fuera un botón */
   text-align: center; /* Centra el texto dentro del "botón" */
   position: relative;

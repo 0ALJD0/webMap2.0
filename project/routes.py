@@ -176,11 +176,11 @@ def add_establecimiento():
         accesibilidad = data.get('accesibilidad', False)
         
         latitud = data.get('latitud')
-        if isinstance(latitud, str):
-            return jsonify({'message': 'La latitud esta vacía'}), 500
+        #if isinstance(latitud, str):
+            #return jsonify({'message': 'La latitud esta vacía'}), 500
         longitud = data.get('longitud')
-        if isinstance(longitud, str):
-            return jsonify({'message': 'La longitud esta vacía'}), 500
+        #if isinstance(longitud, str):
+            #return jsonify({'message': 'La longitud esta vacía'}), 500
         descripcion = data.get('descripcion')
 
 
