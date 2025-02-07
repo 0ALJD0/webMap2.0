@@ -1,11 +1,10 @@
 /* Valoraciones.css */
 .valoraciones-container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 10px 10px 10px 10px;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   .valoraciones-container h2 {
@@ -13,13 +12,28 @@
     margin-bottom: 16px;
     color: #333;
   }
-  
+
   .promedio {
-    font-size: 20px;
-    font-weight: bold;
-    color: #555;
+    display: flex;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center;
+    margin-bottom: 16px;
   }
-  
+
+  .promedio-numero {
+      font-size: 60px;
+      font-weight: bold;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 5px; /* Espaciado entre el número y la estrella */
+  }
+
+  .estrella {
+      color: gold;
+      font-size: 60px; /* Ajusta el tamaño de la estrella según necesites */
+  }
+
   .valoraciones-form {
     margin-bottom: 24px;
   }
@@ -30,15 +44,27 @@
     font-size: 14px;
     color: #555;
   }
-  .valoracion{
-    display: flex; /* Hace que el contenido del label se alinee en fila */
-    align-items: start; /* Centra verticalmente el texto y las estrellas */
-    gap: 8px; /* Espaciado entre el texto del label y las estrellas */
+  .valoracion {
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna */
+    align-items: center; /* Centra los elementos horizontalmente */
+    gap: 5px;
     margin-bottom: 12px;
     font-size: 14px;
     color: #555;
   }
+
+  .titulo-valoracion {
+    text-align: left; /* Asegura que el texto esté alineado a la izquierda */
+    width: 100%; /* Para que ocupe todo el ancho disponible */
+    margin-bottom: 0; /* Asegura que no haya margen extra */
+  }
   
+  .estrellas-container {
+    display: flex;
+    justify-content: center;
+  }
+
   .valoraciones-form input,
   .valoraciones-form textarea {
     width: 100%;
@@ -47,6 +73,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
+    font-family: inherit; /* Hereda la fuente del contenedor o elemento padre */
+    font-size: inherit; /* Hereda el tamaño de fuente del contenedor */
   }
   
   .valoraciones-form textarea {

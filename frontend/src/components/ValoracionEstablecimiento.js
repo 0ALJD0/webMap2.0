@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { obtenerPromedioValoraciones, crearValoracion, obtenerValoraciones } from '../services/api';
 import './css/ValoracionEstablecimiento.css';
+import { FaStar } from "react-icons/fa";
 import Estrellas from './Estrellas';
 const ValoracionEstablecimiento = ({ establecimientoId }) => {
   const [promedio, setPromedio] = useState(0);
@@ -55,16 +56,19 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
 
   return (
     <div className="valoraciones-container">
-      <h2>Valoraciones</h2>
-      <p className="promedio">Promedio: {promedio} ⭐</p>
+      <div className="promedio">
+        <span className="promedio-numero">
+          {Number(promedio).toFixed(1)}
+          <FaStar className="estrella" size={40}/>
+        </span>
+      </div>
 
       <form className="valoraciones-form" onSubmit={handleSubmit}>
-        <div className='valoracion'>
-          <label>
-           Puntuacion (1-5):
-          </label>
-          
-          <Estrellas puntuacion={puntuacion} onCambioPuntuacion={setPuntuacion} />
+        <div className="valoracion">
+          <h3 className="titulo-valoracion">Danos tu opinión</h3>
+          <div className="estrellas-container">
+            <Estrellas puntuacion={puntuacion} onCambioPuntuacion={setPuntuacion} />
+          </div>
         </div>
         <label>
           Nombre (opcional):
@@ -72,13 +76,16 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
             type="text"
             value={nombreAnonimo}
             onChange={(e) => setNombreAnonimo(e.target.value)}
+            placeholder="Escribe tu nombre aquí..."
           />
         </label>
         <label>
-          Comentario (opcional):
+          Comentario:
           <textarea
             value={comentario}
             onChange={(e) => setComentario(e.target.value)}
+            required
+            placeholder="Escribe tu comentario aquí..."
           />
         </label>
         <button type="submit">Enviar Valoración</button>

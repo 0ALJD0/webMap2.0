@@ -136,6 +136,7 @@ const EstablecimientosTabla = ({ establecimiento }) => {
         <div className="el-detalle-item">
             <FaStarHalfStroke  className="el-icon" />
             <div>
+              <strong className='title-detalle-start'>Valoraciones</strong>
               <ValoracionEstablecimiento  establecimientoId={id}/>
             </div>
           </div>

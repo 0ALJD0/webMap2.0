@@ -5,6 +5,7 @@ import AgenteVirtual from '../components/AgenteVirtual';
 import BarraBusqueda from '../components/BarraBusqueda';
 import FiltroEstablecimientos from '../components/FiltroEstablecimientos';
 import { fetchEstablecimientos, obtenerPromedioValoraciones  } from '../services/api';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import './css/HomePage.css';
 
 const HomePage = () => {
@@ -87,11 +88,6 @@ const HomePage = () => {
 
     setEstablecimientosFiltrados(filtrados);
   };
- /* <button className="hp-plegar-boton1" onClick={() => setPlegadoAgente(!plegadoAgente)}>
-  {plegadoAgente ? '↑' : '↓'}
-  </button>
-    elemento no implmentado por bugs***
-  */
 
   return (
     <div className="hp-homepage">
@@ -102,7 +98,7 @@ const HomePage = () => {
         {mostrarTabla && (
           <div className={`hp-establecimientos-tabla ${plegadoTabla ? 'plegado' : 'desplegado'}`}>
             <button className="hp-plegar-boton" onClick={() => setPlegadoTabla(!plegadoTabla)}>
-              {plegadoTabla ? '→' : '←'}
+              {plegadoTabla ? <IoIosArrowForward className="boton-icono" size={30}/> : <IoIosArrowBack className="boton-icono" size={30}/>}
             </button>
             {!plegadoTabla && (
               <div className="hp-tabla-contenido">
