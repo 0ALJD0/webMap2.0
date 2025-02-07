@@ -182,7 +182,7 @@ const Importar = ({ onCancel }) => {
                     </p>
                     <pre className="importar-example">
                         nombre,direccion,tipo,tipo_servicio,tipo_cocina,latitud,longitud,petfriendly,accesibilidad,
-                        descripcion,numero_taza,numero_cubiertos,numero_copas
+                        descripcion,numero_taza,numero_cubiertos,numero_copas,horarios
                         <br />
                         La Tablita2,Calle1 Av2,Restaurante,1;2,3;4,-0.951560696, -80.691441,true,false,Descripcion Generica,1,1,1,Lunes 9:00 - 19:00; Martes 9:00 - 19:00
                         <br />
