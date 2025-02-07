@@ -54,18 +54,18 @@ body {
     transform: scale(1.05);
     opacity: 0.9;
   }
- /* Flecha indicadora */
- .arrow-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 50px;
-  }
+  /* Flecha indicadora */
+  .arrow-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    }
 
-  .arrow {
-    width: 70px;  /* Ajusta el tamaño según necesites */
-    height: auto;
-    animation: bounce 1.5s infinite; /* Hace que la flecha rebote */
-  }
+    .arrow {
+      width: 70px;  /* Ajusta el tamaño según necesites */
+      height: auto;
+      animation: bounce 1.5s infinite; /* Hace que la flecha rebote */
+    }
 
   /* Animación de rebote */
   @keyframes bounce {
@@ -161,7 +161,7 @@ body {
 
   .info-image img {
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     height: auto;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);

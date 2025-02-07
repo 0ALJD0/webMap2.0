@@ -179,7 +179,7 @@ const IntroPage = () => {
               </p>
             </div>
             <div className="info-image">
-              <img src="./img/MapaInteractivo.jpeg" alt="Mapa interactivo" />
+              <img src="./img/MapaInteractivo1.jpeg" alt="Mapa interactivo" />
             </div>
           </div>
         </div>
@@ -199,24 +199,9 @@ const IntroPage = () => {
               </p>
           </div>
           <div className="info-image">
-            <img src="./img/AgenteVirtual.jpeg" alt="Agente virtual" />
+            <img src="./img/AgenteVirtual1.jpeg" alt="Agente virtual" />
           </div>
         </div>
-        </div>
-
-        <div 
-          className={`info-section ${inView[3] ? 'fade-in' : ''}`} 
-          ref={(el) => (sectionsRef.current[3] = el)}
-        >
-          <div className="info-content">
-            <div className="info-text">
-              <h2>Galería de Establecimientos</h2>
-              <p>Explora los mejores lugares para disfrutar de una buena comida.</p>
-            </div>
-            <div className="info-image">
-              <img src="/ruta-de-tu-imagen3.jpg" alt="Galería de establecimientos" />
-            </div>
-          </div>
         </div>
       </div>
                       
