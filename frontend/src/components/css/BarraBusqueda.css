@@ -122,7 +122,7 @@
 }
 
 .boton-calcular-ruta {
-    background: #28a745;
+    background: #007bff;
     color: white;
     border: none;
     padding: 8px 15px;
@@ -133,11 +133,11 @@
 }
 
 .boton-calcular-ruta:hover {
-    background: #218838;
+    background: #0056b3;
 }
 
 .boton-ubicacion-actual{
-    background: #28a745;
+    background: #007bff;
     color: white;
     border: none;
     padding: 8px 15px;
@@ -147,8 +147,30 @@
     transition: background 0.3s ease;
 }
 .boton-ubicacion-actual:hover {
-    background: #218838;
+    background: #0056b3;
 }
 .p-limpiar{
   z-index: 9999;
+}
+.boton-limpiar {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Espacio entre el icono y el texto */
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s ease;
+  width: 17%;
+}
+
+.boton-limpiar:hover {
+  background: #e0e0e0;
+}
+
+.icono-limpiar {
+  font-size: 18px;
 }

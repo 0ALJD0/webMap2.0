@@ -1,72 +1,71 @@
-/* Contenedores principales de cada filtro */
-.filtro-tipos-wrapper {
+.filtro-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   position: absolute;
-  top: 1%;
-  right: 30%;
-  padding: 10px;
-  border-radius: 10px;
+  top: 3.5%;
+  right: 7%;
   z-index: 1000;
+  max-width: 800PX;
+}
+
+.filtro-container {
+  display: flex;
+  gap: 20px; /* Espacio entre los filtros */
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.filtro-tipos-wrapper, .filtro-valoraciones-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.filtro-valoraciones-wrapper {
-  position: absolute;
-  top: 7%; /* Posición más abajo que el primer filtro */
-  right: 30%;
-  padding: 10px;
-  border-radius: 10px;
-  z-index: 1000;
+.filtro-container::-webkit-scrollbar {
+  display: none; /* Oculta la barra de desplazamiento */
+}
+
+.filtro-boton {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
+  background: #ffffff;
+  color: #333;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s ease;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  height: 35px;
+  line-height: 35px;
 }
-.filtro-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 8px;
-    max-width: 300px; /* Ajusta este valor según sea necesario */
-  }
-  
-  .filtro-container::-webkit-scrollbar {
-    display: none; /* Oculta la barra de desplazamiento */
-  }
-  
-  .filtro-boton {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: #0078A8;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background 0.3s ease;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  }
-  
-  .filtro-boton.activo {
-    background: #004f70;
-  }
-  
-  .filtro-boton:hover {
-    background: #005f8b;
-  }
-  
-  .filtro-flecha {
-    background: none;
-    border-radius: 100%;
-    border: none;
-    color: #2e96be;
-    cursor: pointer;
-    font-size: 35px;
-    padding: 5px;
-  }
-  
-  .filtro-flecha:hover {
-    color: #005f8b;
-  }
+
+.filtro-boton.activo {
+  background: #007bff;
+  color: white;
+}
+
+.filtro-boton:hover {
+  background: #007bff;
+  color: white;
+}
+
+.filtro-flecha {
+  background: none;
+  border-radius: 100%;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 25px;
+  padding: 5px;
+  height: 35px;
+  width: 35px
+}
+
+.filtro-flecha:hover {
+  color: #e5e5e5;
+}

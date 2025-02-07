@@ -9,6 +9,8 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
   const [puntuacion, setPuntuacion] = useState(0);
   const [nombreAnonimo, setNombreAnonimo] = useState('Anónimo');
   const [comentario, setComentario] = useState('');
+  const [mostrarPopup, setMostrarPopup] = useState(false); // Estado para el popup
+  const [errorPuntuacion, setErrorPuntuacion] = useState(false);
 
   // Obtener el promedio de valoraciones al cargar el componente
   useEffect(() => {
@@ -41,19 +43,40 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
   // Manejar el envío de una nueva valoración
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validar si el usuario seleccionó una puntuación
+    if (puntuacion === 0) {
+      setErrorPuntuacion(true);
+      setTimeout(() => setErrorPuntuacion(false), 1000); // Remover animación después de 1 segundo
+      return;
+    }
+ 
     try {
       await crearValoracion(establecimientoId, puntuacion, nombreAnonimo, comentario);
-      alert('Valoración enviada exitosamente');
+      
+      // Mostrar popup de confirmación
+      setMostrarPopup(true);
+      setTimeout(() => {
+        setMostrarPopup(false);
+      }, 3000); // Ocultar popup después de 3 segundos
+
       // Actualizar el promedio y las valoraciones después de enviar
       const nuevoPromedio = await obtenerPromedioValoraciones(establecimientoId);
       setPromedio(nuevoPromedio);
       const nuevasValoraciones = await obtenerValoraciones(establecimientoId);
       setValoraciones(nuevasValoraciones);
+      
+      // Limpiar los campos del formulario
+      setPuntuacion(0);
+      setNombreAnonimo('Anónimo');
+      setComentario('');
+
     } catch (error) {
       console.error('Error:', error);
     }
   };
-
+  
+  
   return (
     <div className="valoraciones-container">
       <div className="promedio">
@@ -66,7 +89,7 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
       <form className="valoraciones-form" onSubmit={handleSubmit}>
         <div className="valoracion">
           <h3 className="titulo-valoracion">Danos tu opinión</h3>
-          <div className="estrellas-container">
+          <div className={`estrellas-container ${errorPuntuacion ? 'error' : ''}`}>
             <Estrellas puntuacion={puntuacion} onCambioPuntuacion={setPuntuacion} />
           </div>
         </div>
@@ -90,6 +113,13 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
         </label>
         <button type="submit">Enviar Valoración</button>
       </form>
+
+      {/* Popup de confirmación */}
+      {mostrarPopup && (
+        <div className="popup">
+          <p>¡Opinión enviada exitosamente!</p>
+        </div>
+      )}
 
       <div className="historial-valoraciones">
         <h3>Historial de Valoraciones</h3>

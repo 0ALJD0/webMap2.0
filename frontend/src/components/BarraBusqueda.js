@@ -168,9 +168,9 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
             onChange={(e) => setHacia(e.target.value)}
           />
           {(desde || hacia) && (
-            <div>
-              <p className="p-limpiar"> Limpiar</p>
-              <PiBroom  className="icono-limpiar" onClick={limpiarRuta} />
+            <div className="boton-limpiar" onClick={limpiarRuta}>
+              <PiBroom className="icono-limpiar" />
+              <span>Limpiar</span>
             </div>
           )}
 

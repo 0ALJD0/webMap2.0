@@ -1,6 +1,6 @@
-import React, { useState, useRef  } from 'react';
+import React, { useState, useRef } from 'react';
 import './css/FiltroEstablecimientos.css';
-import { FaCoffee, FaUtensils, FaGlassCheers, FaMusic, FaStore, FaTruck, FaConciergeBell, FaChevronCircleLeft , FaChevronCircleRight,FaStar } from 'react-icons/fa';
+import { FaCoffee, FaUtensils, FaGlassCheers, FaMusic, FaStore, FaTruck, FaConciergeBell, FaChevronCircleLeft, FaChevronCircleRight, FaStar } from 'react-icons/fa';
 
 const tiposEstablecimientos = [
   { nombre: 'Cafetería', clave: 'Cafetería', icono: <FaCoffee /> },
@@ -11,18 +11,19 @@ const tiposEstablecimientos = [
   { nombre: 'Establecimiento móvil', clave: 'Establecimiento móvil', icono: <FaTruck /> },
   { nombre: 'Servicio de catering', clave: 'Servicio de catering', icono: <FaConciergeBell /> },
 ];
+
 const valoraciones = [
-  { nombre: '1 estrella', clave: 1, icono: <FaStar /> },
-  { nombre: '2 estrellas', clave: 2, icono: <><FaStar /><FaStar /></> },
-  { nombre: '3 estrellas', clave: 3, icono: <><FaStar /><FaStar /><FaStar /></> },
-  { nombre: '4 estrellas', clave: 4, icono: <><FaStar /><FaStar /><FaStar /><FaStar /></> },
-  { nombre: '5 estrellas', clave: 5, icono: <><FaStar /><FaStar /><FaStar /><FaStar /><FaStar /></> },
+  { nombre: '1 estrella', clave: 1, icono: <FaStar color='gold'/> },
+  { nombre: '2 estrellas', clave: 2, icono: <><FaStar color='gold'/><FaStar color='gold'/></> },
+  { nombre: '3 estrellas', clave: 3, icono: <><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/></> },
+  { nombre: '4 estrellas', clave: 4, icono: <><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/></> },
+  { nombre: '5 estrellas', clave: 5, icono: <><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/></> },
 ];
+
 const FiltroEstablecimientos = ({ onFiltrar }) => {
   const [filtrosTipo, setFiltrosTipo] = useState([]);
   const [filtrosValoracion, setFiltrosValoracion] = useState([]);
-  const tipoContainerRef = useRef(null);
-  const valoracionContainerRef = useRef(null);
+  const filtroContainerRef = useRef(null);
 
   // Manejar selección y deselección de filtros de tipo
   const toggleFiltroTipo = (clave) => {
@@ -43,8 +44,8 @@ const FiltroEstablecimientos = ({ onFiltrar }) => {
   };
 
   // Desplazamiento horizontal
-  const scroll = (ref, direction) => {
-    const container = ref.current;
+  const scroll = (direction) => {
+    const container = filtroContainerRef.current;
     const scrollAmount = 200; // Ajusta este valor según sea necesario
     if (direction === 'left') {
       container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -54,13 +55,14 @@ const FiltroEstablecimientos = ({ onFiltrar }) => {
   };
 
   return (
-    <div>
-      {/* Filtro de tipo de establecimiento */}
-      <div className="filtro-tipos-wrapper">
-        <button className="filtro-flecha" onClick={() => scroll(tipoContainerRef, 'left')}>
-          <FaChevronCircleLeft  />
-        </button>
-        <div className="filtro-container" ref={tipoContainerRef}>
+    <div className="filtro-wrapper">
+      <button className="filtro-flecha" onClick={() => scroll('left')}>
+        <FaChevronCircleLeft  />
+      </button>
+
+      {/* Filtros combinados en un solo contenedor */}
+      <div className="filtro-container" ref={filtroContainerRef}>
+        <div className="filtro-tipos-wrapper">
           {tiposEstablecimientos.map(({ nombre, clave, icono }) => (
             <button
               key={clave}
@@ -71,17 +73,8 @@ const FiltroEstablecimientos = ({ onFiltrar }) => {
             </button>
           ))}
         </div>
-        <button className="filtro-flecha" onClick={() => scroll(tipoContainerRef, 'right')}>
-          <FaChevronCircleRight />
-        </button>
-      </div>
 
-      {/* Filtro de valoración */}
-      <div className="filtro-valoraciones-wrapper">
-        <button className="filtro-flecha" onClick={() => scroll(valoracionContainerRef, 'left')}>
-          <FaChevronCircleLeft  />
-        </button>
-        <div className="filtro-container" ref={valoracionContainerRef}>
+        <div className="filtro-valoraciones-wrapper">
           {valoraciones.map(({ nombre, clave, icono }) => (
             <button
               key={clave}
@@ -92,10 +85,11 @@ const FiltroEstablecimientos = ({ onFiltrar }) => {
             </button>
           ))}
         </div>
-        <button className="filtro-flecha" onClick={() => scroll(valoracionContainerRef, 'right')}>
-          <FaChevronCircleRight />
-        </button>
       </div>
+
+      <button className="filtro-flecha" onClick={() => scroll('right')}>
+        <FaChevronCircleRight />
+      </button>
     </div>
   );
 };

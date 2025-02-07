@@ -12,8 +12,8 @@
   }
   
   .ubicacion-actual-boton {
-    background-color: #0078A8;
-    color: white;
+    background-color:white;
+    color: 333;
     border: none;
     border-radius: 50%;
     padding: 3px;
@@ -24,7 +24,7 @@
   }
   
   .ubicacion-actual-boton:hover {
-    background-color: #005f8a;
+    background-color: #d2d2d2;
   }
   
   .icon-ubicacion {

@@ -153,12 +153,19 @@ def add_establecimiento():
 
         data = request.get_json()
         nombre = data.get('nombre')
+        if len(nombre) == 0:
+            return jsonify({'message': 'El nombre esta vacío'}), 500
         # Verificar si el nombre ya existe
         if Establecimiento.query.filter_by(nombre=nombre, eliminado=False).first():
             return jsonify({'message': 'Establecimiento con este nombre ya existe'}), 409
         
         direccion = data.get('direccion')
+        if len(direccion) == 0:
+            return jsonify({'message': 'La direccion esta vacía'}), 500
+        
         tipo = data.get('tipo')
+        if len(tipo) == 0:
+            return jsonify({'message': 'El tipo esta vacío'}), 500
 
         tipo_servicio_ids = data.get('tipo_servicio', [])
         tipo_cocina_ids = data.get('tipo_cocina', [])
@@ -169,7 +176,11 @@ def add_establecimiento():
         accesibilidad = data.get('accesibilidad', False)
         
         latitud = data.get('latitud')
+        if isinstance(latitud, str):
+            return jsonify({'message': 'La latitud esta vacía'}), 500
         longitud = data.get('longitud')
+        if isinstance(longitud, str):
+            return jsonify({'message': 'La longitud esta vacía'}), 500
         descripcion = data.get('descripcion')
 
 

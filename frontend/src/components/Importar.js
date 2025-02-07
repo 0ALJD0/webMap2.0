@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import { crearEstablecimiento } from '../services/api';
 import './css/Importar.css';
+import { FaInfoCircle } from 'react-icons/fa';
 
 const Importar = ({ onCancel }) => {
     const [csvFile, setCsvFile] = useState(null);
@@ -169,6 +170,7 @@ const Importar = ({ onCancel }) => {
                 <input type="file" className="importar-file-input" accept=".csv" onChange={handleFileChange} />
                 {mensaje && (
                     <p className={`importar-message ${mensaje ? "fade-out" : ""}`}>
+                        <FaInfoCircle style={{ marginRight: '8px' }} /> {/* Ícono de información */}
                         {mensaje}
                     </p>
                 )}

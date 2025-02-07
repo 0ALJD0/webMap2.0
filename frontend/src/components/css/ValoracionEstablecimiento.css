@@ -64,7 +64,16 @@
     display: flex;
     justify-content: center;
   }
-
+  .estrellas-container.error {
+    animation: shake 0.3s ease-in-out 2;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+  }
   .valoraciones-form input,
   .valoraciones-form textarea {
     width: 100%;
@@ -132,4 +141,31 @@
   .historial-valoraciones li small {
     font-size: 12px;
     color: #888;
+  }
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    z-index: 1001;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Animación para que el popup aparezca suavemente */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
   }

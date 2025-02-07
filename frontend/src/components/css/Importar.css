@@ -144,9 +144,9 @@
     margin: 1rem 0;
     font-size: 0.9rem;
     text-align: center;
-    background-color: #d4edda; /* Verde claro para éxito */
-    color: #155724;
-    transition: opacity 1s ease-in-out;
+    background-color: #d4e9ed; /* Verde claro para éxito */
+    color: #103b4a;
+    transition: opacity 3s ease-in-out;
   }
   
   .importar-message.fade-out {
