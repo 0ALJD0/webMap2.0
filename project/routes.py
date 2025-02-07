@@ -215,7 +215,29 @@ def add_establecimiento():
 
         db.session.commit()
 
-        return jsonify({'message': 'Establecimiento added successfully'}), 201
+        # Devolver el establecimiento creado
+        establecimiento_creado = {
+            'id': nuevo_establecimiento.id,
+            'nombre': nuevo_establecimiento.nombre,
+            'direccion': nuevo_establecimiento.direccion,
+            'tipo': nuevo_establecimiento.tipo,
+            'numero_taza': nuevo_establecimiento.numero_taza,
+            'numero_cubiertos': nuevo_establecimiento.numero_cubiertos,
+            'numero_copas': nuevo_establecimiento.numero_copas,
+            'petfriendly': nuevo_establecimiento.petfriendly,
+            'accesibilidad': nuevo_establecimiento.accesibilidad,
+            'latitud': nuevo_establecimiento.latitud,
+            'longitud': nuevo_establecimiento.longitud,
+            'descripcion': nuevo_establecimiento.descripcion,
+            'administrador_id': nuevo_establecimiento.administrador_id,
+            'tipo_servicio': [ts.id for ts in nuevo_establecimiento.tipo_servicio],
+            'tipo_cocina': [tc.id for tc in nuevo_establecimiento.tipo_cocina]
+        }
+
+        return jsonify({
+            'message': 'Establecimiento added successfully',
+            'establecimiento': establecimiento_creado
+        }), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

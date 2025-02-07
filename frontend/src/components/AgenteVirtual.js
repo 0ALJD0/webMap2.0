@@ -4,7 +4,9 @@ import api from '../services/api';
 import './css/AgenteVirtual.css';
 const AgenteVirtual = () => {
     const [mensajeUsuario, setMensajeUsuario] = useState('');
-    const [mensajesChat, setMensajesChat] = useState([]);
+    const [mensajesChat, setMensajesChat] = useState([
+      { text: "👋 ¡Hola! Soy tu asistente virtual de establecimientos. Puedes preguntarme sobre restaurantes, horarios, valoraciones y más. Ejemplo: '¿Cuáles son los restaurantes mejor valorados?'", fromUser: false }
+    ]);
   
     const preguntarAgenteVirtual = async (mensaje) => {
       try {
