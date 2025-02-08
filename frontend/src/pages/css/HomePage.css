@@ -18,12 +18,14 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 37.5%;
   background: rgba(255, 255, 255, 0.664);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   z-index: 1000;
   transition: transform 0.3s ease;
+  max-width: 500px;
+  width: 90%;
+  height: 100%; /* Ajusta la altura según el contenido */
+  max-height: 100%; 
 }
 
 .hp-establecimientos-tabla.plegado {
