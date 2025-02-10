@@ -171,7 +171,7 @@
 
         return (
           <div>
-            <h1>Hisrograma de valoración de establecimientos</h1>
+            <h1>Histrograma de valoración de establecimientos</h1>
             <div className="histograma-chart-container">
               {/* Contenedor de los filtros */}
               <div className="histograma-controls">
