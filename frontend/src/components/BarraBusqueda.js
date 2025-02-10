@@ -16,6 +16,12 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
   const [desdeLat, setDesdeLat]=useState("");
   const [desdeLng, setDesdeLng]=useState("");
 
+  // Estados para las sugerencias de "Desde" y "Hacia"
+  const [sugerenciasDesde, setSugerenciasDesde] = useState([]);
+  const [sugerenciasHacia, setSugerenciasHacia] = useState([]);
+  const [indiceActivoDesde, setIndiceActivoDesde] = useState(-1);
+  const [indiceActivoHacia, setIndiceActivoHacia] = useState(-1);
+
   const manejarCambio = (e) => {
     const valor = e.target.value;
     setBusqueda(valor);
@@ -31,11 +37,57 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
     setSugerencias(filtrados);
     setIndiceActivo(-1);
   };
+  // Función para manejar cambios en el input "Desde"
+  const manejarCambioDesde = (e) => {
+    const valor = e.target.value;
+    setDesde(valor);
+
+    if (valor.trim() === "") {
+      setSugerenciasDesde([]);
+      return;
+    }
+
+    const filtrados = establecimientos.filter((est) =>
+      est.nombre.toLowerCase().includes(valor.toLowerCase())
+    );
+    setSugerenciasDesde(filtrados);
+    setIndiceActivoDesde(-1);
+  };
+
+  // Función para manejar cambios en el input "Hacia"
+  const manejarCambioHacia = (e) => {
+    const valor = e.target.value;
+    setHacia(valor);
+
+    if (valor.trim() === "") {
+      setSugerenciasHacia([]);
+      return;
+    }
+
+    const filtrados = establecimientos.filter((est) =>
+      est.nombre.toLowerCase().includes(valor.toLowerCase())
+    );
+    setSugerenciasHacia(filtrados);
+    setIndiceActivoHacia(-1);
+  };
+
 
   const manejarSeleccion = (establecimiento) => {
     setBusqueda(establecimiento.nombre);
     setSugerencias([]);
     onSeleccionarEstablecimiento(establecimiento);
+  };
+
+  // Función para manejar la selección de una sugerencia en el input "Desde"
+  const manejarSeleccionDesde = (establecimiento) => {
+    setDesde(establecimiento.nombre);
+    setSugerenciasDesde([]);
+  };
+
+  // Función para manejar la selección de una sugerencia en el input "Hacia"
+  const manejarSeleccionHacia = (establecimiento) => {
+    setHacia(establecimiento.nombre);
+    setSugerenciasHacia([]);
   };
 
   const manejarTecla = (e) => {
@@ -59,6 +111,47 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
         }
     }
   };
+
+    // Función para manejar teclas en el input "Desde"
+    const manejarTeclaDesde = (e) => {
+      if (e.key === "ArrowDown" && indiceActivoDesde < sugerenciasDesde.length - 1) {
+        setIndiceActivoDesde(indiceActivoDesde + 1);
+      } else if (e.key === "ArrowUp" && indiceActivoDesde > 0) {
+        setIndiceActivoDesde(indiceActivoDesde - 1);
+      } else if (e.key === "Enter") {
+        if (indiceActivoDesde >= 0) {
+          manejarSeleccionDesde(sugerenciasDesde[indiceActivoDesde]);
+        } else {
+          const encontrado = establecimientos.find(
+            (est) => est.nombre.toLowerCase() === desde.toLowerCase()
+          );
+          if (encontrado) {
+            manejarSeleccionDesde(encontrado);
+          }
+        }
+      }
+    };
+  
+  // Función para manejar teclas en el input "Hacia"
+  const manejarTeclaHacia = (e) => {
+    if (e.key === "ArrowDown" && indiceActivoHacia < sugerenciasHacia.length - 1) {
+      setIndiceActivoHacia(indiceActivoHacia + 1);
+    } else if (e.key === "ArrowUp" && indiceActivoHacia > 0) {
+      setIndiceActivoHacia(indiceActivoHacia - 1);
+    } else if (e.key === "Enter") {
+      if (indiceActivoHacia >= 0) {
+        manejarSeleccionHacia(sugerenciasHacia[indiceActivoHacia]);
+      } else {
+        const encontrado = establecimientos.find(
+          (est) => est.nombre.toLowerCase() === hacia.toLowerCase()
+        );
+        if (encontrado) {
+          manejarSeleccionHacia(encontrado);
+        }
+      }
+    }
+  };
+  
   const limpiarBusqueda = () => {
     setBusqueda("");
     setSugerencias([]);
@@ -153,20 +246,57 @@ const BarraBusqueda = ({ establecimientos, onSeleccionarEstablecimiento, onCalcu
       {/* Menú desplegable con inputs "Desde" y "Hacia" */}
       {mostrarMenuRuta && (
         <div className="menu-ruta">
-          <input
-            type="text"
-            placeholder="Desde..."
-            value={desde}
-            onChange={(e) => setDesde(e.target.value)}
-          />
-          <button className="boton-ubicacion-actual" onClick={obtenerUbicacionActual}>📍 Usar ubicación actual</button>
+          <div className="input-contenedor">
+            <input
+              type="text"
+              placeholder="Desde..."
+              value={desde}
+              onChange={manejarCambioDesde}
+              onKeyDown={manejarTeclaDesde}
+            />
+            {sugerenciasDesde.length > 0 && (
+              <div className="sugerencias-lista-desde">
+                {sugerenciasDesde.map((establecimiento, index) => (
+                  <div
+                    key={establecimiento.id}
+                    className={`sugerencia ${index === indiceActivoDesde ? "activa" : ""}`}
+                    onMouseEnter={() => setIndiceActivoDesde(index)}
+                    onClick={() => manejarSeleccionDesde(establecimiento)}
+                  >
+                    {establecimiento.nombre}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-          <input
-            type="text"
-            placeholder="Hacia..."
-            value={hacia}
-            onChange={(e) => setHacia(e.target.value)}
-          />
+          <button className="boton-ubicacion-actual" onClick={obtenerUbicacionActual}>
+            📍 Usar ubicación actual
+          </button>
+
+          <div className="input-contenedor">
+            <input
+              type="text"
+              placeholder="Hacia..."
+              value={hacia}
+              onChange={manejarCambioHacia}
+              onKeyDown={manejarTeclaHacia}
+            />
+            {sugerenciasHacia.length > 0 && (
+              <div className="sugerencias-lista-hacia">
+                {sugerenciasHacia.map((establecimiento, index) => (
+                  <div
+                    key={establecimiento.id}
+                    className={`sugerencia ${index === indiceActivoHacia ? "activa" : ""}`}
+                    onMouseEnter={() => setIndiceActivoHacia(index)}
+                    onClick={() => manejarSeleccionHacia(establecimiento)}
+                  >
+                    {establecimiento.nombre}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           {(desde || hacia) && (
             <div className="boton-limpiar" onClick={limpiarRuta}>
               <PiBroom className="icono-limpiar" />
