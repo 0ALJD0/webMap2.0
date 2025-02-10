@@ -174,3 +174,24 @@
 .icono-limpiar {
   font-size: 18px;
 }
+/* Estilos para las sugerencias de "Desde" */
+.sugerencias-lista-desde {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+/* Estilos para las sugerencias de "Hacia" */
+.sugerencias-lista-hacia {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
