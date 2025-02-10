@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { obtenerPromedioValoraciones, crearValoracion, obtenerValoraciones } from '../services/api';
 import './css/ValoracionEstablecimiento.css';
 import { FaStar } from "react-icons/fa";
@@ -11,7 +11,12 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
   const [comentario, setComentario] = useState('');
   const [mostrarPopup, setMostrarPopup] = useState(false); // Estado para el popup
   const [errorPuntuacion, setErrorPuntuacion] = useState(false);
+  const [verMas, setVerMas] = useState(false); // Estado para controlar la expansión de los comentarios
 
+  // Referencia al primer comentario
+  const primerComentarioRef = useRef(null);
+
+  
   // Obtener el promedio de valoraciones al cargar el componente
   useEffect(() => {
     const fetchPromedio = async () => {
@@ -75,7 +80,17 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
       console.error('Error:', error);
     }
   };
-  
+    // Función para manejar el botón "Ver más" / "Ver menos"
+    const toggleVerMas = () => {
+      setVerMas(!verMas);
+
+      if (verMas) {
+        // Si estamos ocultando comentarios, hacer scroll al primer comentario
+        setTimeout(() => {
+          primerComentarioRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300); // Retraso pequeño para asegurar que la animación de contraer haya finalizado
+      }
+    };
   
   return (
     <div className="valoraciones-container">
@@ -121,17 +136,24 @@ const ValoracionEstablecimiento = ({ establecimientoId }) => {
         </div>
       )}
 
+      {/* Historial de valoraciones con scroll y botones Ver más / Ver menos */}
       <div className="historial-valoraciones">
         <h3>Historial de Valoraciones</h3>
-        <ul>
-          {valoraciones.map((valoracion) => (
-            <li key={valoracion.id}>
-              <strong>{valoracion.nombre_anonimo}</strong> - {valoracion.puntuacion} ⭐
-              <p>{valoracion.comentario}</p>
-              <small>{new Date(valoracion.fecha).toLocaleString()}</small>
-            </li>
-          ))}
-        </ul>
+          <ul className={`lista-comentarios ${verMas ? "expandido" : ""}`}>
+            {valoraciones.slice(0, verMas ? valoraciones.length : 3).map((valoracion, index) => (
+              <li key={valoracion.id} ref={index === 0 ? primerComentarioRef : null}>
+                <strong>{valoracion.nombre_anonimo}</strong> - {valoracion.puntuacion} ⭐
+                <p>{valoracion.comentario}</p>
+                <small>{new Date(valoracion.fecha).toLocaleString()}</small>
+              </li>
+            ))}
+          </ul>
+
+        {valoraciones.length > 3 && (
+          <button className="ver-mas" onClick={toggleVerMas}>
+            {verMas ? "Ver menos" : "Ver más"}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -122,7 +122,7 @@
   
   .historial-valoraciones li {
     background-color: white;
-    padding: 16px;
+    padding: 10px;
     margin-bottom: 12px;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -141,6 +141,34 @@
   .historial-valoraciones li small {
     font-size: 12px;
     color: #888;
+  }
+
+  .lista-comentarios {
+    max-height: 200px; /* Altura máxima antes de activar el scroll */
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+  }
+  
+  .lista-comentarios.expandido {
+    max-height: 300px; /* Aumenta el tamaño cuando se expande */
+    overflow-y: auto; /* Activa el scroll vertical */
+    padding-right: 5px;
+  }
+  
+  .ver-mas {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: block;
+    width: fit-content;
+  }
+  
+  .ver-mas:hover {
+    background-color: #0056b3;
   }
   .popup-valoraciones {
     position: fixed;
