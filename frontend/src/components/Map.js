@@ -129,7 +129,7 @@ const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta, seleccionarEst  }) 
 
   return (
     <div className="map-container">
-      <MapContainer center={[-0.95156069, -80.6914418]} zoom={13} zoomControl={false} className="leaflet-map" >
+      <MapContainer center={[-0.95156069, -80.6914418]} zoom={15} minZoom={14} maxZoom={18} zoomControl={false} className="leaflet-map" >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
