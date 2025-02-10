@@ -1,71 +1,109 @@
-.filtro-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+/* Contenedores principales de cada filtro */
+.filtro-tipos-wrapper {
   position: absolute;
-  top: 3.5%;
-  right: 7%;
+  top: 1%;
+  right: 30%;
+  padding: 10px;
+  border-radius: 10px;
   z-index: 1000;
-  max-width: 800PX;
-}
-
-.filtro-container {
-  display: flex;
-  gap: 20px; /* Espacio entre los filtros */
-  overflow-x: auto;
-  scroll-behavior: smooth;
-}
-
-.filtro-tipos-wrapper, .filtro-valoraciones-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.filtro-container::-webkit-scrollbar {
-  display: none; /* Oculta la barra de desplazamiento */
-}
-
-.filtro-boton {
+.filtro-valoraciones-wrapper {
+  position: absolute;
+  top: 7%; /* Posición más abajo que el primer filtro */
+  right: 30%;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 1000;
   display: flex;
   align-items: center;
-  gap: 5px;
-  background: #ffffff;
-  color: #333;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background 0.3s ease;
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  height: 35px;
-  line-height: 35px;
+  gap: 10px;
 }
+.filtro-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 8px;
+    max-width: 300px; /* Ajusta este valor según sea necesario */
+  }
+  
+  .filtro-container::-webkit-scrollbar {
+    display: none; /* Oculta la barra de desplazamiento */
+  }
+  
+  .filtro-boton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #0078A8;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  }
+  
+  .filtro-boton.activo {
+    background: #004f70;
+  }
+  
+  .filtro-boton:hover {
+    background: #005f8b;
+  }
+  
+  .filtro-flecha {
+    background: none;
+    border-radius: 100%;
+    border: none;
+    color: #2e96be;
+    cursor: pointer;
+    font-size: 35px;
+    padding: 5px;
+  }
+  
+  .filtro-flecha:hover {
+    color: #005f8b;
+  }
 
-.filtro-boton.activo {
-  background: #007bff;
-  color: white;
-}
-
-.filtro-boton:hover {
-  background: #007bff;
-  color: white;
-}
-
-.filtro-flecha {
-  background: none;
-  border-radius: 100%;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 25px;
-  padding: 5px;
-  height: 35px;
-  width: 35px
-}
-
-.filtro-flecha:hover {
-  color: #e5e5e5;
-}
+  /*CSS DEL FILTRO ADICIONAL*/
+  .filtro-adicional-wrapper {
+    position: absolute;
+    top: 15%; /* Posición más abajo que el primer filtro */
+    right: 30%;
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .iconos-adicionales {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .icono-adicional {
+    font-size: 1.2em;
+    color: #666;
+  }
+  
+  .texto-adicional {
+    font-size: 0.8em;
+    margin-top: 3px;
+  }
+  
+  .filtro-boton.activo .icono-adicional {
+    color: #e67e22;
+  }
+  
+  .filtro-boton.activo .texto-adicional {
+    color: #e67e22;
+    font-weight: bold;
+  }

@@ -58,20 +58,20 @@ const HomePage = () => {
     setRuta([]);
   }
   // Función para manejar los filtros
-  const handleFiltrar = async ({ tipos, valoraciones }) => {
+  const handleFiltrar = async ({ tipos, valoraciones, adicional }) => {
     let filtrados = establecimientos;
-
+  
     // Si no hay filtros seleccionados, mostrar todos los establecimientos
-    if (tipos.length === 0 && valoraciones.length === 0) {
+    if (tipos.length === 0 && valoraciones.length === 0 && !adicional) {
       setEstablecimientosFiltrados(establecimientos);
       return;
     }
-
+  
     // Filtrar por tipo de establecimiento
     if (tipos.length > 0) {
       filtrados = filtrados.filter(e => tipos.includes(e.tipo));
     }
-
+  
     // Filtrar por valoración
     if (valoraciones.length > 0) {
       const establecimientosConPromedio = await Promise.all(
@@ -80,12 +80,31 @@ const HomePage = () => {
           return { ...establecimiento, promedio };
         })
       );
-
+  
       filtrados = establecimientosConPromedio.filter(establecimiento =>
         valoraciones.some(valoracion => Math.floor(establecimiento.promedio) === valoracion)
       );
     }
-
+  
+    // Filtrar por atributo adicional
+    if (adicional) {
+      filtrados = filtrados.filter(establecimiento => {
+        const tipoSeleccionado = tipos[0]; // Solo un tipo seleccionado
+        switch (tipoSeleccionado) {
+          case 'Restaurante':
+            return establecimiento.numero_cubiertos === parseInt(adicional);
+          case 'Cafetería':
+            return establecimiento.numero_taza === parseInt(adicional);
+          case 'Bar':
+          case 'Discoteca':
+            return establecimiento.numero_copas === parseInt(adicional);
+          default:
+            return true; // Si no hay tipo seleccionado, no aplicar filtro adicional
+        }
+      });
+    }
+  
+    // Actualizar el estado con los establecimientos filtrados
     setEstablecimientosFiltrados(filtrados);
   };
 

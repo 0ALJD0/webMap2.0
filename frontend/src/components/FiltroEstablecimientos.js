@@ -19,19 +19,55 @@ const valoraciones = [
   { nombre: '4 estrellas', clave: 4, icono: <><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/></> },
   { nombre: '5 estrellas', clave: 5, icono: <><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/><FaStar color='gold'/></> },
 ];
-
+// Configuración de filtros adicionales
+const filtrosAdicionales = {
+  Restaurante: {
+    atributo: 'numero_cubiertos',
+    icono: <FaUtensils />, // Ícono representativo
+    opciones: [1, 2, 3, 4, 5].map(num => ({
+      clave: num,
+      texto: `${num} tenedor${num !== 1 ? 'es' : ''}`
+    }))
+  },
+  Cafetería: {
+    atributo: 'numero_taza',
+    icono: <FaCoffee />, // Ícono representativo
+    opciones: [1, 2].map(num => ({
+      clave: num,
+      texto: `${num} taza${num !== 1 ? 's' : ''}`
+    }))
+  },
+  Bar: {
+    atributo: 'numero_copas',
+    icono: <FaGlassCheers />, // Ícono representativo
+    opciones: [1, 2, 3].map(num => ({
+      clave: num,
+      texto: `${num} copa${num !== 1 ? 's' : ''}`
+    }))
+  },
+  Discoteca: {
+    atributo: 'numero_copas',
+    icono: <FaGlassCheers />, // Ícono representativo
+    opciones: [1, 2, 3].map(num => ({
+      clave: num,
+      texto: `${num} copa${num !== 1 ? 's' : ''}`
+    }))
+  }
+};
 const FiltroEstablecimientos = ({ onFiltrar }) => {
-  const [filtrosTipo, setFiltrosTipo] = useState([]);
+  const [filtrosTipo, setFiltrosTipo] = useState(null);
   const [filtrosValoracion, setFiltrosValoracion] = useState([]);
-  const filtroContainerRef = useRef(null);
+  const [filtroAdicional, setFiltroAdicional] = useState(null);
+  const tipoContainerRef = useRef(null);
+  const valoracionContainerRef = useRef(null);
+  const adicionalContainerRef = useRef(null);
 
   // Manejar selección y deselección de filtros de tipo
   const toggleFiltroTipo = (clave) => {
-    let nuevosFiltros = filtrosTipo.includes(clave)
-      ? filtrosTipo.filter(f => f !== clave)
-      : [...filtrosTipo, clave];
+    let nuevosFiltros = filtrosTipo === clave ? null : clave;
     setFiltrosTipo(nuevosFiltros);
-    onFiltrar({ tipos: nuevosFiltros, valoraciones: filtrosValoracion }); // Notificar al padre
+    setFiltroAdicional(null); // Resetear filtro adicional al cambiar el tipo
+    onFiltrar({ tipos: nuevosFiltros ? [nuevosFiltros] : [], valoraciones: filtrosValoracion, adicional: null });
   };
 
   // Manejar selección y deselección de filtros de valoración
@@ -40,12 +76,19 @@ const FiltroEstablecimientos = ({ onFiltrar }) => {
       ? filtrosValoracion.filter(f => f !== clave)
       : [...filtrosValoracion, clave];
     setFiltrosValoracion(nuevosFiltros);
-    onFiltrar({ tipos: filtrosTipo, valoraciones: nuevosFiltros }); // Notificar al padre
+    onFiltrar({ tipos: filtrosTipo ? [filtrosTipo] : [], valoraciones: nuevosFiltros, adicional: filtroAdicional });
+  };
+
+  // Manejar selección de filtro adicional
+  const toggleFiltroAdicional = (clave) => {
+    const nuevoFiltro = filtroAdicional === clave ? null : clave;
+    setFiltroAdicional(nuevoFiltro);
+    onFiltrar({ tipos: filtrosTipo ? [filtrosTipo] : [], valoraciones: filtrosValoracion, adicional: nuevoFiltro });
   };
 
   // Desplazamiento horizontal
-  const scroll = (direction) => {
-    const container = filtroContainerRef.current;
+  const scroll = (ref, direction) => {
+    const container = ref.current;
     const scrollAmount = 200; // Ajusta este valor según sea necesario
     if (direction === 'left') {
       container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -53,28 +96,67 @@ const FiltroEstablecimientos = ({ onFiltrar }) => {
       container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
+    // Renderizar filtros adicionales
+    const renderFiltroAdicional = () => {
+      if (!filtrosTipo || !filtrosAdicionales[filtrosTipo]) return null;
+  
+      const {icono, opciones } = filtrosAdicionales[filtrosTipo];
+  
+      return (
+        <div className="filtro-adicional-wrapper">
+        <button className="filtro-flecha" onClick={() => scroll(adicionalContainerRef, 'left')}>
+          <FaChevronCircleLeft />
+        </button>
+        <div className="filtro-container" ref={adicionalContainerRef}>
+          {opciones.map(({ clave, texto }) => (
+            <button
+              key={clave}
+              className={`filtro-boton ${filtroAdicional === clave ? 'activo' : ''}`}
+              onClick={() => toggleFiltroAdicional(clave)}
+            >
+              {icono} {texto}
+            </button>
+          ))}
+        </div>
+        <button className="filtro-flecha" onClick={() => scroll(adicionalContainerRef, 'right')}>
+          <FaChevronCircleRight />
+        </button>
+      </div>
+    );
+    };
 
   return (
-    <div className="filtro-wrapper">
-      <button className="filtro-flecha" onClick={() => scroll('left')}>
-        <FaChevronCircleLeft  />
-      </button>
-
-      {/* Filtros combinados en un solo contenedor */}
-      <div className="filtro-container" ref={filtroContainerRef}>
-        <div className="filtro-tipos-wrapper">
+    <div>
+      {/* Filtro de tipo de establecimiento */}
+      <div className="filtro-tipos-wrapper">
+        <button className="filtro-flecha" onClick={() => scroll(tipoContainerRef, 'left')}>
+          <FaChevronCircleLeft  />
+        </button>
+        <div className="filtro-container" ref={tipoContainerRef}>
           {tiposEstablecimientos.map(({ nombre, clave, icono }) => (
             <button
               key={clave}
-              className={`filtro-boton ${filtrosTipo.includes(clave) ? 'activo' : ''}`}
+              className={`filtro-boton ${filtrosTipo === clave ? 'activo' : ''}`}
               onClick={() => toggleFiltroTipo(clave)}
             >
               {icono} {nombre}
             </button>
           ))}
         </div>
+        <button className="filtro-flecha" onClick={() => scroll(tipoContainerRef, 'right')}>
+          <FaChevronCircleRight />
+        </button>
+      </div>
 
-        <div className="filtro-valoraciones-wrapper">
+      {/* Filtro adicional (tenedores, tazas, copas) */}
+      {renderFiltroAdicional()}
+
+      {/* Filtro de valoración */}
+      <div className="filtro-valoraciones-wrapper">
+        <button className="filtro-flecha" onClick={() => scroll(valoracionContainerRef, 'left')}>
+          <FaChevronCircleLeft  />
+        </button>
+        <div className="filtro-container" ref={valoracionContainerRef}>
           {valoraciones.map(({ nombre, clave, icono }) => (
             <button
               key={clave}
@@ -85,11 +167,10 @@ const FiltroEstablecimientos = ({ onFiltrar }) => {
             </button>
           ))}
         </div>
+        <button className="filtro-flecha" onClick={() => scroll(valoracionContainerRef, 'right')}>
+          <FaChevronCircleRight />
+        </button>
       </div>
-
-      <button className="filtro-flecha" onClick={() => scroll('right')}>
-        <FaChevronCircleRight />
-      </button>
     </div>
   );
 };
