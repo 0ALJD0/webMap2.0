@@ -86,9 +86,9 @@ const Importar = ({ onCancel }) => {
                     try {
                         // 1️⃣ Crear el establecimiento
                         const response = await crearEstablecimiento(establecimiento);
-                        console.log(response);
+
                         const establecimientoId = response.establecimiento.id; // Obtener el ID devuelto por el backend
-                        
+                        setMensaje(`Establecimiento agragado: ${response.establecimiento.id} - ${response.establecimiento.nombre}`);
                         // 2️⃣ Enviar los horarios a la API
                         if (row.horarios) {
                             const horarios = row.horarios.split(';').map((horarioStr) => {
@@ -100,7 +100,7 @@ const Importar = ({ onCancel }) => {
                                         hora_cierre: match[3]
                                     };
                                 } else {
-                                    console.error(`Formato incorrecto en horarios: ${horarioStr}`);
+                                    setMensaje(`Formato Incorrecto en horarios: ${horarioStr}`);
                                     return null;
                                 }
                             }).filter(Boolean);
