@@ -145,10 +145,32 @@ const Importar = ({ onCancel }) => {
                         Usa los siguientes IDs para declarar los tipos de cocina. Puedes agregar varios separados por punto y coma (;):
                     </p>
                     <ul className="importar-list">
-                        <li>ID 1: Cocina Italiana</li>
-                        <li>ID 2: Cocina Mexicana</li>
-                        <li>ID 3: Cocina Asiática</li>
-                        <li>ID 4: Cocina Mediterránea</li>
+                        <li>ID 1: Argentina</li>
+                        <li>ID 2: Asiática</li>
+                        <li>ID 3: Brasilera</li>
+                        <li>ID 4: China</li>
+                        <li>ID 5: Colombiana</li>
+                        <li>ID 6: Coreana</li>
+                        <li>ID 7: Costa Rica</li>
+                        <li>ID 8: Escandinava</li>
+                        <li>ID 9: Ecuatoriana</li>
+                        <li>ID 10: Venezolana</li>
+                        <li>ID 11: Italiana</li>
+                        <li>ID 12: Japonesa</li>
+                        <li>ID 13: Kosher</li>
+                        <li>ID 14: Mexicana</li>
+                        <li>ID 15: Rusa</li>
+                        <li>ID 16: Cocina Andina</li>
+                        <li>ID 17: Cocina Patrimonial</li>
+                        <li>ID 18: Comida rápida</li>
+                        <li>ID 19: Frutas y Vegetales</li>
+                        <li>ID 20: Mariscos</li>
+                        <li>ID 21: Mediterránea</li>
+                        <li>ID 22: Novoandina</li>
+                        <li>ID 23: Panadería, pastelería y repostería</li>
+                        <li>ID 24: Parrilladas</li>
+                        <li>ID 25: Pizza</li>
+                        <li>ID 26: Vegetariana</li>
                         {/* Agregar más tipos de cocina según sea necesario */}
                     </ul>
 
@@ -157,24 +179,43 @@ const Importar = ({ onCancel }) => {
                         Usa los siguientes IDs para declarar los tipos de servicio. Puedes agregar varios separados por punto y coma (;):
                     </p>
                     <ul className="importar-list">
-                        <li>ID 1: Comida para llevar</li>
-                        <li>ID 2: Servicio a mesa</li>
+                        <li>ID 1: Menú</li>
+                        <li>ID 2: Autoservicio</li>
                         <li>ID 3: Buffet</li>
-                        <li>ID 4: Catering</li>
+                        <li>ID 4: Menú fijo</li>
+                        <li>ID 5: Servicio a domicilio</li>
+                        <li>ID 6: Servicio al auto</li>
                         {/* Agregar más tipos de servicio según sea necesario */}
                     </ul>
 
                     <h3 className="importar-subtitle">Tipos de Establecimiento (tipo)</h3>
                     <p className="importar-instructions">
-                        Usa uno de los siguientes IDs para declarar el tipo de establecimiento:
+                        Usa uno de los siguientes Name's para declarar el tipo de establecimiento:
                     </p>
                     <ul className="importar-list">
-                        <li>ID 1: Restaurante</li>
-                        <li>ID 2: Cafetería</li>
-                        <li>ID 3: Bar</li>
-                        <li>ID 4: Restaurante Rápido</li>
+                        <li>Restaurante</li>
+                        <li>Cafetería</li>
+                        <li>Bar</li>
+                        <li>Establecimiento móvil</li>
+                        <li>Discoteca</li>
+                        <li>Plaza de Comida</li>
+                        <li>Servicio de Catering</li>
                         {/* Agregar más tipos de establecimiento según sea necesario */}
                     </ul>
+
+                    <h3 className="importar-subtitle">Horarios (horarios)</h3>
+                    <p className="importar-instructions">
+                       Puedes agregar los horarios siguiendo el siguiente esquema:
+                    </p>
+                    <p className="importar-instructions">
+                       Un día de la semana (Lunes a Domingo):
+                        <br />
+                        Lunes: 9:00 - 19:00
+                        <br />
+                        Para varios días, debes concatennerlos con (;):
+                        <br />
+                        Lunes 9:00 - 19:00; Martes 9:00 - 19:00; Miércoles 9:00 - 19:00; Jueves 9:00 - 19:00; Viernes 9:00 - 19:00; Sabado 9:00 - 19:00; Domingo 9:00 - 19:00
+                    </p>
 
                     <h3 className="importar-subtitle">Instrucciones para el archivo CSV</h3>
                     <p className="importar-instructions">

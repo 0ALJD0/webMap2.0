@@ -7,7 +7,7 @@ import ReactDOMServer from "react-dom/server";
 import './css/UbicacionActual.css';
 
 
-const UbicacionActual = ({Limpiar}) => {
+const UbicacionActual = () => {
   const map = useMap();
   const [ubicacion, setUbicacion] = useState(null);
   const [ubicacionActiva, setUbicacionActiva] = useState(false);
@@ -64,11 +64,9 @@ const UbicacionActual = ({Limpiar}) => {
     <div className="ubicacion-actual-control">
       <MdMyLocation  title={ubicacionActiva ? "Limpiar ubicación" : "Ver mi ubicación"} className='ubicacion-actual-boton' onClick={handleClick}></MdMyLocation>
       {ubicacion && (
-        Limpiar && (
-          <Marker position={[ubicacion.lat, ubicacion.lng]} icon={ubicacionIcon}>
-            <Popup>Tu ubicación actual</Popup>
-          </Marker>
-        )
+        <Marker position={[ubicacion.lat, ubicacion.lng]} icon={ubicacionIcon}>
+          <Popup>Tu ubicación actual</Popup>
+        </Marker>
       )}
     </div>
   );

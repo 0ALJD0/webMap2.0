@@ -137,7 +137,9 @@ const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta, seleccionarEst  }) 
 
         <MoverMapa zoom={zoom} />
         <Ruta rutas={rutas} onLimpiarRuta ={onLimpiarRuta} />
-        <UbicacionActual  Limpiar={mostrarMarcadores}/>
+        {mostrarMarcadores &&
+          <UbicacionActual  />
+        }
         {/* Mostrar marcadores solo si mostrarMarcadores es true */}
         {mostrarMarcadores &&
           establecimientos.map((establecimiento) => (
