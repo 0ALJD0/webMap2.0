@@ -17,7 +17,7 @@ const UbicacionActual = () => {
     className: 'icon-ubicacion',
     html: ReactDOMServer.renderToString(
         <div className='icono-ubicacion'>
-            <RiUserLocationFill  color='white'/>
+            <RiUserLocationFill  color='#007bff'/>
         </div>
     ),
     iconSize: [40, 40],

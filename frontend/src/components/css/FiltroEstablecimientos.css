@@ -1,81 +1,84 @@
 /* Contenedores principales de cada filtro */
-.filtro-tipos-wrapper {
-  position: absolute;
-  top: 1%;
-  right: 30%;
-  padding: 10px;
-  border-radius: 10px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+  .filtro-tipos-wrapper,
+  .filtro-valoraciones-wrapper {
+    position: absolute;
+    top: 1%;
+    right: 22%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    transition: all 0.3s ease-in-out;
+  }
 
-.filtro-valoraciones-wrapper {
-  position: absolute;
-  top: 7%; /* Posición más abajo que el primer filtro */
-  right: 30%;
-  padding: 10px;
-  border-radius: 10px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.filtro-container {
+  .filtro-valoraciones-wrapper {
+    top: 7%; /* Posición más abajo que el primer filtro */
+  }
+
+  /* Contenedor de los filtros */
+  .filtro-container {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
-    gap: 8px;
-    max-width: 300px; /* Ajusta este valor según sea necesario */
+    gap: 10px;
+    max-width: 450px; /* Aumentado el tamaño */
+    padding: 5px 0;
   }
-  
+
   .filtro-container::-webkit-scrollbar {
     display: none; /* Oculta la barra de desplazamiento */
   }
-  
+
+  /* Botón de filtro */
   .filtro-boton {
     display: flex;
     align-items: center;
-    gap: 5px;
-    background: #0078A8;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 20px;
+    gap: 6px;
+    background: white;
+    color: black; /* Texto negro cuando está inactivo */
+    border: 2px solid transparent;
+    padding: 7px 15px;
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 12px;
-    transition: background 0.3s ease;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    font-size: 14px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-weight: 500;
   }
-  
+
+  .filtro-boton:hover,
   .filtro-boton.activo {
-    background: #004f70;
+    background: #007bff;
+    color: white; /* Cambia a blanco cuando está activo */
   }
-  
-  .filtro-boton:hover {
-    background: #005f8b;
-  }
-  
+
+/* Botones de desplazamiento */
   .filtro-flecha {
     background: none;
-    border-radius: 100%;
     border: none;
-    color: #2e96be;
+    color: white; /* Ahora es blanco */
     cursor: pointer;
-    font-size: 35px;
+    font-size: 25px;
     padding: 5px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  
-  .filtro-flecha:hover {
-    color: #005f8b;
+
+  .filtro-flecha:hover,
+  .filtro-flecha.activo {
+    filter: drop-shadow(0px 0px 6px rgba(140, 140, 140, 0.8)); /* Efecto de brillo */
   }
 
   /*CSS DEL FILTRO ADICIONAL*/
   .filtro-adicional-wrapper {
     position: absolute;
-    top: 15%; /* Posición más abajo que el primer filtro */
-    right: 30%;
+    top: 13%; /* Posición más abajo que el primer filtro */
+    right: 22.3%;
     padding: 10px;
     border-radius: 10px;
     z-index: 1000;
