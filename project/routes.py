@@ -514,10 +514,7 @@ def preguntar_openai():
         data = request.get_json()
         pregunta_usuario = data.get('pregunta')
 
-       # Limpiar el historial de la sesión antes de procesar una nueva pregunta
-        session.pop('chat_history', None)  # Elimina el historial de mensajes
-        session.pop('system_message', None)  # Elimina el mensaje del sistema (si es necesario)
-        
+
         # Guardar el mensaje del usuario en la base de datos
         mensaje_usuario = Chat(mensaje=pregunta_usuario)
         db.session.add(mensaje_usuario)
