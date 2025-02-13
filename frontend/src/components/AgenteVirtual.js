@@ -5,7 +5,17 @@ import './css/AgenteVirtual.css';
 const AgenteVirtual = () => {
     const [mensajeUsuario, setMensajeUsuario] = useState('');
     const [mensajesChat, setMensajesChat] = useState([
-      { text: "👋 ¡Hola! Soy tu asistente virtual de establecimientos. Puedes preguntarme sobre restaurantes, horarios, valoraciones y más. Ejemplo: '¿Cuáles son los restaurantes mejor valorados?'", fromUser: false }
+      { 
+        text: `
+          👋 ¡Hola! Soy tu asistente virtual de establecimientos. <br><br>
+          Puedes preguntarme sobre: <br>
+          - 🍽️ <b>Restaurantes disponibles</b> <br>
+          - ⏰ <b>Horarios de atención</b> <br>
+          - ⭐ <b>Valoraciones</b> <br>
+          - 📍 <b>Dirección</b> <br><br>
+          <i>Ejemplo:</i> "¿Cuáles son los restaurantes mejor valorados?"`,
+        fromUser: false 
+      }
     ]);
   
     const preguntarAgenteVirtual = async (mensaje) => {
@@ -47,11 +57,14 @@ const AgenteVirtual = () => {
     return (
       <div className="agente-virtual">
         <div className="chat-container">
+          
           <div className="chat">
             {mensajesChat.map((mensaje, index) => (
-              <div key={index} className={`message ${mensaje.fromUser ? 'user' : 'agent'}`}>
-                {mensaje.text}
-              </div>
+            <div 
+              key={index} 
+              className={`message ${mensaje.fromUser ? 'user' : 'agent'}`}
+              dangerouslySetInnerHTML={{ __html: mensaje.text }} 
+            />
             ))}
           </div>
         </div>

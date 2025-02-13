@@ -514,7 +514,6 @@ def preguntar_openai():
         data = request.get_json()
         pregunta_usuario = data.get('pregunta')
 
-
         # Guardar el mensaje del usuario en la base de datos
         mensaje_usuario = Chat(mensaje=pregunta_usuario)
         db.session.add(mensaje_usuario)
@@ -525,7 +524,7 @@ def preguntar_openai():
         # Obtener los establecimientos de la base de datos
         establecimientos_info = obtener_datos_establecimientos()
 
-        # Limpiar los datos eliminando información redundante
+         # Limpiar los datos eliminando información redundante
         datos_limpios = [
             {
                 'nombre': est['nombre'],
@@ -542,12 +541,6 @@ def preguntar_openai():
                 }
             } for est in establecimientos_info
         ]
-        # Cargar establecimientos en la sesión si no están ya cargados
-        if 'establecimientos_info' not in session:
-            session['establecimientos_info'] = datos_limpios
-
-        establecimientos_info2 = session['establecimientos_info']
-
 
         # Inicializar el historial de mensajes si no existe
         if 'chat_history' not in session:
@@ -555,15 +548,12 @@ def preguntar_openai():
 
         # Añadir el mensaje del usuario al historial
         session['chat_history'].append({"role": "user", "content": pregunta_usuario})
-
-        # Construir el mensaje del sistema (solo una vez)
-        if 'system_message' not in session:
         # Construye los mensajes para OpenAI
-            session['system_message'] = """
+        system_message = """
             Eres un asistente virtual especializado en establecimientos. Sigue estas reglas:
             1 **Solo responde con información de los establecimientos proporcionados**.
             2 **Nunca inventes nombres, direcciones, horarios, valoraciones u otros datos**.
-            3 Si el usuario pregunta algo fuera de los establecimientos, responde: "Solo puedo ayudarte con información de establecimientos".
+            3 Si el usuario pregunta algo que no sea sobre la informacion de los establecimientos que te he pasado, o que no sea un saludo o algo similar responde: "Solo puedo ayudarte con información de establecimientos".
             4 Si no hay datos para responder, di: "No tengo información sobre eso en mi base de datos".
             5 Usa lenguaje natural y evita listas técnicas.
             6 Destaca: nombre, tipo, dirección, valoración, servicios y horarios.
@@ -589,42 +579,27 @@ def preguntar_openai():
             - "Te recomiendo el restaurante [Nombre], aunque no aparece en mis datos".
 
             Datos de establecimientos (JSON):
-            """ 
-           
-        # Dividir los establecimientos en partes más pequeñas
-        fragmentos_establecimientos = [establecimientos_info2[i:i + LIMITE_ESTABLECIMIENTOS] for i in range(0, len(establecimientos_info2), LIMITE_ESTABLECIMIENTOS)]
+            """  + json.dumps(datos_limpios)
+        # Crear la solicitud a la API de OpenAI con el historial de mensajes
+        messages = [
+            {"role": "system", "content":system_message },
+            
+        ] + session['chat_history']
 
-        # Crear un único mensaje para OpenAI con todos los fragmentos de los establecimientos.
-        fragmento_completo_datos = ""
-        for fragmento in fragmentos_establecimientos:
-            fragmento_datos = json.dumps(fragmento, separators=(",", ":"))  # Convertimos el fragmento en JSON
-            fragmento_completo_datos += "\n\n" + fragmento_datos
-
-       # Crear el mensaje final para OpenAI con todos los fragmentos y la pregunta
-        mensaje_final = {
-            "role": "system",
-            "content": session['system_message'] + "\n\nDatos de establecimientos:" + fragmento_completo_datos
-        }
-
-        # Agregar el historial de chat al mensaje final
-        mensaje_final['content'] += "\n\nHistorial de conversación:\n" + json.dumps(session['chat_history'], separators=(",", ":"))
-
-        # Enviar el mensaje final a OpenAI para obtener una respuesta única
+        # Realizar la solicitud a la API de OpenAI
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[mensaje_final]
+            messages=messages
         )
 
-        # Obtener la respuesta final
-        respuesta_final = response['choices'][0]['message']['content']
+        respuesta = response['choices'][0]['message']['content']
 
         # Añadir la respuesta de la API al historial
-        session['chat_history'].append({"role": "assistant", "content": respuesta_final})
+        session['chat_history'].append({"role": "assistant", "content": respuesta})
 
-        return jsonify({'respuesta': respuesta_final}), 200
+        return jsonify({'respuesta': respuesta}), 200
     except Exception as e:
-        return jsonify({'error': 'Ocurrió un error en la consulta OpenAI: ' +str(e)}), 500
-
+        return jsonify({'error': str(e)}), 500
 
 ##Proceso para la obtención del histograma:
 # Cargar el modelo de spaCy en español

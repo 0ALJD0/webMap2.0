@@ -12,11 +12,12 @@ import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 import 'leaflet.locatecontrol'; // Importa el plugin
 import 'leaflet.locatecontrol/dist/L.Control.Locate.min.css'; // Importa los estilos
-import { FaUtensils  } from "react-icons/fa";
+import { FaUtensils, FaCoffee, FaGlassCheers, FaMusic, FaStore, FaTruck, FaConciergeBell } from "react-icons/fa";
 import ReactDOMServer from "react-dom/server";
 
   // Crear el icono con FaMapMarkerAlt de react-icons
-  const customIcon = L.divIcon({
+  // Crear el icono con FaUtensils de react-icons
+  const customIcon1 = L.divIcon({
     className: "custom-icon",
     html: ReactDOMServer.renderToString(
       <div className="icon-background">
@@ -26,6 +27,92 @@ import ReactDOMServer from "react-dom/server";
     iconSize: [40, 50], // Ajustamos tamaño para el pin
     iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
   });
+    // Crear el icono con FaCoffee de react-icons
+    const customIcon2 = L.divIcon({
+      className: "custom-icon",
+      html: ReactDOMServer.renderToString(
+        <div className="icon-background">
+          <FaCoffee size={20} color="white" />
+        </div>
+      ),
+      iconSize: [40, 50], // Ajustamos tamaño para el pin
+      iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
+    });
+      // Crear el icono con FaGlassCheers de react-icons
+  const customIcon3 = L.divIcon({
+    className: "custom-icon",
+    html: ReactDOMServer.renderToString(
+      <div className="icon-background">
+        <FaGlassCheers size={20} color="white" />
+      </div>
+    ),
+    iconSize: [40, 50], // Ajustamos tamaño para el pin
+    iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
+  });
+    // Crear el icono con FaMusic de react-icons
+    const customIcon4 = L.divIcon({
+      className: "custom-icon",
+      html: ReactDOMServer.renderToString(
+        <div className="icon-background">
+          <FaMusic size={20} color="white" />
+        </div>
+      ),
+      iconSize: [40, 50], // Ajustamos tamaño para el pin
+      iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
+    });
+      // Crear el icono con FaStore de react-icons
+  const customIcon5 = L.divIcon({
+    className: "custom-icon",
+    html: ReactDOMServer.renderToString(
+      <div className="icon-background">
+        <FaStore size={20} color="white" />
+      </div>
+    ),
+    iconSize: [40, 50], // Ajustamos tamaño para el pin
+    iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
+  });
+  // Crear el icono con FaTruck de react-icons
+  const customIcon6 = L.divIcon({
+    className: "custom-icon",
+    html: ReactDOMServer.renderToString(
+      <div className="icon-background">
+        <FaTruck size={20} color="white" />
+      </div>
+    ),
+    iconSize: [40, 50], // Ajustamos tamaño para el pin
+    iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
+  });
+  // Crear el icono con FaConciergeBell de react-icons
+  const customIcon7 = L.divIcon({
+    className: "custom-icon",
+    html: ReactDOMServer.renderToString(
+      <div className="icon-background">
+        <FaConciergeBell size={20} color="white" />
+      </div>
+    ),
+    iconSize: [40, 50], // Ajustamos tamaño para el pin
+    iconAnchor: [20, 50], // Ajustamos el punto de anclaje para que quede bien posicionado
+  });
+  const obtenerIcono = (tipo) => {
+    switch (tipo) {
+      case "Restaurante":
+        return customIcon1;
+      case "Cafetería":
+        return customIcon2;
+      case "Bar":
+        return customIcon3;
+      case "Discoteca":
+        return customIcon4;
+      case "Plaza de comida":
+        return customIcon5;
+      case "Establecimiento móvil":
+        return customIcon6;
+      case "Servicio de catering":
+        return customIcon7;
+      default:
+        return customIcon1; // Ícono por defecto
+    }
+  };
 
 const MoverMapa = ({ zoom }) => {
   const map = useMap();
@@ -146,7 +233,7 @@ const Map = ({ establecimientos, zoom, rutas, onLimpiarRuta, seleccionarEst  }) 
             <Marker
               key={establecimiento.id}
               position={[parseFloat(establecimiento.latitud), parseFloat(establecimiento.longitud)]}
-              icon={customIcon}
+              icon={obtenerIcono(establecimiento.tipo)} // Usar la función para obtener el ícono
               eventHandlers={{
                 click: () => seleccionarEst(establecimiento),
               }}
