@@ -285,7 +285,7 @@ const Histograma = () => {
     const image = canvas.toDataURL('image/png'); // Convierte a imagen PNG
     const link = document.createElement('a');
     link.href = image;
-    link.download = `histograma_${categoriaSeleccionada}.png`; // Nombre del archivo
+    link.download = `histograma1_${categoriaSeleccionada}.png`; // Nombre del archivo
     link.click(); // Simula un clic para descargar la imagen
   };
   //Función para exportar el grafico como csv
@@ -305,7 +305,7 @@ const Histograma = () => {
     const csvString = csvRows.join('\n');
     const link = document.createElement('a');
     link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
-    link.download = `histograma_${categoriaSeleccionada}.csv`;
+    link.download = `histograma1_${categoriaSeleccionada}.csv`;
     link.click();
   };
 
@@ -346,7 +346,7 @@ const Histograma = () => {
         {datos && Object.keys(datos).length > 0 ? (
         histogramaData && histogramaData.labels.length > 0 ? (
             <div className='histrograma-grafico'>
-              <Bar data={histogramaData} options={opciones}
+              <Bar id={"histogramaChart"}data={histogramaData} options={opciones}
               style={{padding: '30px'}}
                />
               <div className='histograma-botones'>

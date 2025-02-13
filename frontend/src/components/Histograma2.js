@@ -37,7 +37,7 @@
       { value: 4, label: '⭐⭐⭐⭐ ' },
       { value: 5, label: '⭐⭐⭐⭐⭐' }
     ];
-
+    const [histogramaData, setHistogramaData] = useState(null);
     // Cargar estadísticas al cargar la página
     useEffect(() => {
       // Obtener estadísticas desde el backend
@@ -52,6 +52,10 @@
       };
       fetchEstadisticas();
     }, []);
+
+    useEffect(() => {
+      setHistogramaData(prepararDatosGrafico());
+    }, [estadisticas, filtroTipo, filtroEstrella]);
     // Extraer opciones para los selectores
     const extraerFiltros = (data) => {
       const tipos = new Set(data.map((item) => item.caracteristica));
@@ -167,7 +171,35 @@
           },
         };
 
+        const exportarImagen = () => {
+          const chart = document.getElementById('histograma2-chart');
+          if (chart) {
+            const link = document.createElement('a');
+            link.href = chart.toDataURL('image/png');
+            link.download = 'histograma2.png';
+            link.click();
+          } else {
+            console.error("No se encontró el gráfico para exportar.");
+          }
+        };
+        const exportarCSV = () => {
+          if (!histogramaData) return;
 
+          let csvContent = 'data:text/csv;charset=utf-8,';
+          csvContent += 'Periodo,Característica,Frecuencia\n';
+
+          histogramaData.labels.forEach((periodo, i) => {
+            histogramaData.datasets.forEach((dataset) => {
+              csvContent += `${periodo},${dataset.label},${dataset.data[i]}\n`;
+            });
+          });
+
+          const encodedUri = encodeURI(csvContent);
+          const link = document.createElement('a');
+          link.href = encodedUri;
+          link.download = 'histograma2.csv';
+          link.click();
+        };
 
         return (
           <div>
@@ -201,8 +233,16 @@
         
               {/* Contenedor del gráfico */}
               <div className="histograma-grafico2">
-                <Bar data={prepararDatosGrafico()} options={opciones}
+                <Bar id="histograma2-chart" data={prepararDatosGrafico()} options={opciones}
                 style={{padding: '30px'}} />
+                <div className='histograma-botones'>
+                  <button onClick={exportarImagen} className="export-boton">
+                    Exportar como imagen
+                  </button>
+                  <button onClick={exportarCSV} className="export-boton">
+                    Exportar como CSV
+                  </button>
+                </div>
               </div>
             </div>
           </div>
